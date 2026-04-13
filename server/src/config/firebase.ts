@@ -1,7 +1,13 @@
 import admin from 'firebase-admin'
 import path from 'path'
 
-const serviceAccount = require(path.resolve('firebase-credentials.json'))
+let serviceAccount: any
+
+if (process.env.FIREBASE_CREDENTIALS) {
+  serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS)
+} else {
+  serviceAccount = require(path.resolve('firebase-credentials.json'))
+}
 
 if (!admin.apps.length) {
   admin.initializeApp({
