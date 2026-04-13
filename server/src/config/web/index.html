@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Nexus Horizon</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background: #0D1117; color: #fff; font-family: 'Segoe UI', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+    /* DESKTOP */
+    .container { width: 100%; max-width: 420px; padding: 24px; }
+    .logo h1 { font-size: 48px; font-weight: 700; color: #00F5FF; letter-spacing: 12px; text-align: center; }
+    .logo h2 { font-size: 16px; font-weight: 300; color: #7000FF; letter-spacing: 8px; text-align: center; }
+    .logo p { font-size: 13px; color: #8B949E; letter-spacing: 2px; margin-top: 4px; text-align: center; }
+    .logo { margin-bottom: 32px; }
+    .card { background: rgba(22,27,34,0.8); border: 1px solid #21262D; border-radius: 16px; padding: 24px; }
+    .label { font-size: 11px; color: #00F5FF; letter-spacing: 2px; margin-bottom: 6px; margin-top: 12px; display: block; }
+    input { width: 100%; background: #161B22; border: 1px solid #21262D; border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 16px; outline: none; transition: border-color 0.2s; }
+    input:focus { border-color: #00F5FF; }
+    input::placeholder { color: #8B949E; }
+    .btn-primary { width: 100%; background: #00F5FF; color: #0D1117; border: none; border-radius: 8px; padding: 14px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-top: 16px; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary { width: 100%; background: #7000FF; color: #fff; border: none; border-radius: 8px; padding: 14px; font-size: 13px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-top: 16px; transition: opacity 0.2s; }
+    .btn-secondary:hover { opacity: 0.85; }
+    .link { text-align: center; margin-top: 16px; font-size: 13px; color: #8B949E; cursor: pointer; }
+    .link:hover { color: #00F5FF; }
+    .error { background: rgba(255,49,49,0.1); border: 1px solid #FF3131; border-radius: 8px; padding: 12px; color: #FF3131; font-size: 13px; margin-top: 12px; display: none; }
+    .success { background: rgba(0,245,255,0.1); border: 1px solid #00F5FF; border-radius: 8px; padding: 12px; color: #00F5FF; font-size: 13px; margin-top: 12px; display: none; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .dashboard { max-width: 960px; width: 100%; padding: 24px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #21262D; }
+    .header h1 { font-size: 20px; color: #00F5FF; letter-spacing: 4px; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-user { font-size: 13px; color: #8B949E; }
+    .header-alert { width: 8px; height: 8px; border-radius: 50%; background: #FF3131; animation: blink 1.5s infinite; }
+    .logout { color: #FF3131; font-size: 13px; cursor: pointer; letter-spacing: 2px; background: none; border: none; }
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .nav-tab { padding: 8px 14px; border-radius: 8px; border: 1px solid #21262D; background: transparent; color: #8B949E; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
+    .nav-tab.active { border-color: #00F5FF; background: rgba(0,245,255,0.1); color: #00F5FF; }
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .providers { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .provider-btn { flex: 1; min-width: 80px; padding: 10px; border-radius: 8px; border: 1px solid #21262D; background: transparent; color: #8B949E; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; }
+    .provider-btn.active { border-color: #00F5FF; background: rgba(0,245,255,0.1); color: #00F5FF; }
+    .metric-card { background: rgba(22,27,34,0.8); border: 1px solid #21262D; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .metric-label { font-size: 11px; color: #00F5FF; letter-spacing: 2px; margin-bottom: 8px; }
+    .metric-value { font-size: 14px; color: #fff; margin-bottom: 16px; }
+    .metrics-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .metric-box { flex: 1; min-width: 80px; background: #161B22; border-radius: 8px; padding: 16px; }
+    .metric-box-label { font-size: 11px; color: #8B949E; letter-spacing: 2px; margin-bottom: 4px; }
+    .metric-box-value { font-size: 28px; font-weight: 700; color: #00F5FF; }
+    .signal-bar { height: 4px; background: #21262D; border-radius: 2px; overflow: hidden; }
+    .signal-fill { height: 100%; background: #00F5FF; border-radius: 2px; transition: width 0.5s; }
+    .info-card { background: rgba(22,27,34,0.8); border: 1px solid #7000FF; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .info-title { font-size: 11px; color: #7000FF; letter-spacing: 2px; margin-bottom: 8px; }
+    .info-text { font-size: 13px; color: #8B949E; letter-spacing: 1px; line-height: 1.6; }
+    .tech-badge { display: inline-block; background: rgba(112,0,255,0.15); border: 1px solid #7000FF; color: #7000FF; font-size: 11px; padding: 4px 10px; border-radius: 20px; margin: 4px 4px 0 0; font-weight: 700; letter-spacing: 1px; }
+    .lifi-card { background: rgba(22,27,34,0.8); border: 1px solid #00F5FF; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .lifi-title { font-size: 11px; color: #00F5FF; letter-spacing: 2px; margin-bottom: 16px; }
+    .lifi-simulator { display: flex; gap: 16px; align-items: flex-start; }
+    .lifi-light { width: 80px; height: 80px; border-radius: 50%; background: #00F5FF; box-shadow: 0 0 30px #00F5FF; transition: all 0.3s; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #0D1117; font-weight: 700; letter-spacing: 1px; text-align: center; flex-shrink: 0; }
+    .lifi-light.off { background: #21262D; box-shadow: none; color: #8B949E; }
+    .lifi-info { flex: 1; }
+    .lifi-status { font-size: 13px; color: #fff; margin-bottom: 8px; }
+    .lifi-speed { font-size: 32px; font-weight: 700; color: #00F5FF; }
+    .lifi-speed-label { font-size: 11px; color: #8B949E; letter-spacing: 2px; }
+    .chart-container { position: relative; height: 80px; background: #161B22; border-radius: 8px; overflow: hidden; margin-top: 12px; }
+    canvas { width: 100%; height: 100%; }
+    .lifi-btn { background: rgba(0,245,255,0.1); border: 1px solid #00F5FF; color: #00F5FF; border-radius: 8px; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-top: 12px; transition: all 0.2s; }
+    .lifi-btn.blocked { background: rgba(255,49,49,0.1); border-color: #FF3131; color: #FF3131; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .map-card { background: rgba(22,27,34,0.8); border: 1px solid #21262D; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .map-title { font-size: 11px; color: #00F5FF; letter-spacing: 2px; margin-bottom: 16px; }
+    .map-container { position: relative; background: #0A0E14; border-radius: 12px; overflow: hidden; height: 320px; }
+    .sat-info { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .sat-node { background: #161B22; border-radius: 8px; padding: 12px; border: 1px solid #21262D; cursor: pointer; transition: all 0.2s; }
+    .sat-node:hover { border-color: #00F5FF; }
+    .sat-node.active { border-color: #00F5FF; background: rgba(0,245,255,0.05); }
+    .sat-node-id { font-size: 11px; color: #00F5FF; letter-spacing: 1px; margin-bottom: 4px; }
+    .sat-node-status { font-size: 12px; color: #8B949E; }
+    .sat-node-signal { font-size: 18px; font-weight: 700; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #00F5FF; display: inline-block; margin-right: 4px; animation: blink 1.5s infinite; }
+    .dot.red { background: #FF3131; }
+    .dot.yellow { background: #FFB800; }
+    .oran-card { background: rgba(22,27,34,0.8); border: 1px solid #7000FF; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .oran-title { font-size: 11px; color: #7000FF; letter-spacing: 2px; margin-bottom: 16px; }
+    .oran-node { background: #161B22; border-radius: 8px; padding: 16px; border: 1px solid #21262D; margin-bottom: 12px; }
+    .oran-node-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .oran-node-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .oran-badge { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 1px; }
+    .oran-badge.online { background: rgba(0,245,255,0.1); color: #00F5FF; border: 1px solid #00F5FF; }
+    .oran-badge.warning { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid #FFB800; }
+    .oran-badge.offline { background: rgba(255,49,49,0.1); color: #FF3131; border: 1px solid #FF3131; }
+    .oran-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+    .oran-metric { text-align: center; }
+    .oran-metric-label { font-size: 10px; color: #8B949E; letter-spacing: 1px; margin-bottom: 4px; }
+    .oran-metric-value { font-size: 16px; font-weight: 700; color: #00F5FF; }
+    .oran-bar { height: 3px; background: #21262D; border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .oran-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .summary-box { background: #161B22; border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #21262D; }
+    .summary-box-label { font-size: 10px; color: #8B949E; letter-spacing: 2px; margin-bottom: 8px; }
+    .summary-box-value { font-size: 24px; font-weight: 700; color: #00F5FF; }
+    .profile-card { background: rgba(22,27,34,0.8); border: 1px solid #21262D; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00F5FF, #7000FF); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: #0D1117; margin: 0 auto 16px; }
+    .profile-name { text-align: center; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .profile-email { text-align: center; font-size: 13px; color: #8B949E; margin-bottom: 24px; }
+    .profile-field { background: #161B22; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .profile-field-label { font-size: 11px; color: #8B949E; letter-spacing: 2px; }
+    .profile-field-value { font-size: 13px; color: #00F5FF; }
+    .history-card { background: rgba(22,27,34,0.8); border: 1px solid #21262D; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .history-title { font-size: 11px; color: #00F5FF; letter-spacing: 2px; margin-bottom: 16px; }
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #21262D; }
+    .history-item:last-child { border-bottom: none; }
+    .history-left { display: flex; align-items: center; gap: 12px; }
+    .history-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+    .history-icon.sat { background: rgba(0,245,255,0.1); color: #00F5FF; border: 1px solid #00F5FF; }
+    .history-icon.cell { background: rgba(112,0,255,0.1); color: #7000FF; border: 1px solid #7000FF; }
+    .history-icon.lifi { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid #FFB800; }
+    .history-icon.dtc { background: rgba(255,49,49,0.1); color: #FF3131; border: 1px solid #FF3131; }
+    .history-info { font-size: 13px; color: #fff; }
+    .history-time { font-size: 11px; color: #8B949E; margin-top: 2px; }
+    .history-right { text-align: right; }
+    .history-signal { font-size: 16px; font-weight: 700; color: #00F5FF; }
+    .history-latency { font-size: 11px; color: #8B949E; }
+    .alert-banner { background: rgba(255,49,49,0.1); border: 1px solid #FF3131; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: #FF3131; }
+    .dtc-card { background: rgba(22,27,34,0.8); border: 1px solid #FF3131; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .dtc-title { font-size: 11px; color: #FF3131; letter-spacing: 2px; margin-bottom: 16px; }
+    .dtc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dtc-box { background: #161B22; border-radius: 8px; padding: 16px; border: 1px solid #21262D; }
+    .dtc-box-label { font-size: 11px; color: #8B949E; letter-spacing: 2px; margin-bottom: 8px; }
+    .dtc-box-value { font-size: 22px; font-weight: 700; color: #FF3131; }
+    .dtc-box-sub { font-size: 11px; color: #8B949E; margin-top: 4px; }
+    .auto-refresh { font-size: 11px; color: #8B949E; text-align: right; margin-bottom: 8px; }
+    .device-banner { background: rgba(22,27,34,0.9); border: 1px solid #21262D; border-radius: 8px; padding: 8px 16px; margin-bottom: 16px; font-size: 11px; color: #8B949E; display: flex; align-items: center; gap: 8px; }
+    .device-icon { font-size: 16px; }
+
+    /* MOBILE BOTTOM NAV */
+    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #161B22; border-top: 1px solid #21262D; padding: 8px 0; z-index: 100; }
+    .mobile-nav-items { display: flex; justify-content: space-around; align-items: center; }
+    .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 8px; cursor: pointer; color: #8B949E; font-size: 10px; font-weight: 700; letter-spacing: 1px; transition: color 0.2s; border: none; background: none; }
+    .mobile-nav-item.active { color: #00F5FF; }
+    .mobile-nav-icon { font-size: 20px; }
+
+    /* TABLET */
+    @media (min-width: 601px) and (max-width: 1024px) {
+      .dashboard { padding: 16px; max-width: 100%; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .sat-info { grid-template-columns: 1fr 1fr 1fr; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .oran-metrics { grid-template-columns: 1fr 1fr; }
+      .logo h1 { font-size: 40px; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      body { align-items: flex-start; }
+      .container { padding: 20px 16px; }
+      .logo h1 { font-size: 32px; letter-spacing: 8px; }
+      .logo h2 { font-size: 13px; letter-spacing: 6px; }
+      .dashboard { padding: 12px 12px 80px; max-width: 100%; }
+      .header h1 { font-size: 14px; letter-spacing: 2px; }
+      .header-user { display: none; }
+      .nav-tabs { display: none; }
+      .mobile-nav { display: block; }
+      .grid { grid-template-columns: 1fr; }
+      .lifi-simulator { flex-direction: column; align-items: center; }
+      .sat-info { grid-template-columns: 1fr 1fr; }
+      .oran-metrics { grid-template-columns: 1fr 1fr; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .dtc-grid { grid-template-columns: 1fr; }
+      .metric-box-value { font-size: 22px; }
+      .map-container { height: 220px; }
+      .providers { gap: 6px; }
+      .provider-btn { font-size: 10px; padding: 8px 6px; letter-spacing: 1px; }
+      .profile-field { flex-direction: column; align-items: flex-start; }
+      .history-info { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="authContainer">
+    <div class="logo">
+      <h1>NEXUS</h1>
+      <h2>HORIZON</h2>
+      <p>Next-Gen Connectivity</p>
+    </div>
+    <div class="screen active" id="loginScreen">
+      <div class="card">
+        <label class="label">EMAIL</label>
+        <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
+        <label class="label">SENHA</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        <div class="error" id="loginError"></div>
+        <button class="btn-primary" onclick="handleLogin()">ACESSAR SISTEMA</button>
+        <p class="link" onclick="showRegister()">Não tem conta? Cadastre-se</p>
+      </div>
+    </div>
+    <div class="screen" id="registerScreen">
+      <div class="card">
+        <label class="label">NOME</label>
+        <input type="text" id="registerName" placeholder="Seu nome" autocomplete="name">
+        <label class="label">EMAIL</label>
+        <input type="email" id="registerEmail" placeholder="seu@email.com" autocomplete="email">
+        <label class="label">SENHA</label>
+        <input type="password" id="registerPassword" placeholder="••••••••" autocomplete="new-password">
+        <div class="error" id="registerError"></div>
+        <div class="success" id="registerSuccess"></div>
+        <button class="btn-secondary" onclick="handleRegister()">CRIAR CONTA</button>
+        <p class="link" onclick="showLogin()">Já tem conta? Faça login</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard" id="dashboardContainer" style="display:none">
+    <div class="header">
+      <div>
+        <h1>NEXUS HORIZON</h1>
+        <span style="font-size:11px;color:#8B949E">Sistema de Conectividade</span>
+      </div>
+      <div class="header-right">
+        <div class="header-alert" title="RAN-BA-001 OFFLINE"></div>
+        <span class="header-user" id="headerUser"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+
+    <!-- DESKTOP TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('connectivity', this)">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="showPage('satellite', this)">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="showPage('lifi', this)">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="showPage('oran', this)">OPEN RAN</button>
+      <button class="nav-tab" onclick="showPage('dtc', this)">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="showPage('profile', this)">PERFIL</button>
+      <button class="nav-tab" onclick="showPage('history', this)">HISTÓRICO</button>
+    </div>
+
+    <!-- CONECTIVIDADE -->
+    <div class="page active" id="page-connectivity">
+      <div class="device-banner"><span class="device-icon" id="deviceIcon">💻</span><span id="deviceInfo">Detectando dispositivo...</span></div>
+      <div class="alert-banner"><span class="dot red"></span>ALERTA: RAN-BA-001 — Bahia está OFFLINE.</div>
+      <div class="auto-refresh" id="autoRefreshLabel">Atualização automática: 10s</div>
+      <div class="providers">
+        <button class="provider-btn active" onclick="fetchData('satellite', this)">SAT</button>
+        <button class="provider-btn" onclick="fetchData('cellular', this)">5G</button>
+        <button class="provider-btn" onclick="fetchData('lifi', this)">Li-Fi</button>
+        <button class="provider-btn" onclick="fetchData('directcell', this)">DTC</button>
+      </div>
+      <div class="grid">
+        <div class="metric-card">
+          <div class="metric-label">STATUS</div>
+          <div class="metric-value" id="statusValue">Carregando...</div>
+          <div class="metrics-row">
+            <div class="metric-box">
+              <div class="metric-box-label">LATÊNCIA</div>
+              <div class="metric-box-value" id="latencyValue">--</div>
+              <div style="font-size:11px;color:#8B949E">ms</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-box-label">SINAL</div>
+              <div class="metric-box-value" id="signalValue">--</div>
+              <div style="font-size:11px;color:#8B949E">%</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-box-label">TECNOLOGIA</div>
+              <div style="font-size:14px;font-weight:700;color:#7000FF" id="techValue">--</div>
+            </div>
+          </div>
+          <div class="signal-bar">
+            <div class="signal-fill" id="signalFill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-title">TECNOLOGIAS ATIVAS</div>
+          <div style="margin-bottom:12px">
+            <span class="tech-badge">Direct-to-Cell</span>
+            <span class="tech-badge">Open RAN</span>
+            <span class="tech-badge">Li-Fi</span>
+            <span class="tech-badge">5G</span>
+            <span class="tech-badge">Satélite</span>
+          </div>
+          <div class="info-title">PROVEDOR ATIVO</div>
+          <div class="info-text" id="activeProvider">Satélite — SAT-BR-001</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAPA SATELITAL -->
+    <div class="page" id="page-satellite">
+      <div class="map-card">
+        <div class="map-title">MAPA DE NÓS ORBITAIS — COBERTURA BRASIL</div>
+        <div class="map-container"><canvas id="mapCanvas"></canvas></div>
+        <div class="sat-info" id="satInfo"></div>
+      </div>
+    </div>
+
+    <!-- SIMULADOR Li-Fi -->
+    <div class="page" id="page-lifi">
+      <div class="lifi-card">
+        <div class="lifi-title">SIMULADOR Li-Fi — TRANSMISSÃO VIA LUZ</div>
+        <div class="lifi-simulator">
+          <div>
+            <div class="lifi-light" id="lifiLight" onclick="toggleLifi()">LUZ<br>ON</div>
+            <button class="lifi-btn" id="lifiBtn" onclick="toggleLifi()">BLOQUEAR SINAL</button>
+          </div>
+          <div class="lifi-info">
+            <div class="lifi-status" id="lifiStatus">Transmitindo dados via luz...</div>
+            <div class="lifi-speed" id="lifiSpeed">100</div>
+            <div class="lifi-speed-label">Gbps</div>
+            <div class="chart-container"><canvas id="lifiChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-title">COMO FUNCIONA O Li-Fi</div>
+        <div class="info-text">Transmite dados através de ondas de luz visível. Velocidade de até 100 Gbps, mais seguro que Wi-Fi pois a luz não atravessa paredes, sem interferência eletromagnética — ideal para hospitais e aviões.</div>
+      </div>
+    </div>
+
+    <!-- OPEN RAN -->
+    <div class="page" id="page-oran">
+      <div class="summary-grid">
+        <div class="summary-box"><div class="summary-box-label">NÓS ATIVOS</div><div class="summary-box-value">5</div></div>
+        <div class="summary-box"><div class="summary-box-label">FORNECEDORES</div><div class="summary-box-value" style="color:#7000FF">3</div></div>
+        <div class="summary-box"><div class="summary-box-label">ECONOMIA</div><div class="summary-box-value">37%</div></div>
+        <div class="summary-box"><div class="summary-box-label">UPTIME</div><div class="summary-box-value">99.8%</div></div>
+      </div>
+      <div class="oran-card">
+        <div class="oran-title">NÓS DE RÁDIO ABERTO — OPEN RAN</div>
+        <div class="oran-node">
+          <div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-SP-001 — São Paulo</div><div class="oran-badge online">ONLINE</div></div>
+          <div class="oran-metrics">
+            <div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">42%</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">8.2G</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">1.2M</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">3ms</div></div>
+          </div>
+          <div class="oran-bar"><div class="oran-bar-fill" style="width:42%;background:#00F5FF"></div></div>
+        </div>
+        <div class="oran-node">
+          <div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-RJ-001 — Rio de Janeiro</div><div class="oran-badge online">ONLINE</div></div>
+          <div class="oran-metrics">
+            <div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">67%</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">5.8G</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">890K</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">4ms</div></div>
+          </div>
+          <div class="oran-bar"><div class="oran-bar-fill" style="width:67%;background:#FFB800"></div></div>
+        </div>
+        <div class="oran-node">
+          <div class="oran-node-header"><div class="oran-node-name"><span class="dot yellow"></span>RAN-MG-001 — Minas Gerais</div><div class="oran-badge warning">ALERTA</div></div>
+          <div class="oran-metrics">
+            <div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">89%</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">3.1G</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">560K</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">12ms</div></div>
+          </div>
+          <div class="oran-bar"><div class="oran-bar-fill" style="width:89%;background:#FF3131"></div></div>
+        </div>
+        <div class="oran-node">
+          <div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-RS-001 — Rio Grande do Sul</div><div class="oran-badge online">ONLINE</div></div>
+          <div class="oran-metrics">
+            <div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">31%</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">2.4G</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">340K</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">5ms</div></div>
+          </div>
+          <div class="oran-bar"><div class="oran-bar-fill" style="width:31%;background:#00F5FF"></div></div>
+        </div>
+        <div class="oran-node">
+          <div class="oran-node-header"><div class="oran-node-name"><span class="dot red"></span>RAN-BA-001 — Bahia</div><div class="oran-badge offline">OFFLINE</div></div>
+          <div class="oran-metrics">
+            <div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value" style="color:#FF3131">--</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value" style="color:#FF3131">0</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value" style="color:#FF3131">0</div></div>
+            <div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value" style="color:#FF3131">--</div></div>
+          </div>
+          <div class="oran-bar"><div class="oran-bar-fill" style="width:0%;background:#FF3131"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIRECT-TO-CELL -->
+    <div class="page" id="page-dtc">
+      <div class="dtc-card">
+        <div class="dtc-title">DIRECT-TO-CELL — SATÉLITE DIRETO PARA O CELULAR</div>
+        <div class="dtc-grid">
+          <div class="dtc-box"><div class="dtc-box-label">NÓ ATIVO</div><div class="dtc-box-value">DTC-BR-001</div><div class="dtc-box-sub">Cobertura: Brasil</div></div>
+          <div class="dtc-box"><div class="dtc-box-label">ALTITUDE ORBITAL</div><div class="dtc-box-value">550 km</div><div class="dtc-box-sub">Órbita baixa (LEO)</div></div>
+          <div class="dtc-box"><div class="dtc-box-label">LATÊNCIA</div><div class="dtc-box-value" id="dtcLatency">--</div><div class="dtc-box-sub">ms em tempo real</div></div>
+          <div class="dtc-box"><div class="dtc-box-label">SINAL</div><div class="dtc-box-value" id="dtcSignal">--</div><div class="dtc-box-sub">% de cobertura</div></div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">STATUS DA CONEXÃO</div>
+        <div class="metric-value" id="dtcStatus">Carregando...</div>
+        <div class="signal-bar" style="margin-top:8px"><div class="signal-fill" id="dtcSignalFill" style="width:0%;background:#FF3131"></div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-title">O QUE É DIRECT-TO-CELL</div>
+        <div class="info-text">O satélite funciona como uma "torre de celular no espaço". Empresas como SpaceX e AST SpaceMobile testam nos EUA a conexão direta do satélite para o smartphone comum, sem antena extra. Acabaria com as "zonas mortas" em estradas, fazendas e áreas rurais do Brasil.</div>
+      </div>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="page" id="page-profile">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profileAvatar">N</div>
+        <div class="profile-name" id="profileName">Carregando...</div>
+        <div class="profile-email" id="profileEmail">--</div>
+        <div class="profile-field"><div class="profile-field-label">PLANO</div><div class="profile-field-value" id="profilePlan">Nexus Pro</div></div>
+        <div class="profile-field"><div class="profile-field-label">STATUS</div><div class="profile-field-value">Ativo</div></div>
+        <div class="profile-field"><div class="profile-field-label">TECNOLOGIAS</div><div class="profile-field-value">SAT · 5G · Li-Fi · DTC</div></div>
+        <div class="profile-field"><div class="profile-field-label">MEMBRO DESDE</div><div class="profile-field-value" id="profileSince">2026</div></div>
+        <div class="profile-field"><div class="profile-field-label">CONEXÕES TOTAIS</div><div class="profile-field-value" id="profileConnections">--</div></div>
+        <div class="profile-field"><div class="profile-field-label">ÚLTIMO ACESSO</div><div class="profile-field-value" id="profileLastLogin">--</div></div>
+        <div class="profile-field"><div class="profile-field-label">DISPOSITIVO</div><div class="profile-field-value" id="profileDevice">--</div></div>
+        <div class="profile-field"><div class="profile-field-label">SISTEMA</div><div class="profile-field-value" id="profileOS">--</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-title">SEGURANÇA</div>
+        <div class="info-text">Dados protegidos com JWT + AES-256. Todas as conexões são criptografadas. Armazenamento seguro via Firebase Firestore. Token expira em 7 dias.</div>
+      </div>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div class="page" id="page-history">
+      <div class="history-card">
+        <div class="history-title">HISTÓRICO DE CONEXÕES</div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon sat">SAT</div><div><div class="history-info">Satélite — SAT-BR-001</div><div class="history-time">Hoje, 20:33</div></div></div>
+          <div class="history-right"><div class="history-signal">92%</div><div class="history-latency">28ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon lifi">LFI</div><div><div class="history-info">Li-Fi — LIFI-LAB-001</div><div class="history-time">Hoje, 19:55</div></div></div>
+          <div class="history-right"><div class="history-signal">100%</div><div class="history-latency">1ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon cell">5G</div><div><div class="history-info">Celular — TOWER-SP-042</div><div class="history-time">Hoje, 19:12</div></div></div>
+          <div class="history-right"><div class="history-signal">87%</div><div class="history-latency">8ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon dtc">DTC</div><div><div class="history-info">Direct-to-Cell — DTC-BR-001</div><div class="history-time">Hoje, 18:47</div></div></div>
+          <div class="history-right"><div class="history-signal">82%</div><div class="history-latency">15ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon sat">SAT</div><div><div class="history-info">Satélite — SAT-BR-005</div><div class="history-time">Hoje, 18:00</div></div></div>
+          <div class="history-right"><div class="history-signal">95%</div><div class="history-latency">22ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon cell">5G</div><div><div class="history-info">Celular — TOWER-RJ-018</div><div class="history-time">Ontem, 22:15</div></div></div>
+          <div class="history-right"><div class="history-signal">76%</div><div class="history-latency">11ms</div></div>
+        </div>
+        <div class="history-item">
+          <div class="history-left"><div class="history-icon lifi">LFI</div><div><div class="history-info">Li-Fi — LIFI-LAB-001</div><div class="history-time">Ontem, 20:30</div></div></div>
+          <div class="history-right"><div class="history-signal">100%</div><div class="history-latency">1ms</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-items">
+      <button class="mobile-nav-item active" onclick="mobileNav('connectivity', this)">
+        <span class="mobile-nav-icon">📡</span>SINAL
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('satellite', this)">
+        <span class="mobile-nav-icon">🛰️</span>MAPA
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('lifi', this)">
+        <span class="mobile-nav-icon">💡</span>Li-Fi
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('oran', this)">
+        <span class="mobile-nav-icon">📶</span>RAN
+      </button>
+      <button class="mobile-nav-item" onclick="mobileNav('profile', this)">
+        <span class="mobile-nav-icon">👤</span>PERFIL
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    const API = 'http://localhost:3333/api'
+    let token = localStorage.getItem('token')
+    let userEmail = localStorage.getItem('userEmail') || ''
+    let userName = localStorage.getItem('userName') || ''
+    let lifiActive = true
+    let chartData = new Array(60).fill(100)
+    let chartInterval = null
+    let autoRefreshInterval = null
+    let autoRefreshCount = 10
+    let currentProvider = 'satellite'
+    let currentProviderBtn = null
+
+    const satellites = [
+      { id: 'SAT-BR-001', lat: 0.25, lng: 0.35, signal: 92, status: 'online', region: 'Norte' },
+      { id: 'SAT-BR-002', lat: 0.45, lng: 0.55, signal: 87, status: 'online', region: 'Sudeste' },
+      { id: 'SAT-BR-003', lat: 0.65, lng: 0.42, signal: 78, status: 'online', region: 'Sul' },
+      { id: 'SAT-BR-004', lat: 0.35, lng: 0.72, signal: 0, status: 'offline', region: 'Nordeste' },
+      { id: 'SAT-BR-005', lat: 0.55, lng: 0.28, signal: 95, status: 'online', region: 'Centro-Oeste' },
+      { id: 'SAT-BR-006', lat: 0.20, lng: 0.60, signal: 65, status: 'online', region: 'Amazônia' },
+    ]
+
+    function detectDevice() {
+      const ua = navigator.userAgent
+      const w = window.innerWidth
+      let icon = '💻'
+      let info = ''
+      let type = 'desktop'
+      let os = ''
+      let deviceName = ''
+
+      if (/android/i.test(ua)) {
+        os = 'Android'
+        const match = ua.match(/Android\s([\d.]+)/)
+        if (match) os += ' ' + match[1]
+        icon = '📱'
+        type = 'mobile'
+        deviceName = 'Smartphone Android'
+        const brand = ua.match(/(Samsung|Xiaomi|Motorola|LG|Huawei|OnePlus|Realme|OPPO|Vivo)/i)
+        if (brand) deviceName = brand[1]
+      } else if (/iPad/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        os = 'iPadOS'
+        const match = ua.match(/OS\s([\d_]+)/)
+        if (match) os += ' ' + match[1].replace(/_/g, '.')
+        icon = '📱'
+        type = 'tablet'
+        deviceName = 'iPad'
+      } else if (/iPhone/i.test(ua)) {
+        os = 'iOS'
+        const match = ua.match(/OS\s([\d_]+)/)
+        if (match) os += ' ' + match[1].replace(/_/g, '.')
+        icon = '📱'
+        type = 'mobile'
+        deviceName = 'iPhone'
+      } else if (/Windows/i.test(ua)) {
+        os = 'Windows'
+        const match = ua.match(/Windows NT\s([\d.]+)/)
+        if (match) {
+          const v = parseFloat(match[1])
+          if (v >= 10) os = 'Windows 11/10'
+          else if (v === 6.3) os = 'Windows 8.1'
+          else if (v === 6.2) os = 'Windows 8'
+          else os = 'Windows'
+        }
+        if (w >= 1280) { icon = '🖥️'; deviceName = 'Desktop' }
+        else { icon = '💻'; deviceName = 'Notebook' }
+        type = 'desktop'
+      } else if (/Mac/i.test(ua)) {
+        os = 'macOS'
+        icon = '💻'
+        deviceName = 'MacBook/iMac'
+        type = 'desktop'
+      } else if (/Linux/i.test(ua)) {
+        os = 'Linux'
+        icon = '💻'
+        deviceName = 'Computador Linux'
+        type = 'desktop'
+      }
+
+      if (w <= 600 && type !== 'mobile') { icon = '📱'; type = 'mobile' }
+      else if (w > 600 && w <= 1024 && type !== 'tablet') { icon = '📱'; type = 'tablet'; deviceName = 'Tablet' }
+
+      info = `${deviceName} · ${os} · ${w}px`
+
+      document.getElementById('deviceIcon').textContent = icon
+      document.getElementById('deviceInfo').textContent = info
+      document.getElementById('profileDevice').textContent = deviceName || 'Desconhecido'
+      document.getElementById('profileOS').textContent = os || navigator.platform
+
+      return { type, os, deviceName, icon }
+    }
+
+    if (token) showDashboard()
+
+    function showLogin() {
+      document.getElementById('loginScreen').classList.add('active')
+      document.getElementById('registerScreen').classList.remove('active')
+    }
+
+    function showRegister() {
+      document.getElementById('loginScreen').classList.remove('active')
+      document.getElementById('registerScreen').classList.add('active')
+    }
+
+    function showDashboard() {
+      document.getElementById('authContainer').style.display = 'none'
+      document.getElementById('dashboardContainer').style.display = 'block'
+      document.getElementById('headerUser').textContent = userName || userEmail.split('@')[0]
+      currentProviderBtn = document.querySelector('.provider-btn')
+      fetchData('satellite', currentProviderBtn)
+      fetchDTC()
+      startLifiSimulator()
+      startAutoRefresh()
+      setTimeout(drawMap, 100)
+      loadProfile()
+      detectDevice()
+    }
+
+    async function loadProfile() {
+      try {
+        const res = await fetch(`${API}/auth/profile`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        if (res.status === 401) { handleLogout(); return }
+        const data = await res.json()
+        const name = data.name || userEmail.split('@')[0]
+        document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase()
+        document.getElementById('profileName').textContent = name
+        document.getElementById('profileEmail').textContent = data.email
+        document.getElementById('profilePlan').textContent = data.plan || 'Nexus Pro'
+        document.getElementById('profileConnections').textContent = data.totalConnections || 0
+        document.getElementById('profileSince').textContent = data.createdAt ? new Date(data.createdAt).getFullYear() : 2026
+        document.getElementById('profileLastLogin').textContent = data.lastLogin ? new Date(data.lastLogin).toLocaleString('pt-BR') : 'Agora'
+        document.getElementById('headerUser').textContent = name
+      } catch (err) { console.error(err) }
+    }
+
+    function startAutoRefresh() {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
+      autoRefreshCount = 10
+      autoRefreshInterval = setInterval(() => {
+        autoRefreshCount--
+        const el = document.getElementById('autoRefreshLabel')
+        if (el) el.textContent = `Atualização automática: ${autoRefreshCount}s`
+        if (autoRefreshCount <= 0) {
+          autoRefreshCount = 10
+          if (currentProviderBtn) fetchData(currentProvider, currentProviderBtn)
+        }
+      }, 1000)
+    }
+
+    function showPage(page, btn) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+      btn.classList.add('active')
+      document.getElementById(`page-${page}`).classList.add('active')
+      if (page === 'satellite') setTimeout(drawMap, 100)
+      if (page === 'dtc') fetchDTC()
+    }
+
+    function mobileNav(page, btn) {
+      document.querySelectorAll('.mobile-nav-item').forEach(t => t.classList.remove('active'))
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+      btn.classList.add('active')
+      document.getElementById(`page-${page}`).classList.add('active')
+      if (page === 'satellite') setTimeout(drawMap, 100)
+      if (page === 'dtc') fetchDTC()
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('loginEmail').value
+      const password = document.getElementById('loginPassword').value
+      const errorEl = document.getElementById('loginError')
+      errorEl.style.display = 'none'
+      try {
+        const res = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Falha no login')
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('userEmail', email)
+        localStorage.setItem('userName', data.user?.name || '')
+        token = data.token
+        userEmail = email
+        userName = data.user?.name || ''
+        showDashboard()
+      } catch (err) {
+        errorEl.textContent = err.message
+        errorEl.style.display = 'block'
+      }
+    }
+
+    async function handleRegister() {
+      const name = document.getElementById('registerName').value
+      const email = document.getElementById('registerEmail').value
+      const password = document.getElementById('registerPassword').value
+      const errorEl = document.getElementById('registerError')
+      const successEl = document.getElementById('registerSuccess')
+      errorEl.style.display = 'none'
+      successEl.style.display = 'none'
+      try {
+        const res = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
+        successEl.textContent = 'Conta criada! Faça login.'
+        successEl.style.display = 'block'
+        setTimeout(() => showLogin(), 2000)
+      } catch (err) {
+        errorEl.textContent = err.message
+        errorEl.style.display = 'block'
+      }
+    }
+
+    async function fetchData(type, btn) {
+      document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      currentProvider = type
+      currentProviderBtn = btn
+      const providers = {
+        satellite: 'Satélite — SAT-BR-001',
+        cellular: 'Celular — TOWER-SP-042',
+        lifi: 'Li-Fi — LIFI-LAB-001',
+        directcell: 'Direct-to-Cell — DTC-BR-001'
+      }
+      document.getElementById('activeProvider').textContent = providers[type]
+      try {
+        const res = await fetch(`${API}/connectivity/${type}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        if (res.status === 401) { handleLogout(); return }
+        const data = await res.json()
+        document.getElementById('statusValue').textContent = data.status
+        document.getElementById('latencyValue').textContent = data.latency
+        document.getElementById('signalValue').textContent = data.signal
+        document.getElementById('signalFill').style.width = `${data.signal}%`
+        document.getElementById('techValue').textContent = data.technology || type
+        autoRefreshCount = 10
+      } catch (err) { console.error(err) }
+    }
+
+    async function fetchDTC() {
+      try {
+        const res = await fetch(`${API}/connectivity/directcell`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+        const data = await res.json()
+        document.getElementById('dtcLatency').textContent = data.latency
+        document.getElementById('dtcSignal').textContent = data.signal + '%'
+        document.getElementById('dtcStatus').textContent = data.status
+        document.getElementById('dtcSignalFill').style.width = `${data.signal}%`
+      } catch (err) { console.error(err) }
+    }
+
+    function drawMap() {
+      const canvas = document.getElementById('mapCanvas')
+      if (!canvas) return
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+      const ctx = canvas.getContext('2d')
+      const W = canvas.width, H = canvas.height
+      ctx.fillStyle = '#0A0E14'; ctx.fillRect(0, 0, W, H)
+      for (let i = 0; i < 80; i++) {
+        ctx.beginPath(); ctx.arc(Math.random()*W, Math.random()*H, Math.random()*1.2, 0, Math.PI*2)
+        ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.4+0.1})`; ctx.fill()
+      }
+      ctx.strokeStyle = 'rgba(0,245,255,0.08)'; ctx.lineWidth = 0.5
+      for (let i = 0; i <= 6; i++) {
+        ctx.beginPath(); ctx.moveTo(0,(H/6)*i); ctx.lineTo(W,(H/6)*i); ctx.stroke()
+        ctx.beginPath(); ctx.moveTo((W/6)*i,0); ctx.lineTo((W/6)*i,H); ctx.stroke()
+      }
+      satellites.forEach(sat => {
+        const x = sat.lng*W, y = sat.lat*H
+        const isOnline = sat.status === 'online'
+        if (isOnline) {
+          ctx.beginPath(); ctx.arc(x,y,30,0,Math.PI*2)
+          ctx.strokeStyle='rgba(0,245,255,0.15)'; ctx.lineWidth=1; ctx.stroke()
+          ctx.beginPath(); ctx.arc(x,y,50,0,Math.PI*2)
+          ctx.strokeStyle='rgba(0,245,255,0.06)'; ctx.stroke()
+        }
+        ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2)
+        ctx.fillStyle = isOnline ? '#00F5FF' : '#FF3131'; ctx.fill()
+        if (isOnline) {
+          ctx.shadowColor='#00F5FF'; ctx.shadowBlur=12
+          ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2)
+          ctx.fillStyle='#00F5FF'; ctx.fill(); ctx.shadowBlur=0
+        }
+        ctx.fillStyle = isOnline ? '#00F5FF' : '#FF3131'
+        ctx.font='11px Segoe UI'; ctx.fillText(sat.id, x+10, y-8)
+        ctx.fillStyle='#8B949E'; ctx.font='10px Segoe UI'; ctx.fillText(sat.region, x+10, y+6)
+      })
+      document.getElementById('satInfo').innerHTML = satellites.map(sat => `
+        <div class="sat-node ${sat.status==='online'?'active':''}" onclick="selectSat('${sat.id}')">
+          <div class="sat-node-id"><span class="dot ${sat.status==='offline'?'red':''}"></span>${sat.id}</div>
+          <div class="sat-node-status">${sat.region}</div>
+          <div class="sat-node-signal" style="color:${sat.status==='online'?'#00F5FF':'#FF3131'}">${sat.status==='online'?sat.signal+'%':'OFFLINE'}</div>
+        </div>
+      `).join('')
+    }
+
+    function selectSat(id) {
+      const sat = satellites.find(s => s.id === id)
+      if (sat) {
+        document.getElementById('statusValue').textContent = sat.status==='online' ? `Connected — Orbital node ${sat.id}` : `Offline — ${sat.id}`
+        document.getElementById('latencyValue').textContent = sat.status==='online' ? Math.floor(Math.random()*30)+20 : '--'
+        document.getElementById('signalValue').textContent = sat.signal
+        document.getElementById('signalFill').style.width = `${sat.signal}%`
+        showPage('connectivity', document.querySelector('.nav-tab'))
+      }
+    }
+
+    function toggleLifi() {
+      lifiActive = !lifiActive
+      const light = document.getElementById('lifiLight')
+      const btn = document.getElementById('lifiBtn')
+      const status = document.getElementById('lifiStatus')
+      const speed = document.getElementById('lifiSpeed')
+      if (lifiActive) {
+        light.classList.remove('off'); light.innerHTML='LUZ<br>ON'
+        btn.classList.remove('blocked'); btn.textContent='BLOQUEAR SINAL'
+        status.textContent='Transmitindo dados via luz...'; speed.style.color='#00F5FF'
+      } else {
+        light.classList.add('off'); light.innerHTML='LUZ<br>OFF'
+        btn.classList.add('blocked'); btn.textContent='LIBERAR SINAL'
+        status.textContent='Sinal bloqueado — sensor coberto'; speed.style.color='#FF3131'
+      }
+    }
+
+    function startLifiSimulator() {
+      const canvas = document.getElementById('lifiChart')
+      const ctx = canvas.getContext('2d')
+      chartInterval = setInterval(() => {
+        const speed = document.getElementById('lifiSpeed')
+        let newValue
+        if (lifiActive) { newValue = Math.floor(Math.random()*20)+85; speed.textContent=newValue }
+        else { newValue = Math.floor(Math.random()*5); speed.textContent=newValue }
+        chartData.push(newValue); chartData.shift()
+        canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.beginPath(); ctx.strokeStyle=lifiActive?'#00F5FF':'#FF3131'; ctx.lineWidth=2
+        chartData.forEach((val,i) => {
+          const x=(i/chartData.length)*canvas.width
+          const y=canvas.height-(val/100)*canvas.height
+          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)
+        })
+        ctx.stroke()
+        ctx.fillStyle=lifiActive?'rgba(0,245,255,0.1)':'rgba(255,49,49,0.1)'
+        ctx.lineTo(canvas.width,canvas.height); ctx.lineTo(0,canvas.height)
+        ctx.closePath(); ctx.fill()
+      }, 500)
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userEmail')
+      localStorage.removeItem('userName')
+      token = null
+      if (chartInterval) clearInterval(chartInterval)
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
+      document.getElementById('authContainer').style.display = 'flex'
+      document.getElementById('dashboardContainer').style.display = 'none'
+      showLogin()
+    }
+
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        if (document.getElementById('loginScreen').classList.contains('active')) handleLogin()
+        else handleRegister()
+      }
+    })
+
+    window.addEventListener('resize', () => {
+      if (token) detectDevice()
+    })
+  </script>
+</body>
+</html>
