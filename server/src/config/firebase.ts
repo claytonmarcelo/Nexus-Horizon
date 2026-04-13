@@ -1,10 +1,13 @@
 import admin from 'firebase-admin'
 import path from 'path'
+import fs from 'fs'
 
 let serviceAccount: any
 
-if (process.env.FIREBASE_CREDENTIALS) {
-  serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS)
+const secretPath = '/etc/secrets/firebase-credentials.json'
+
+if (fs.existsSync(secretPath)) {
+  serviceAccount = JSON.parse(fs.readFileSync(secretPath, 'utf8'))
 } else {
   serviceAccount = require(path.resolve('firebase-credentials.json'))
 }

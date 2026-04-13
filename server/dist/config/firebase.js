@@ -6,9 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 let serviceAccount;
-if (process.env.FIREBASE_CREDENTIALS) {
-    serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+const secretPath = '/etc/secrets/firebase-credentials.json';
+if (fs_1.default.existsSync(secretPath)) {
+    serviceAccount = JSON.parse(fs_1.default.readFileSync(secretPath, 'utf8'));
 }
 else {
     serviceAccount = require(path_1.default.resolve('firebase-credentials.json'));
