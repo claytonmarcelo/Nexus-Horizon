@@ -13,4 +13,5 @@ if (!firebase_admin_1.default.apps.length) {
     });
 }
 exports.db = firebase_admin_1.default.firestore();
+console.log("Firebase initialized successfully");
 //# sourceMappingURL=firebase.js.map

@@ -10,3 +10,4 @@ if (!admin.apps.length) {
 }
 
 export const db = admin.firestore()
+console.log("Firebase initialized successfully")
