@@ -5,11 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
-const path_1 = __importDefault(require("path"));
-const serviceAccount = require(path_1.default.join(__dirname, '../../firebase-credentials.json'));
 if (!firebase_admin_1.default.apps.length) {
     firebase_admin_1.default.initializeApp({
-        credential: firebase_admin_1.default.credential.cert(serviceAccount),
+        credential: firebase_admin_1.default.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        }),
     });
 }
 exports.db = firebase_admin_1.default.firestore();
