@@ -9,7 +9,7 @@ import { authRoutes } from './routes/authRoutes'
 
 dotenv.config()
 
-const server = Fastify({ logger: false })
+const server = Fastify({ logger: true })
 
 server.register(fastifyJwt, {
   secret: process.env.JWT_SECRET as string,

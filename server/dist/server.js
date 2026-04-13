@@ -12,7 +12,7 @@ const path_1 = __importDefault(require("path"));
 const connectivityRoutes_1 = require("./routes/connectivityRoutes");
 const authRoutes_1 = require("./routes/authRoutes");
 dotenv_1.default.config();
-const server = (0, fastify_1.default)({ logger: false });
+const server = (0, fastify_1.default)({ logger: true });
 server.register(jwt_1.default, {
     secret: process.env.JWT_SECRET,
 });
