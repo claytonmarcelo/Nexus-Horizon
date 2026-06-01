@@ -13,8 +13,12 @@ const connectivityRoutes_1 = require("./routes/connectivityRoutes");
 const authRoutes_1 = require("./routes/authRoutes");
 dotenv_1.default.config();
 const server = (0, fastify_1.default)({ logger: true });
+const jwtSecret = process.env.JWT_SECRET || 'nexus-horizon-secret-key';
+if (!process.env.JWT_SECRET) {
+    server.log.warn('JWT_SECRET não definido. Usando chave padrão para desenvolvimento.');
+}
 server.register(jwt_1.default, {
-    secret: process.env.JWT_SECRET,
+    secret: jwtSecret,
 });
 server.register(cors_1.default, {
     origin: true,

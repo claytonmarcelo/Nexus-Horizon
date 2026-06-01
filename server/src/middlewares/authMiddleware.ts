@@ -7,7 +7,7 @@ export async function authMiddleware(
   try {
     await request.jwtVerify()
   } catch (err) {
-    reply.status(401).send({
+    return reply.status(401).send({
       error: 'Unauthorized',
       message: 'Token inválido ou expirado.',
     })

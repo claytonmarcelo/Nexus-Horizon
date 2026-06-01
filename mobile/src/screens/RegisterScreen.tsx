@@ -11,7 +11,8 @@ import {
   Platform,
 } from 'react-native'
 import { colors, typography, spacing } from '../theme'
-import { api } from '../services/api'
+import { api, setAuthToken } from '../services/api'
+import * as SecureStore from 'expo-secure-store'
 
 export function RegisterScreen({ navigation }: any) {
   const [name, setName] = useState('')
@@ -26,7 +27,16 @@ export function RegisterScreen({ navigation }: any) {
     }
     setLoading(true)
     try {
-      await api.post('/auth/register', { name, email, password })
+      const response = await api.post('/auth/register', { name, email, password })
+      const { token } = response.data
+
+      if (token) {
+        await SecureStore.setItemAsync('token', token)
+        setAuthToken(token)
+        navigation.replace('Dashboard')
+        return
+      }
+
       Alert.alert('Sucesso', 'Conta criada! Faça login.', [
         { text: 'OK', onPress: () => navigation.navigate('Login') },
       ])

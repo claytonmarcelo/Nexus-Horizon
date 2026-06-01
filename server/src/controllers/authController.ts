@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import bcrypt from 'bcryptjs'
 import { db } from '../config/firebase'
@@ -18,7 +19,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     name,
     email,
     password: hashedPassword,
@@ -29,8 +30,14 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   await usersRef.doc(newUser.id).set(newUser)
 
+  const token = await reply.jwtSign(
+    { id: newUser.id, email: newUser.email, name: newUser.name },
+    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+  )
+
   return reply.status(201).send({
     message: 'Usuário criado com sucesso.',
+    token,
     user: { id: newUser.id, name: newUser.name, email: newUser.email },
   })
 }

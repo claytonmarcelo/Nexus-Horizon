@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
 exports.login = login;
 exports.getProfile = getProfile;
+const crypto_1 = require("crypto");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const firebase_1 = require("../config/firebase");
 async function register(request, reply) {
@@ -17,7 +18,7 @@ async function register(request, reply) {
     }
     const hashedPassword = await bcryptjs_1.default.hash(password, 10);
     const newUser = {
-        id: crypto.randomUUID(),
+        id: (0, crypto_1.randomUUID)(),
         name,
         email,
         password: hashedPassword,
@@ -26,8 +27,10 @@ async function register(request, reply) {
         totalConnections: 0,
     };
     await usersRef.doc(newUser.id).set(newUser);
+    const token = await reply.jwtSign({ id: newUser.id, email: newUser.email, name: newUser.name }, { expiresIn: process.env.JWT_EXPIRES_IN || '7d' });
     return reply.status(201).send({
         message: 'Usuário criado com sucesso.',
+        token,
         user: { id: newUser.id, name: newUser.name, email: newUser.email },
     });
 }

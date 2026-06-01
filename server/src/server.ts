@@ -10,9 +10,14 @@ import { authRoutes } from './routes/authRoutes'
 dotenv.config()
 
 const server = Fastify({ logger: true })
+const jwtSecret = process.env.JWT_SECRET || 'nexus-horizon-secret-key'
+
+if (!process.env.JWT_SECRET) {
+  server.log.warn('JWT_SECRET não definido. Usando chave padrão para desenvolvimento.')
+}
 
 server.register(fastifyJwt, {
-  secret: process.env.JWT_SECRET as string,
+  secret: jwtSecret,
 })
 
 server.register(fastifyCors, {

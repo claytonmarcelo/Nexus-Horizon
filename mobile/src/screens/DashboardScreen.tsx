@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native'
+import axios from 'axios'
 import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
 import * as SecureStore from 'expo-secure-store'
@@ -24,19 +25,31 @@ export function DashboardScreen({ navigation }: any) {
 
   const fetchData = async (type: string) => {
     try {
-      const token = await SecureStore.getItemAsync('token')
-      const response = await api.get(`/connectivity/${type}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const response = await api.get(`/connectivity/${type}`)
       setData(response.data)
       setActiveProvider(type)
     } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        await SecureStore.deleteItemAsync('token')
+        removeAuthToken()
+        navigation.replace('Login')
+        return
+      }
       Alert.alert('Erro', 'Falha ao buscar dados.')
     }
   }
 
   useEffect(() => {
-    fetchData('satellite')
+    const init = async () => {
+      const token = await SecureStore.getItemAsync('token')
+      if (!token) {
+        navigation.replace('Login')
+        return
+      }
+      fetchData('satellite')
+    }
+
+    init()
   }, [])
 
   const handleLogout = async () => {
@@ -49,6 +62,7 @@ export function DashboardScreen({ navigation }: any) {
     { key: 'satellite', label: 'SAT' },
     { key: 'cellular', label: '5G' },
     { key: 'lifi', label: 'Li-Fi' },
+    { key: 'directcell', label: 'DTC' },
   ]
 
   return (
@@ -64,11 +78,12 @@ export function DashboardScreen({ navigation }: any) {
       </View>
 
       <View style={styles.providerRow}>
-        {providers.map((p) => (
+        {providers.map((p, index) => (
           <TouchableOpacity
             key={p.key}
             style={[
               styles.providerBtn,
+              index < providers.length - 1 && styles.providerBtnMargin,
               activeProvider === p.key && styles.providerBtnActive,
             ]}
             onPress={() => fetchData(p.key)}
@@ -150,7 +165,6 @@ const styles = StyleSheet.create({
   providerRow: {
     flexDirection: 'row',
     padding: spacing.md,
-    gap: spacing.sm,
   },
   providerBtn: {
     flex: 1,
@@ -159,6 +173,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
+  },
+  providerBtnMargin: {
+    marginRight: spacing.sm,
   },
   providerBtnActive: {
     borderColor: colors.primary,

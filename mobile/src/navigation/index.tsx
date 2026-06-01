@@ -16,7 +16,7 @@ export function Navigation() {
         screenOptions={{
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.primary,
-          headerTitleStyle: { letterSpacing: 2 },
+          headerTitleStyle: { letterSpacing: 2 } as any,
           contentStyle: { backgroundColor: colors.background },
         }}
       >

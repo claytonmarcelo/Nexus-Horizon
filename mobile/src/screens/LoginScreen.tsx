@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import { colors, typography, spacing } from '../theme'
 import { api, setAuthToken } from '../services/api'
+import * as SecureStore from 'expo-secure-store'
 
 export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('')
@@ -27,6 +28,7 @@ export function LoginScreen({ navigation }: any) {
     try {
       const response = await api.post('/auth/login', { email, password })
       const { token } = response.data
+      await SecureStore.setItemAsync('token', token)
       setAuthToken(token)
       navigation.replace('Dashboard')
     } catch (error: any) {
