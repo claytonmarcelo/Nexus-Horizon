@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Open RAN</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .oran-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid rgba(255,184,0,0.4); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .oran-title { font-size: 11px; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(90deg, #FFB800, #FFFFFF, #FFB800); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 3s linear infinite; }
+    .oran-node { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 16px; border: 1px solid #1E1E1E; margin-bottom: 12px; }
+    .oran-node-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .oran-node-name { font-size: 13px; font-weight: 700; color: #E0E0E0; }
+    .oran-badge { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 1px; }
+    .oran-badge.online { background: rgba(0,255,136,0.1); color: #00FF88; border: 1px solid rgba(0,255,136,0.4); }
+    .oran-badge.warning { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid rgba(255,184,0,0.4); }
+    .oran-badge.offline { background: rgba(255,49,49,0.1); color: #FF3131; border: 1px solid rgba(255,49,49,0.4); }
+    .oran-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+    .oran-metric { text-align: center; }
+    .oran-metric-label { font-size: 10px; color: #555; letter-spacing: 1px; margin-bottom: 4px; }
+    .oran-metric-value { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .oran-bar { height: 3px; background: #1A1A1A; border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .oran-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .summary-box { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #1E1E1E; }
+    .summary-box-label { font-size: 10px; color: #555; letter-spacing: 2px; margin-bottom: 8px; }
+    .summary-box-value { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #00FF88; display: inline-block; margin-right: 4px; box-shadow: 0 0 4px #00FF88; }
+    .dot.red { background: #FF3131; box-shadow: 0 0 4px #FF3131; }
+    .dot.yellow { background: #FFB800; box-shadow: 0 0 4px #FFB800; }
+    @media (max-width: 600px) { .summary-grid { grid-template-columns: 1fr 1fr; } .oran-metrics { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div><h1>NEXUS HORIZON</h1><span style="font-size:11px;color:#666">Sistema de Conectividade</span></div>
+      <div class="header-right"><button class="logout" onclick="handleLogout()">SAIR</button></div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab active" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-box"><div class="summary-box-label">NÓS ATIVOS</div><div class="summary-box-value">5</div></div>
+      <div class="summary-box"><div class="summary-box-label">FORNECEDORES</div><div class="summary-box-value" style="background:linear-gradient(135deg,#FFB800,#FFFFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">3</div></div>
+      <div class="summary-box"><div class="summary-box-label">ECONOMIA</div><div class="summary-box-value">37%</div></div>
+      <div class="summary-box"><div class="summary-box-label">UPTIME</div><div class="summary-box-value" style="background:linear-gradient(135deg,#00FF88,#FFFFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">99.8%</div></div>
+    </div>
+    <div class="oran-card">
+      <div class="oran-title">NÓS DE RÁDIO ABERTO — OPEN RAN</div>
+      <div class="oran-node"><div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-SP-001 — São Paulo</div><div class="oran-badge online">ONLINE</div></div><div class="oran-metrics"><div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">42%</div></div><div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">8.2G</div></div><div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">1.2M</div></div><div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">3ms</div></div></div><div class="oran-bar"><div class="oran-bar-fill" style="width:42%;background:linear-gradient(90deg,#FF6B00,#FFB800)"></div></div></div>
+      <div class="oran-node"><div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-RJ-001 — Rio de Janeiro</div><div class="oran-badge online">ONLINE</div></div><div class="oran-metrics"><div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">67%</div></div><div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">5.8G</div></div><div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">890K</div></div><div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">4ms</div></div></div><div class="oran-bar"><div class="oran-bar-fill" style="width:67%;background:#FFB800"></div></div></div>
+      <div class="oran-node"><div class="oran-node-header"><div class="oran-node-name"><span class="dot yellow"></span>RAN-MG-001 — Minas Gerais</div><div class="oran-badge warning">ALERTA</div></div><div class="oran-metrics"><div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">89%</div></div><div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">3.1G</div></div><div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">560K</div></div><div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">12ms</div></div></div><div class="oran-bar"><div class="oran-bar-fill" style="width:89%;background:#FF3131"></div></div></div>
+      <div class="oran-node"><div class="oran-node-header"><div class="oran-node-name"><span class="dot"></span>RAN-RS-001 — Rio Grande do Sul</div><div class="oran-badge online">ONLINE</div></div><div class="oran-metrics"><div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value">31%</div></div><div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value">2.4G</div></div><div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value">340K</div></div><div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value">5ms</div></div></div><div class="oran-bar"><div class="oran-bar-fill" style="width:31%;background:linear-gradient(90deg,#FF6B00,#FFB800)"></div></div></div>
+      <div class="oran-node"><div class="oran-node-header"><div class="oran-node-name"><span class="dot red"></span>RAN-BA-001 — Bahia</div><div class="oran-badge offline">OFFLINE</div></div><div class="oran-metrics"><div class="oran-metric"><div class="oran-metric-label">CPU</div><div class="oran-metric-value" style="color:#FF3131">--</div></div><div class="oran-metric"><div class="oran-metric-label">TRÁFEGO</div><div class="oran-metric-value" style="color:#FF3131">0</div></div><div class="oran-metric"><div class="oran-metric-label">USUÁRIOS</div><div class="oran-metric-value" style="color:#FF3131">0</div></div><div class="oran-metric"><div class="oran-metric-label">LATÊNCIA</div><div class="oran-metric-value" style="color:#FF3131">--</div></div></div><div class="oran-bar"><div class="oran-bar-fill" style="width:0%;background:#FF3131"></div></div></div>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+    function handleLogout() {
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      goTo('login.html')
+    }
+  </script>
+</body>
+</html>

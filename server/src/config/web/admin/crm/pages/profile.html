@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Perfil</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .profile-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid #222; border-radius: 16px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
+    .profile-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(192,192,192,0.5), rgba(255,255,255,0.8), transparent); }
+    .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FF6B00, #FFB800, #FFFFFF, #FFB800, #FF6B00); background-size: 200% 200%; animation: chrome-spin 3s linear infinite; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: #0A0A0A; margin: 0 auto 16px; box-shadow: 0 0 20px rgba(255,107,0,0.4); }
+    .profile-name { text-align: center; font-size: 20px; font-weight: 700; color: #F0F0F0; margin-bottom: 4px; }
+    .profile-email { text-align: center; font-size: 13px; color: #888; margin-bottom: 24px; }
+    .profile-field { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; border: 1px solid #1E1E1E; }
+    .profile-field-label { font-size: 11px; color: #555; letter-spacing: 2px; }
+    .profile-field-value { font-size: 13px; background: linear-gradient(90deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div><h1>NEXUS HORIZON</h1><span style="font-size:11px;color:#666">Sistema de Conectividade</span></div>
+      <div class="header-right"><button class="logout" onclick="handleLogout()">SAIR</button></div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab active" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+    <div class="profile-card">
+      <div class="profile-avatar" id="profileAvatar">N</div>
+      <div class="profile-name" id="profileName">Carregando...</div>
+      <div class="profile-email" id="profileEmail">--</div>
+      <div class="profile-field"><div class="profile-field-label">PLANO</div><div class="profile-field-value" id="profilePlan">Nexus Pro</div></div>
+      <div class="profile-field"><div class="profile-field-label">STATUS</div><div class="profile-field-value" style="background:linear-gradient(90deg,#00FF88,#FFFFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Ativo</div></div>
+      <div class="profile-field"><div class="profile-field-label">TECNOLOGIAS</div><div class="profile-field-value">SAT · 5G · Li-Fi · DTC</div></div>
+      <div class="profile-field"><div class="profile-field-label">MEMBRO DESDE</div><div class="profile-field-value" id="profileSince">2026</div></div>
+      <div class="profile-field"><div class="profile-field-label">CONEXÕES TOTAIS</div><div class="profile-field-value" id="profileConnections">--</div></div>
+      <div class="profile-field"><div class="profile-field-label">ÚLTIMO ACESSO</div><div class="profile-field-value" id="profileLastLogin">--</div></div>
+      <div class="profile-field"><div class="profile-field-label">DISPOSITIVO</div><div class="profile-field-value" id="profileDevice">--</div></div>
+      <div class="profile-field"><div class="profile-field-label">SISTEMA</div><div class="profile-field-value" id="profileOS">--</div></div>
+    </div>
+    <div class="info-card">
+      <div class="info-title">SEGURANÇA</div>
+      <div class="info-text">Dados protegidos com JWT + AES-256. Todas as conexões são criptografadas. Armazenamento seguro via Firebase Firestore. Token expira em 7 dias.</div>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+    loadProfile()
+
+    async function loadProfile() {
+      try {
+        const res = await apiFetch('/auth/profile')
+        const data = await res.json()
+        const name = data.name || getUser().email.split('@')[0]
+        document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase()
+        document.getElementById('profileName').textContent = name
+        document.getElementById('profileEmail').textContent = data.email
+        document.getElementById('profilePlan').textContent = data.plan || 'Nexus Pro'
+        document.getElementById('profileConnections').textContent = data.totalConnections || 0
+        document.getElementById('profileSince').textContent = data.createdAt ? new Date(data.createdAt).getFullYear() : 2026
+        document.getElementById('profileLastLogin').textContent = data.lastLogin ? new Date(data.lastLogin).toLocaleString('pt-BR') : 'Agora'
+        const ua = navigator.userAgent
+        let device = 'Desktop', os = 'Unknown'
+        if (/android/i.test(ua)) { os = 'Android'; device = 'Smartphone' }
+        else if (/iPhone|iPad/i.test(ua)) { os = 'iOS'; device = 'iPhone/iPad' }
+        else if (/Windows/i.test(ua)) { os = 'Windows'; device = 'Desktop' }
+        else if (/Mac/i.test(ua)) { os = 'macOS'; device = 'Mac' }
+        else if (/Linux/i.test(ua)) { os = 'Linux'; device = 'Desktop' }
+        document.getElementById('profileDevice').textContent = device
+        document.getElementById('profileOS').textContent = os
+      } catch (err) {
+        if (err.message !== 'Unauthorized') console.error(err)
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      goTo('login.html')
+    }
+  </script>
+</body>
+</html>

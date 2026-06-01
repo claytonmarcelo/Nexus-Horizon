@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Cadastro</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>NEXUS</h1>
+      <h2>HORIZON</h2>
+      <p>Crie sua conta</p>
+    </div>
+    <div class="card">
+      <label class="label">NOME</label>
+      <input type="text" id="registerName" placeholder="Seu nome" autocomplete="name">
+      <label class="label">EMAIL</label>
+      <input type="email" id="registerEmail" placeholder="seu@email.com" autocomplete="email">
+      <label class="label">SENHA</label>
+      <input type="password" id="registerPassword" placeholder="••••••••" autocomplete="new-password">
+      <div class="error" id="registerError"></div>
+      <div class="success" id="registerSuccess"></div>
+      <button class="btn-secondary" onclick="handleRegister()">CRIAR CONTA</button>
+      <p class="link" onclick="goTo('login.html')">Já tem conta? Faça login</p>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    async function handleRegister() {
+      const name = document.getElementById('registerName').value
+      const email = document.getElementById('registerEmail').value
+      const password = document.getElementById('registerPassword').value
+      const errorEl = document.getElementById('registerError')
+      const successEl = document.getElementById('registerSuccess')
+      errorEl.style.display = 'none'
+      successEl.style.display = 'none'
+      try {
+        const res = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
+        successEl.textContent = 'Conta criada! Faça login.'
+        successEl.style.display = 'block'
+        setTimeout(() => goTo('login.html'), 2000)
+      } catch (err) {
+        errorEl.textContent = err.message
+        errorEl.style.display = 'block'
+      }
+    }
+
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleRegister()
+    })
+  </script>
+</body>
+</html>

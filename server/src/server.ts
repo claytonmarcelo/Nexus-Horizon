@@ -31,6 +31,12 @@ server.register(fastifyStatic, {
   prefix: '/',
 })
 
+server.register(fastifyStatic, {
+  root: path.join(__dirname, '../src/config/web/admin/crm/pages'),
+  prefix: '/admin/crm/pages/',
+  decorateReply: false,
+})
+
 server.register(authRoutes, { prefix: '/api' })
 server.register(connectivityRoutes, { prefix: '/api' })
 

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Conectividade</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div>
+        <h1>NEXUS HORIZON</h1>
+        <span style="font-size:11px;color:#666">Sistema de Conectividade</span>
+      </div>
+      <div class="header-right">
+        <div class="header-alert" title="RAN-BA-001 OFFLINE"></div>
+        <span class="header-user" id="headerUser"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+
+    <div class="auto-refresh" id="autoRefreshLabel">Atualização automática: 10s</div>
+
+    <div class="providers">
+      <button class="provider-btn active" onclick="fetchData('satellite', this)">SAT</button>
+      <button class="provider-btn" onclick="fetchData('cellular', this)">5G</button>
+      <button class="provider-btn" onclick="fetchData('lifi', this)">Li-Fi</button>
+      <button class="provider-btn" onclick="fetchData('directcell', this)">DTC</button>
+    </div>
+
+    <div class="grid">
+      <div class="metric-card">
+        <div class="metric-label">STATUS</div>
+        <div class="metric-value" id="statusValue">Carregando...</div>
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-box-label">LATÊNCIA</div>
+            <div class="metric-box-value" id="latencyValue">--</div>
+            <div style="font-size:11px;color:#555">ms</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-label">SINAL</div>
+            <div class="metric-box-value" id="signalValue">--</div>
+            <div style="font-size:11px;color:#555">%</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-label">TECNOLOGIA</div>
+            <div style="font-size:14px;font-weight:700;background:linear-gradient(135deg,#FFB800,#FFFFFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="techValue">--</div>
+          </div>
+        </div>
+        <div class="signal-bar">
+          <div class="signal-fill" id="signalFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">TECNOLOGIAS ATIVAS</div>
+        <div style="margin-bottom:12px">
+          <span class="tech-badge">Direct-to-Cell</span>
+          <span class="tech-badge">Open RAN</span>
+          <span class="tech-badge">Li-Fi</span>
+          <span class="tech-badge">5G</span>
+          <span class="tech-badge">Satélite</span>
+        </div>
+        <div class="info-title">PROVEDOR ATIVO</div>
+        <div class="info-text" id="activeProvider">Satélite — SAT-BR-001</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+
+    let autoRefreshInterval = null
+    let autoRefreshCount = 10
+    let currentProvider = 'satellite'
+    let currentProviderBtn = null
+    const user = getUser()
+
+    document.getElementById('headerUser').textContent = user.name || user.email.split('@')[0]
+    currentProviderBtn = document.querySelector('.provider-btn')
+    fetchData('satellite', currentProviderBtn)
+    startAutoRefresh()
+
+    function startAutoRefresh() {
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
+      autoRefreshCount = 10
+      autoRefreshInterval = setInterval(() => {
+        autoRefreshCount--
+        const el = document.getElementById('autoRefreshLabel')
+        if (el) el.textContent = `Atualização automática: ${autoRefreshCount}s`
+        if (autoRefreshCount <= 0) {
+          autoRefreshCount = 10
+          if (currentProviderBtn) fetchData(currentProvider, currentProviderBtn)
+        }
+      }, 1000)
+    }
+
+    async function fetchData(type, btn) {
+      document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      currentProvider = type
+      currentProviderBtn = btn
+      const providers = {
+        satellite: 'Satélite — SAT-BR-001',
+        cellular: 'Celular — TOWER-SP-042',
+        lifi: 'Li-Fi — LIFI-LAB-001',
+        directcell: 'Direct-to-Cell — DTC-BR-001',
+      }
+      document.getElementById('activeProvider').textContent = providers[type]
+      try {
+        const res = await apiFetch(`/connectivity/${type}`)
+        const data = await res.json()
+        document.getElementById('statusValue').textContent = data.status
+        document.getElementById('latencyValue').textContent = data.latency
+        document.getElementById('signalValue').textContent = data.signal
+        document.getElementById('signalFill').style.width = `${data.signal}%`
+        document.getElementById('techValue').textContent = data.technology || type
+        autoRefreshCount = 10
+      } catch (err) {
+        if (err.message !== 'Unauthorized') console.error(err)
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userEmail')
+      localStorage.removeItem('userName')
+      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
+      goTo('login.html')
+    }
+  </script>
+</body>
+</html>
