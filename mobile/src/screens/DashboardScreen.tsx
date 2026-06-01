@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
@@ -19,11 +20,12 @@ interface ConnectivityData {
   signal: number
 }
 
-export function DashboardScreen({ navigation }: any) {
+export function DashboardScreen() {
+  const navigation = useNavigation() as any
   const [data, setData] = useState<ConnectivityData | null>(null)
   const [activeProvider, setActiveProvider] = useState('satellite')
 
-  const fetchData = async (type: string) => {
+  const fetchData = useCallback(async (type: string) => {
     try {
       const response = await api.get(`/connectivity/${type}`)
       setData(response.data)
@@ -32,31 +34,18 @@ export function DashboardScreen({ navigation }: any) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         await SecureStore.deleteItemAsync('token')
         removeAuthToken()
-        navigation.replace('Login')
+        navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
         return
       }
       Alert.alert('Erro', 'Falha ao buscar dados.')
     }
-  }
+  }, [navigation])
 
-  useEffect(() => {
-    const init = async () => {
-      const token = await SecureStore.getItemAsync('token')
-      if (!token) {
-        navigation.replace('Login')
-        return
-      }
+  useFocusEffect(
+    useCallback(() => {
       fetchData('satellite')
-    }
-
-    init()
-  }, [])
-
-  const handleLogout = async () => {
-    await SecureStore.deleteItemAsync('token')
-    removeAuthToken()
-    navigation.replace('Login')
-  }
+    }, [fetchData])
+  )
 
   const providers = [
     { key: 'satellite', label: 'SAT' },
@@ -67,16 +56,6 @@ export function DashboardScreen({ navigation }: any) {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>NEXUS HORIZON</Text>
-          <Text style={styles.headerSub}>Sistema de Conectividade</Text>
-        </View>
-        <TouchableOpacity onPress={handleLogout}>
-          <Text style={styles.logout}>SAIR</Text>
-        </TouchableOpacity>
-      </View>
-
       <View style={styles.providerRow}>
         {providers.map((p, index) => (
           <TouchableOpacity
@@ -125,7 +104,7 @@ export function DashboardScreen({ navigation }: any) {
       <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>TECNOLOGIAS ATIVAS</Text>
         <Text style={styles.infoText}>
-          Direct-to-Cell · Open RAN · Li-Fi
+          Direct-to-Cell · Open RAN · Li-Fi · 5G · Satélite
         </Text>
       </View>
     </ScrollView>
@@ -136,31 +115,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: spacing.lg,
-    paddingTop: spacing.xl + spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  headerTitle: {
-    fontSize: typography.fontSizes.lg,
-    fontWeight: '700',
-    color: colors.primary,
-    letterSpacing: 4,
-  },
-  headerSub: {
-    fontSize: typography.fontSizes.xs,
-    color: colors.gray,
-    letterSpacing: 1,
-  },
-  logout: {
-    color: colors.danger,
-    fontSize: typography.fontSizes.sm,
-    letterSpacing: 2,
   },
   providerRow: {
     flexDirection: 'row',
@@ -191,6 +145,7 @@ const styles = StyleSheet.create({
   },
   card: {
     margin: spacing.md,
+    marginTop: 0,
     backgroundColor: colors.cardBg,
     borderRadius: 16,
     borderWidth: 1,
@@ -243,6 +198,7 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     margin: spacing.md,
+    marginTop: 0,
     backgroundColor: colors.cardBg,
     borderRadius: 16,
     borderWidth: 1,
