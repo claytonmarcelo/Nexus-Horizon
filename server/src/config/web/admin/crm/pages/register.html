@@ -12,6 +12,7 @@
       <h1>NEXUS</h1>
       <h2>HORIZON</h2>
       <p>Crie sua conta</p>
+      <p class="tagline">Junte-se ao Nexus Horizon</p>
     </div>
     <div class="card">
       <label class="label">NOME</label>
@@ -22,7 +23,7 @@
       <input type="password" id="registerPassword" placeholder="••••••••" autocomplete="new-password">
       <div class="error" id="registerError"></div>
       <div class="success" id="registerSuccess"></div>
-      <button class="btn-secondary" onclick="handleRegister()">CRIAR CONTA</button>
+      <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">CRIAR CONTA</button>
       <p class="link" onclick="goTo('login.html')">Já tem conta? Faça login</p>
     </div>
   </div>
@@ -34,22 +35,18 @@
       const password = document.getElementById('registerPassword').value
       const errorEl = document.getElementById('registerError')
       const successEl = document.getElementById('registerSuccess')
-      errorEl.style.display = 'none'
-      successEl.style.display = 'none'
+      const btn = document.getElementById('registerBtn')
+      errorEl.style.display = 'none'; successEl.style.display = 'none'
+      if (!name || !email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
+      btn.disabled = true; btn.textContent = 'CRIANDO...'
       try {
-        const res = await fetch(`${API}/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-        })
+        const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
-        successEl.textContent = 'Conta criada! Faça login.'
-        successEl.style.display = 'block'
+        successEl.textContent = 'Conta criada! Faça login.'; successEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
         setTimeout(() => goTo('login.html'), 2000)
       } catch (err) {
-        errorEl.textContent = err.message
-        errorEl.style.display = 'block'
+        errorEl.textContent = err.message; errorEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
       }
     }
 

@@ -5,18 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Nexus Horizon</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       background: #0A0A0A;
       color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow-x: hidden;
     }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #FF6B00; }
 
     /* CHROME / SILVER SHIMMER KEYFRAMES */
     @keyframes shimmer {
@@ -27,6 +33,9 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     @keyframes pulse-glow { 0%,100%{box-shadow:0 0 8px #FF6B00,0 0 20px rgba(255,107,0,0.3)} 50%{box-shadow:0 0 16px #FFB800,0 0 40px rgba(255,184,0,0.5)} }
     @keyframes chrome-spin { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    @keyframes skeleton { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes slideDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
 
     /* CHROME TEXT EFFECT */
     .chrome-text {
@@ -95,11 +104,13 @@
 
     /* CARD */
     .card {
-      background: linear-gradient(145deg, #1A1A1A, #0F0F0F);
-      border: 1px solid #2A2A2A;
-      border-radius: 16px;
+      background: rgba(20,20,20,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
       padding: 24px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 4px 24px rgba(0,0,0,0.4);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3);
       position: relative;
       overflow: hidden;
     }
@@ -108,7 +119,7 @@
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,107,0,0.6), rgba(255,184,0,0.8), rgba(255,255,255,0.9), rgba(255,184,0,0.8), rgba(255,107,0,0.6), transparent);
     }
 
     /* LABELS */
@@ -127,9 +138,11 @@
     /* INPUTS */
     input {
       width: 100%;
-      background: #0D0D0D;
-      border: 1px solid #333;
-      border-radius: 8px;
+      background: rgba(13,13,13,0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
       padding: 12px 16px;
       color: #F0F0F0;
       font-size: 16px;
@@ -139,7 +152,7 @@
     }
     input:focus {
       border-color: #FF6B00;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,107,0,0.2), 0 0 12px rgba(255,107,0,0.1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,107,0,0.25), 0 0 20px rgba(255,107,0,0.15);
     }
     input::placeholder { color: #555; }
 
@@ -150,7 +163,7 @@
       background-size: 200% auto;
       color: #0A0A0A;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 14px;
       font-size: 13px;
       font-weight: 800;
@@ -162,6 +175,7 @@
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(255,107,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
     }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
     .btn-primary::before {
       content: '';
       position: absolute;
@@ -170,17 +184,18 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
       transition: left 0.5s;
     }
-    .btn-primary:hover { background-position: right center; box-shadow: 0 6px 25px rgba(255,107,0,0.6), inset 0 1px 0 rgba(255,255,255,0.4); transform: translateY(-1px); }
+    .btn-primary:hover { background-position: right center; box-shadow: 0 8px 32px rgba(255,107,0,0.6), inset 0 1px 0 rgba(255,255,255,0.4); transform: translateY(-1px) scale(1.01); }
     .btn-primary:hover::before { left: 100%; }
     .btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 8px rgba(255,107,0,0.4); }
 
     .btn-secondary {
       width: 100%;
-      background: linear-gradient(135deg, #C0C0C0 0%, #FFFFFF 30%, #A0A0A0 50%, #FFFFFF 70%, #C0C0C0 100%);
-      background-size: 200% auto;
-      color: #0A0A0A;
-      border: none;
-      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #E0E0E0;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
       padding: 14px;
       font-size: 13px;
       font-weight: 800;
@@ -190,8 +205,7 @@
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(192,192,192,0.3), inset 0 1px 0 rgba(255,255,255,0.8);
-      animation: shimmer 2s linear infinite;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
     }
     .btn-secondary::before {
       content: '';
@@ -201,9 +215,10 @@
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
       transition: left 0.5s;
     }
-    .btn-secondary:hover { box-shadow: 0 6px 25px rgba(255,255,255,0.4); transform: translateY(-1px); }
+    .btn-secondary:hover { box-shadow: 0 6px 25px rgba(255,255,255,0.15); transform: translateY(-1px); background: rgba(255,255,255,0.1); }
     .btn-secondary:hover::before { left: 100%; }
     .btn-secondary:active { transform: translateY(1px); }
+    .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
     .link { text-align: center; margin-top: 16px; font-size: 13px; color: #888; cursor: pointer; transition: color 0.2s; }
     .link:hover { color: #FF6B00; }
@@ -264,10 +279,10 @@
 
     /* NAV TABS */
     .nav-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    .nav-tab { padding: 8px 14px; border-radius: 8px; border: 1px solid #2A2A2A; background: transparent; color: #666; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+    .nav-tab { padding: 10px 18px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #666; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
     .nav-tab::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.4s; }
     .nav-tab:hover::before { left: 100%; }
-    .nav-tab:hover { border-color: #FFB800; color: #FFB800; }
+    .nav-tab:hover { border-color: #FFB800; color: #FFB800; transform: translateY(-1px); }
     .nav-tab.active { border-color: #FF6B00; background: rgba(255,107,0,0.1); color: #FF6B00; box-shadow: 0 0 10px rgba(255,107,0,0.2); }
 
     .page { display: none; animation: fadeIn 0.3s ease; }
@@ -277,8 +292,11 @@
     .providers { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
     .provider-btn {
       flex: 1; min-width: 80px; padding: 10px;
-      border-radius: 8px; border: 1px solid #2A2A2A;
-      background: transparent; color: #666;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #666;
       font-weight: 700; letter-spacing: 2px;
       cursor: pointer; transition: all 0.3s;
       position: relative; overflow: hidden;
@@ -301,12 +319,16 @@
 
     /* METRIC CARDS */
     .metric-card {
-      background: linear-gradient(145deg, #141414, #0F0F0F);
-      border: 1px solid #222;
-      border-radius: 16px; padding: 24px; margin-bottom: 16px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.3);
+      background: rgba(20,20,20,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; padding: 24px; margin-bottom: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.4);
       position: relative; overflow: hidden;
+      transition: all 0.3s;
     }
+    .metric-card:hover { border-color: rgba(255,107,0,0.3); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,107,0,0.05); }
     .metric-card::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -322,11 +344,15 @@
     .metrics-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
     .metric-box {
       flex: 1; min-width: 80px;
-      background: linear-gradient(145deg, #111, #0D0D0D);
-      border-radius: 8px; padding: 16px;
-      border: 1px solid #1E1E1E;
+      background: rgba(13,13,13,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 12px; padding: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      transition: all 0.3s;
     }
+    .metric-box:hover { border-color: rgba(255,107,0,0.2); }
     .metric-box-label { font-size: 11px; color: #666; letter-spacing: 2px; margin-bottom: 4px; }
     .metric-box-value {
       font-size: 28px; font-weight: 800;
@@ -343,9 +369,11 @@
 
     /* INFO CARD */
     .info-card {
-      background: linear-gradient(145deg, #141414, #0F0F0F);
-      border: 1px solid #FFB800;
-      border-radius: 16px; padding: 24px; margin-bottom: 16px;
+      background: rgba(20,20,20,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,184,0,0.3);
+      border-radius: 20px; padding: 24px; margin-bottom: 16px;
       box-shadow: 0 0 20px rgba(255,184,0,0.08), inset 0 1px 0 rgba(255,184,0,0.1);
       position: relative; overflow: hidden;
     }
@@ -433,7 +461,7 @@
     .lifi-btn:hover { box-shadow: 0 0 12px rgba(255,107,0,0.3); }
     .lifi-btn.blocked { background: rgba(255,49,49,0.08); border-color: rgba(255,49,49,0.5); color: #FF3131; }
 
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 
     /* MAP CARD */
     .map-card {
@@ -664,10 +692,40 @@
     .mobile-nav-item.active { color: #FF6B00; }
     .mobile-nav-icon { font-size: 20px; }
 
+    /* TOAST */
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .toast { padding: 14px 24px; border-radius: 12px; font-size: 13px; font-weight: 600; letter-spacing: 1px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0,0,0,0.5); animation: slideDown 0.4s ease; pointer-events: auto; border: 1px solid rgba(255,255,255,0.06); }
+    .toast.success { background: rgba(0,255,136,0.15); color: #00FF88; border-color: rgba(0,255,136,0.3); }
+    .toast.error { background: rgba(255,49,49,0.15); color: #FF3131; border-color: rgba(255,49,49,0.3); }
+    .toast.info { background: rgba(255,107,0,0.15); color: #FFB800; border-color: rgba(255,107,0,0.3); }
+    .toast.warning { background: rgba(255,184,0,0.15); color: #FFB800; border-color: rgba(255,184,0,0.3); }
+
+    .spinner { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #FF6B00; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+    .spinner-lg { width: 40px; height: 40px; border-width: 3px; }
+
+    .skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 100%); background-size: 200% 100%; animation: skeleton 1.5s ease infinite; border-radius: 8px; }
+
+    .session-warning { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,184,0,0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,184,0,0.3); padding: 10px 20px; text-align: center; font-size: 13px; color: #FFB800; font-weight: 600; letter-spacing: 1px; z-index: 9998; animation: slideDown 0.4s ease; }
+
+    .connection-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 2px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .connection-badge.excellent { background: rgba(0,255,136,0.1); color: #00FF88; border: 1px solid rgba(0,255,136,0.3); }
+    .connection-badge.good { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid rgba(255,184,0,0.3); }
+    .connection-badge.poor { background: rgba(255,49,49,0.1); color: #FF3131; border: 1px solid rgba(255,49,49,0.3); }
+
+    .connection-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; }
+    .connection-dot.excellent { background: #00FF88; box-shadow: 0 0 6px #00FF88; }
+    .connection-dot.good { background: #FFB800; box-shadow: 0 0 6px #FFB800; }
+    .connection-dot.poor { background: #FF3131; box-shadow: 0 0 6px #FF3131; }
+
+    .header-clock { font-size: 13px; color: #888; font-weight: 600; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+
+    .live-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 2px; background: rgba(255,49,49,0.1); color: #FF3131; border: 1px solid rgba(255,49,49,0.3); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF3131; display: inline-block; animation: blink 1s infinite; box-shadow: 0 0 6px #FF3131; }
+
     /* TABLET */
     @media (min-width: 601px) and (max-width: 1024px) {
       .dashboard { padding: 16px; max-width: 100%; }
-      .grid { grid-template-columns: 1fr 1fr; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
       .sat-info { grid-template-columns: 1fr 1fr 1fr; }
       .summary-grid { grid-template-columns: 1fr 1fr; }
       .oran-metrics { grid-template-columns: 1fr 1fr; }
@@ -683,6 +741,7 @@
       .dashboard { padding: 12px 12px 80px; max-width: 100%; }
       .header h1 { font-size: 14px; letter-spacing: 2px; }
       .header-user { display: none; }
+      .header-clock { display: none; }
       .nav-tabs { display: none; }
       .mobile-nav { display: block; }
       .grid { grid-template-columns: 1fr; }
@@ -697,6 +756,8 @@
       .provider-btn { font-size: 10px; padding: 8px 6px; letter-spacing: 1px; }
       .profile-field { flex-direction: column; align-items: flex-start; }
       .history-info { font-size: 12px; }
+      .toast-container { top: 10px; right: 10px; left: 10px; }
+      .toast { font-size: 12px; padding: 12px 16px; }
     }
 
 
@@ -743,6 +804,8 @@
         <span style="font-size:11px;color:#666">Sistema de Conectividade</span>
       </div>
       <div class="header-right">
+        <span class="connection-badge excellent"><span class="connection-dot excellent"></span>LIVE</span>
+        <span class="header-clock"></span>
         <div class="header-alert" title="RAN-BA-001 OFFLINE"></div>
         <span class="header-user" id="headerUser"></span>
         <button class="logout" onclick="handleLogout()">SAIR</button>
@@ -1001,6 +1064,12 @@
     let autoRefreshCount = 10
     let currentProvider = 'satellite'
     let currentProviderBtn = null
+    let heartbeatTimer = null
+    let sessionTimer = null
+    let connectionQuality = 'excellent'
+    let lastPing = 0
+    const HEARTBEAT_INTERVAL = 300000
+    const SESSION_WARNING_TIME = 840000
 
     const satellites = [
       { id: 'SAT-BR-001', lat: 0.25, lng: 0.35, signal: 92, status: 'online', region: 'Norte' },
@@ -1042,7 +1111,10 @@
       currentProviderBtn=document.querySelector('.provider-btn')
       fetchData('satellite',currentProviderBtn); fetchDTC(); startLifiSimulator(); startAutoRefresh()
       setTimeout(drawMap,100); loadProfile(); detectDevice()
-
+      startHeartbeat()
+      checkConnectionQuality()
+      startClock()
+      showToast('Conectado ao Nexus Horizon','success')
     }
 
     async function loadProfile() {
@@ -1255,11 +1327,58 @@
       },500)
     }
 
+    function startHeartbeat() {
+      if(heartbeatTimer) clearInterval(heartbeatTimer)
+      heartbeatTimer=setInterval(async()=>{
+        try{await fetch(`${window.location.origin}/api/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}});checkConnectionQuality()}catch(e){}
+      },HEARTBEAT_INTERVAL)
+      sessionTimer=setTimeout(()=>{
+        showToast('Sua sessão expirará em 1 minuto. Faça login novamente.','warning')
+      },SESSION_WARNING_TIME)
+    }
+
+    function checkConnectionQuality(){
+      const start=performance.now()
+      try{
+        fetch(`${window.location.origin}/api/health`,{method:'GET',cache:'no-store'}).then(()=>{
+          lastPing=performance.now()-start
+          connectionQuality=lastPing<150?'excellent':lastPing<500?'good':'poor'
+          updateConnectionBadge()
+        }).catch(()=>{connectionQuality='poor';updateConnectionBadge()})
+      }catch{connectionQuality='poor';updateConnectionBadge()}
+    }
+
+    function updateConnectionBadge(){
+      document.querySelectorAll('.connection-badge,.connection-dot').forEach(el=>{
+        if(el.classList.contains('connection-badge')){
+          el.className=`connection-badge ${connectionQuality}`
+          el.innerHTML=`<span class="connection-dot ${connectionQuality}"></span>${connectionQuality==='excellent'?'LIVE':connectionQuality==='good'?'ESTÁVEL':'INSTÁVEL'}`
+        }
+      })
+    }
+
+    function startClock(){
+      function tick(){
+        document.querySelectorAll('.header-clock').forEach(el=>{el.textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
+      }
+      tick();setInterval(tick,1000)
+    }
+
+    function showToast(message,type='info'){
+      let container=document.getElementById('toastContainer')
+      if(!container){container=document.createElement('div');container.id='toastContainer';container.className='toast-container';document.body.appendChild(container)}
+      const toast=document.createElement('div');toast.className=`toast ${type}`;toast.textContent=message
+      container.appendChild(toast)
+      setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(40px)';toast.style.transition='all 0.4s ease';setTimeout(()=>toast.remove(),400)},4000)
+    }
+
     function handleLogout() {
       localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
       token=null
       if(chartInterval) clearInterval(chartInterval)
       if(autoRefreshInterval) clearInterval(autoRefreshInterval)
+      if(heartbeatTimer) clearInterval(heartbeatTimer)
+      if(sessionTimer) clearTimeout(sessionTimer)
       document.body.style.alignItems='center'
       document.body.style.justifyContent='center'
       document.getElementById('authContainer').style.display='flex'
