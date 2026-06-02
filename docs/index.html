@@ -264,36 +264,11 @@
 
     /* NAV TABS */
     .nav-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    .nav-tab {
-      padding: 8px 14px;
-      border-radius: 8px;
-      border: 1px solid #2A2A2A;
-      background: transparent;
-      color: #666;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    .nav-tab::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      transition: left 0.4s;
-    }
+    .nav-tab { padding: 8px 14px; border-radius: 8px; border: 1px solid #2A2A2A; background: transparent; color: #666; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+    .nav-tab::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.4s; }
     .nav-tab:hover::before { left: 100%; }
-    .nav-tab.active {
-      border-color: #FF6B00;
-      background: rgba(255,107,0,0.1);
-      color: #FF6B00;
-      box-shadow: 0 0 10px rgba(255,107,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-    }
     .nav-tab:hover { border-color: #FFB800; color: #FFB800; }
+    .nav-tab.active { border-color: #FF6B00; background: rgba(255,107,0,0.1); color: #FF6B00; box-shadow: 0 0 10px rgba(255,107,0,0.2); }
 
     .page { display: none; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
@@ -723,6 +698,8 @@
       .profile-field { flex-direction: column; align-items: flex-start; }
       .history-info { font-size: 12px; }
     }
+
+
   </style>
 </head>
 <body>
@@ -997,6 +974,8 @@
         </div>
       </div>
     </div>
+
+
   </div>
 
   <nav class="mobile-nav" id="mobileNav">
@@ -1006,6 +985,7 @@
       <button class="mobile-nav-item" onclick="mobileNav('lifi', this)"><span class="mobile-nav-icon">💡</span>Li-Fi</button>
       <button class="mobile-nav-item" onclick="mobileNav('oran', this)"><span class="mobile-nav-icon">📶</span>RAN</button>
       <button class="mobile-nav-item" onclick="mobileNav('profile', this)"><span class="mobile-nav-icon">👤</span>PERFIL</button>
+
     </div>
   </nav>
 
@@ -1062,6 +1042,7 @@
       currentProviderBtn=document.querySelector('.provider-btn')
       fetchData('satellite',currentProviderBtn); fetchDTC(); startLifiSimulator(); startAutoRefresh()
       setTimeout(drawMap,100); loadProfile(); detectDevice()
+
     }
 
     async function loadProfile() {
@@ -1093,10 +1074,10 @@
     }
 
     function showPage(page,btn) {
-      document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'))
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
-      btn.classList.add('active')
+      document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'))
       document.getElementById(`page-${page}`).classList.add('active')
+      if(btn) btn.classList.add('active')
       if(page==='satellite') setTimeout(drawMap,100)
       if(page==='dtc') fetchDTC()
     }
@@ -1295,6 +1276,8 @@
     })
 
     window.addEventListener('resize',()=>{if(token) detectDevice()})
+
+
   </script>
 </body>
 </html>

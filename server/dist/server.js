@@ -29,6 +29,11 @@ server.register(static_1.default, {
     root: path_1.default.join(__dirname, '../src/config/web'),
     prefix: '/',
 });
+server.register(static_1.default, {
+    root: path_1.default.join(__dirname, '../src/config/web/admin/crm/pages'),
+    prefix: '/admin/crm/pages/',
+    decorateReply: false,
+});
 server.register(authRoutes_1.authRoutes, { prefix: '/api' });
 server.register(connectivityRoutes_1.connectivityRoutes, { prefix: '/api' });
 server.get('/health', async () => ({
