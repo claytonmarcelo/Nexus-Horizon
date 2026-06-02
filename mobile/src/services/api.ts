@@ -1,4 +1,4 @@
-﻿import axios, { type InternalAxiosRequestConfig } from 'axios'
+import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { Platform } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 
