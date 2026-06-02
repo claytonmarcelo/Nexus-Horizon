@@ -4,43 +4,70 @@ import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { db } from '../config/firebase'
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const MIN_PASSWORD_LENGTH = 6
+
 function createMailTransporter() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env
-
-  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
-    return null
-  }
-
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) return null
   return nodemailer.createTransport({
     host: SMTP_HOST,
     port: Number(SMTP_PORT),
     secure: SMTP_SECURE === 'true',
-    auth: {
-      user: SMTP_USER,
-      pass: SMTP_PASS,
-    },
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
   })
 }
 
+function validateEmail(email: string): string | null {
+  if (!email || typeof email !== 'string') return 'Email é obrigatório.'
+  const normalized = email.trim().toLowerCase()
+  if (!EMAIL_REGEX.test(normalized)) return 'Email inválido.'
+  return null
+}
+
+function validatePassword(password: string): string | null {
+  if (!password || typeof password !== 'string') return 'Senha é obrigatória.'
+  if (password.length < MIN_PASSWORD_LENGTH) return `Senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`
+  return null
+}
+
+function validateName(name: string): string | null {
+  if (!name || typeof name !== 'string') return 'Nome é obrigatório.'
+  if (name.trim().length < 2) return 'Nome deve ter no mínimo 2 caracteres.'
+  return null
+}
+
+function sanitizeUser(doc: FirebaseFirestore.DocumentData) {
+  const { password, resetToken, resetTokenExpiresAt, ...safe } = doc
+  return safe
+}
+
 export async function register(request: FastifyRequest, reply: FastifyReply) {
-  const { name, email, password } = request.body as {
-    name: string
-    email: string
-    password: string
-  }
+  const { name, email, password } = request.body as { name: string; email: string; password: string }
+
+  const nameError = validateName(name)
+  if (nameError) return reply.status(400).send({ error: nameError })
+
+  const emailError = validateEmail(email)
+  if (emailError) return reply.status(400).send({ error: emailError })
+
+  const passwordError = validatePassword(password)
+  if (passwordError) return reply.status(400).send({ error: passwordError })
+
+  const normalizedEmail = email.trim().toLowerCase()
 
   const usersRef = db.collection('users')
-  const existing = await usersRef.where('email', '==', email).get()
+  const existing = await usersRef.where('email', '==', normalizedEmail).get()
 
   if (!existing.empty) {
-    return reply.status(400).send({ error: 'Email já cadastrado.' })
+    return reply.status(409).send({ error: 'Este email já está cadastrado.' })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = {
     id: randomUUID(),
-    name,
-    email,
+    name: name.trim(),
+    email: normalizedEmail,
     password: hashedPassword,
     createdAt: new Date().toISOString(),
     plan: 'Nexus Pro',
@@ -62,16 +89,18 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 }
 
 export async function login(request: FastifyRequest, reply: FastifyReply) {
-  const { email, password } = request.body as {
-    email: string
-    password: string
+  const { email, password } = request.body as { email: string; password: string }
+
+  if (!email || !password) {
+    return reply.status(400).send({ error: 'Email e senha são obrigatórios.' })
   }
 
+  const normalizedEmail = email.trim().toLowerCase()
   const usersRef = db.collection('users')
-  const snapshot = await usersRef.where('email', '==', email).get()
+  const snapshot = await usersRef.where('email', '==', normalizedEmail).get()
 
   if (snapshot.empty) {
-    return reply.status(401).send({ error: 'Credenciais inválidas.' })
+    return reply.status(401).send({ error: 'Email ou senha incorretos.' })
   }
 
   const userDoc = snapshot.docs[0]
@@ -79,11 +108,12 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
 
   const validPassword = await bcrypt.compare(password, user.password)
   if (!validPassword) {
-    return reply.status(401).send({ error: 'Credenciais inválidas.' })
+    return reply.status(401).send({ error: 'Email ou senha incorretos.' })
   }
 
+  const totalConnections = (user.totalConnections || 0) + 1
   await usersRef.doc(user.id).update({
-    totalConnections: (user.totalConnections || 0) + 1,
+    totalConnections,
     lastLogin: new Date().toISOString(),
   })
 
@@ -99,7 +129,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
       name: user.name,
       email: user.email,
       plan: user.plan || 'Nexus Pro',
-      totalConnections: (user.totalConnections || 0) + 1,
+      totalConnections,
       createdAt: user.createdAt,
     },
   })
@@ -113,18 +143,15 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
   }
 
   const usersRef = db.collection('users')
-  const snapshot = await usersRef.where('email', '==', email).get()
+  const snapshot = await usersRef.where('email', '==', email.trim().toLowerCase()).get()
 
   if (!snapshot.empty) {
     const userDoc = snapshot.docs[0]
-    const user = userDoc.data() as any
+    const user = userDoc.data()
     const resetToken = randomUUID()
-    const resetTokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60).toISOString()
+    const resetTokenExpiresAt = Date.now() + 1000 * 60 * 60
 
-    await usersRef.doc(user.id).update({
-      resetToken,
-      resetTokenExpiresAt,
-    })
+    await usersRef.doc(user.id).update({ resetToken, resetTokenExpiresAt })
 
     const frontendUrl = process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:19006'
     const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`
@@ -133,27 +160,26 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
     if (transporter) {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
-        to: email,
+        to: email.trim().toLowerCase(),
         subject: 'Nexus Horizon - Recuperação de senha',
         text: `Você solicitou a recuperação de senha. Abra este link para redefinir: ${resetLink}`,
         html: `<p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><a href="${resetLink}">${resetLink}</a>`,
       })
-    } else {
-      console.warn('SMTP não configurado. Defina SMTP_HOST, SMTP_PORT, SMTP_USER e SMTP_PASS para enviar o email.')
     }
   }
 
   return reply.send({
-    message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.'
+    message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.',
   })
 }
 
 export async function resetPassword(request: FastifyRequest, reply: FastifyReply) {
   const { token, password } = request.body as { token: string; password: string }
 
-  if (!token || !password) {
-    return reply.status(400).send({ error: 'Token e nova senha são obrigatórios.' })
-  }
+  if (!token) return reply.status(400).send({ error: 'Token é obrigatório.' })
+
+  const passwordError = validatePassword(password)
+  if (passwordError) return reply.status(400).send({ error: passwordError })
 
   const usersRef = db.collection('users')
   const snapshot = await usersRef.where('resetToken', '==', token).get()
@@ -163,9 +189,9 @@ export async function resetPassword(request: FastifyRequest, reply: FastifyReply
   }
 
   const userDoc = snapshot.docs[0]
-  const user = userDoc.data() as any
+  const user = userDoc.data()
 
-  if (!user.resetTokenExpiresAt || new Date(user.resetTokenExpiresAt) < new Date()) {
+  if (!user.resetTokenExpiresAt || user.resetTokenExpiresAt < Date.now()) {
     return reply.status(400).send({ error: 'Token inválido ou expirado.' })
   }
 
@@ -189,14 +215,5 @@ export async function getProfile(request: FastifyRequest, reply: FastifyReply) {
   }
 
   const user = userDoc.data()!
-
-  return reply.send({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    plan: user.plan || 'Nexus Pro',
-    totalConnections: user.totalConnections || 0,
-    createdAt: user.createdAt,
-    lastLogin: user.lastLogin,
-  })
+  return reply.send(sanitizeUser(user))
 }

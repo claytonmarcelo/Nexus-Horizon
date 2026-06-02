@@ -1,33 +1,31 @@
-﻿import admin from 'firebase-admin'
+import admin from 'firebase-admin'
 import dotenv from 'dotenv'
-import fs from 'fs'
-import path from 'path'
 
 dotenv.config()
 
-const credentialsPath = path.resolve(__dirname, '../../firebase-credentials.json')
-const credentials = fs.existsSync(credentialsPath)
-  ? JSON.parse(fs.readFileSync(credentialsPath, 'utf8'))
-  : undefined
+const { FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY } = process.env
 
-const firebaseConfig =
-  process.env.FIREBASE_PROJECT_ID &&
-  process.env.FIREBASE_CLIENT_EMAIL &&
-  process.env.FIREBASE_PRIVATE_KEY
-    ? {
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      }
-    : credentials
+const missingVars: string[] = []
+if (!FIREBASE_PROJECT_ID) missingVars.push('FIREBASE_PROJECT_ID')
+if (!FIREBASE_CLIENT_EMAIL) missingVars.push('FIREBASE_CLIENT_EMAIL')
+if (!FIREBASE_PRIVATE_KEY) missingVars.push('FIREBASE_PRIVATE_KEY')
 
-if (!firebaseConfig) {
-  throw new Error('Firebase configuration not found. Set environment variables or add firebase-credentials.json.')
+if (missingVars.length > 0) {
+  throw new Error(
+    `Firebase configuracao incompleta. Variaveis ausentes: ${missingVars.join(', ')}. ` +
+    'Defina FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL e FIREBASE_PRIVATE_KEY no .env'
+  )
 }
+
+const privateKey = FIREBASE_PRIVATE_KEY!.replace(/\\n/g, '\n')
 
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(firebaseConfig as admin.ServiceAccount),
+    credential: admin.credential.cert({
+      projectId: FIREBASE_PROJECT_ID,
+      clientEmail: FIREBASE_CLIENT_EMAIL,
+      privateKey,
+    }),
   })
 }
 
