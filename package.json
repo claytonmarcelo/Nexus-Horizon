@@ -1,0 +1,23 @@
+{
+  "name": "nexus-horizon",
+  "version": "1.0.0",
+  "description": "Nexus Horizon - Next-Gen Connectivity Platform",
+  "private": true,
+  "scripts": {
+    "dev:mobile": "cd mobile && npx expo start",
+    "dev:server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:mobile\"",
+    "build:mobile": "cd mobile && npx expo build",
+    "build:server": "cd server && npm run build",
+    "build": "npm run build:server && npm run build:mobile",
+    "start:server": "cd server && npm start",
+    "start:mobile": "cd mobile && npx expo start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "expo-cli": "^6.3.0"
+  }
+}

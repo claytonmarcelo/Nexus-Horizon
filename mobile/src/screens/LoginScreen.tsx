@@ -9,6 +9,8 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Modal,
+  Pressable,
 } from 'react-native'
 import { colors, typography, spacing } from '../theme'
 import { api, setAuthToken } from '../services/api'
@@ -18,6 +20,10 @@ export function LoginScreen({ navigation }: any) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loginSuccessModalVisible, setLoginSuccessModalVisible] = useState(false)
+  const [forgotModalVisible, setForgotModalVisible] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotLoading, setForgotLoading] = useState(false)
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -26,15 +32,50 @@ export function LoginScreen({ navigation }: any) {
     }
     setLoading(true)
     try {
+      console.log('[Login] Iniciando login com email:', email)
       const response = await api.post('/auth/login', { email, password })
+      console.log('[Login] Resposta:', response.data)
+      
       const { token } = response.data
       await SecureStore.setItemAsync('token', token)
       setAuthToken(token)
-      navigation.replace('Dashboard')
+      setLoginSuccessModalVisible(true)
     } catch (error: any) {
-      Alert.alert('Erro', error.response?.data?.error || 'Falha no login.')
+      console.log('[Login] Erro:', error.message)
+      console.log('[Login] Response:', error.response?.data)
+      
+      const errorMsg = error.response?.data?.error || error.message || 'Falha na conexão com servidor'
+      Alert.alert('Erro', errorMsg)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleForgotPasswordRequest = async () => {
+    if (!forgotEmail) {
+      Alert.alert('Erro', 'Informe seu email para recuperação.')
+      return
+    }
+
+    setForgotLoading(true)
+    try {
+      console.log('[ForgotPassword] Solicitando recuperação para:', forgotEmail)
+      const response = await api.post('/auth/forgot-password', {
+        email: forgotEmail,
+      })
+      console.log('[ForgotPassword] Resposta:', response.data)
+      
+      Alert.alert('Recuperação de senha', response.data?.message || 'Verifique sua caixa de entrada.')
+      setForgotModalVisible(false)
+      setForgotEmail('')
+    } catch (error: any) {
+      console.log('[ForgotPassword] Erro:', error.message)
+      console.log('[ForgotPassword] Response:', error.response?.data)
+      
+      const errorMsg = error.response?.data?.error || error.message || 'Falha na conexão com servidor'
+      Alert.alert('Erro', errorMsg)
+    } finally {
+      setForgotLoading(false)
     }
   }
 
@@ -82,10 +123,74 @@ export function LoginScreen({ navigation }: any) {
             )}
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => setForgotModalVisible(true)}>
+            <Text style={styles.forgotLink}>Esqueci minha senha</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.link}>Não tem conta? Cadastre-se</Text>
+            <Text style={styles.link}>Faça seu cadastro</Text>
           </TouchableOpacity>
         </View>
+
+        <Modal visible={loginSuccessModalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Conectado</Text>
+              <Text style={styles.modalSubtitle}>
+                Está conectado ao fazer o login no sistema.
+              </Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setLoginSuccessModalVisible(false)
+                  navigation.replace('Dashboard')
+                }}
+              >
+                <Text style={styles.buttonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <Modal visible={forgotModalVisible} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Recuperar senha</Text>
+              <Text style={styles.modalSubtitle}>
+                Informe o email cadastrado para receber o link de redefinição.
+              </Text>
+
+              <TextInput
+                style={styles.input}
+                value={forgotEmail}
+                onChangeText={setForgotEmail}
+                placeholder="seu@email.com"
+                placeholderTextColor={colors.gray}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+
+              <TouchableOpacity
+                style={[styles.button, forgotLoading && styles.buttonDisabled]}
+                onPress={handleForgotPasswordRequest}
+                disabled={forgotLoading}
+              >
+                {forgotLoading ? (
+                  <ActivityIndicator color={colors.background} />
+                ) : (
+                  <Text style={styles.buttonText}>Enviar email</Text>
+                )}
+              </TouchableOpacity>
+
+              <Pressable
+                style={styles.modalClose}
+                onPress={() => setForgotModalVisible(false)}
+              >
+                <Text style={styles.modalCloseText}>Cancelar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
     </KeyboardAvoidingView>
   )
@@ -162,10 +267,53 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.sm,
     letterSpacing: 2,
   },
+  forgotLink: {
+    color: colors.secondary,
+    textAlign: 'center',
+    marginTop: spacing.sm,
+    fontSize: typography.fontSizes.sm,
+  },
   link: {
     color: colors.gray,
     textAlign: 'center',
     marginTop: spacing.md,
+    fontSize: typography.fontSizes.sm,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.55)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.lg,
+  },
+  modalContainer: {
+    width: '100%',
+    backgroundColor: colors.cardBg,
+    borderRadius: 16,
+    padding: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  modalTitle: {
+    fontSize: typography.fontSizes.lg,
+    fontWeight: '700',
+    color: colors.primary,
+    marginBottom: spacing.sm,
+  },
+  modalSubtitle: {
+    color: colors.gray,
+    fontSize: typography.fontSizes.xs,
+    marginBottom: spacing.md,
+    lineHeight: 20,
+  },
+  modalClose: {
+    padding: spacing.sm,
+    marginTop: spacing.md,
+    alignItems: 'center',
+  },
+  modalCloseText: {
+    color: colors.primary,
+    fontWeight: '700',
     fontSize: typography.fontSizes.sm,
   },
 })

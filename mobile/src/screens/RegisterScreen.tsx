@@ -25,15 +25,26 @@ export function RegisterScreen({ navigation }: any) {
       Alert.alert('Erro', 'Preencha todos os campos.')
       return
     }
+
+    if (password.length < 6) {
+      Alert.alert('Erro', 'Senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+
     setLoading(true)
     try {
+      console.log('[Register] Iniciando cadastro com email:', email)
       const response = await api.post('/auth/register', { name, email, password })
+      console.log('[Register] Resposta:', response.data)
+      
       const { token } = response.data
 
       if (token) {
         await SecureStore.setItemAsync('token', token)
         setAuthToken(token)
-        navigation.replace('Dashboard')
+        Alert.alert('Sucesso', 'Conta criada com sucesso!', [
+          { text: 'OK', onPress: () => navigation.replace('Dashboard') },
+        ])
         return
       }
 
@@ -41,7 +52,11 @@ export function RegisterScreen({ navigation }: any) {
         { text: 'OK', onPress: () => navigation.navigate('Login') },
       ])
     } catch (error: any) {
-      Alert.alert('Erro', error.response?.data?.error || 'Falha no cadastro.')
+      console.log('[Register] Erro:', error.message)
+      console.log('[Register] Response:', error.response?.data)
+      
+      const errorMsg = error.response?.data?.error || error.message || 'Falha na conexão com servidor'
+      Alert.alert('Erro', errorMsg)
     } finally {
       setLoading(false)
     }
