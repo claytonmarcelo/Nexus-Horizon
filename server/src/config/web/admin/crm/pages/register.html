@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Horizon — Cadastro</title>
+  <title>Nexus Horizon - Cadastro</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -20,7 +20,10 @@
       <label class="label">EMAIL</label>
       <input type="email" id="registerEmail" placeholder="seu@email.com" autocomplete="email">
       <label class="label">SENHA</label>
-      <input type="password" id="registerPassword" placeholder="••••••••" autocomplete="new-password">
+      <div class="password-field">
+        <input type="password" id="registerPassword" placeholder="********" autocomplete="new-password">
+        <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">Mostrar</button>
+      </div>
       <div class="error" id="registerError"></div>
       <div class="success" id="registerSuccess"></div>
       <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">CRIAR CONTA</button>
@@ -30,23 +33,62 @@
   <script src="assets/api.js"></script>
   <script>
     async function handleRegister() {
-      const name = document.getElementById('registerName').value
-      const email = document.getElementById('registerEmail').value
-      const password = document.getElementById('registerPassword').value
+      const normalizedName = document.getElementById('registerName').value.trim()
+      const normalizedEmail = document.getElementById('registerEmail').value.trim().toLowerCase()
+      const normalizedPassword = document.getElementById('registerPassword').value.trim()
       const errorEl = document.getElementById('registerError')
       const successEl = document.getElementById('registerSuccess')
       const btn = document.getElementById('registerBtn')
-      errorEl.style.display = 'none'; successEl.style.display = 'none'
-      if (!name || !email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
-      btn.disabled = true; btn.textContent = 'CRIANDO...'
+
+      errorEl.style.display = 'none'
+      successEl.style.display = 'none'
+
+      if (!normalizedName || !normalizedEmail || !normalizedPassword) {
+        errorEl.textContent = 'Preencha todos os campos'
+        errorEl.style.display = 'block'
+        return
+      }
+
+      if (normalizedPassword.length < 6) {
+        errorEl.textContent = 'A senha deve ter pelo menos 6 caracteres'
+        errorEl.style.display = 'block'
+        return
+      }
+
+      btn.disabled = true
+      btn.textContent = 'CRIANDO...'
+
       try {
-        const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
+        const res = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: normalizedName,
+            email: normalizedEmail,
+            password: normalizedPassword,
+          }),
+        })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
-        successEl.textContent = 'Conta criada! Faça login.'; successEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
+
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('userEmail', normalizedEmail)
+          localStorage.setItem('userName', data.user?.name || normalizedName)
+          goTo('dashboard.html')
+          return
+        }
+
+        successEl.textContent = 'Conta criada! Faça login.'
+        successEl.style.display = 'block'
+        btn.disabled = false
+        btn.textContent = 'CRIAR CONTA'
         setTimeout(() => goTo('login.html'), 2000)
       } catch (err) {
-        errorEl.textContent = err.message; errorEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
+        errorEl.textContent = err.message
+        errorEl.style.display = 'block'
+        btn.disabled = false
+        btn.textContent = 'CRIAR CONTA'
       }
     }
 

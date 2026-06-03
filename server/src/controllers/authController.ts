@@ -1,15 +1,24 @@
 import { randomUUID } from 'crypto'
-import { FastifyRequest, FastifyReply } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { db } from '../config/firebase'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_PASSWORD_LENGTH = 6
+const DEFAULT_PRODUCTION_FRONTEND_URL = 'https://claytonmarcelo.github.io/Nexus-Horizon'
+const DEFAULT_DEVELOPMENT_FRONTEND_URL = 'http://localhost:3333'
+const isProduction = process.env.NODE_ENV === 'production'
+
+type AuthBody = Record<string, unknown>
 
 function createMailTransporter() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env
-  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) return null
+
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
+    return null
+  }
+
   return nodemailer.createTransport({
     host: SMTP_HOST,
     port: Number(SMTP_PORT),
@@ -18,22 +27,36 @@ function createMailTransporter() {
   })
 }
 
+function getBody(request: FastifyRequest): AuthBody {
+  if (typeof request.body === 'object' && request.body !== null) {
+    return request.body as AuthBody
+  }
+
+  return {}
+}
+
+function getTrimmedString(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : ''
+}
+
 function validateEmail(email: string): string | null {
-  if (!email || typeof email !== 'string') return 'Email é obrigatório.'
-  const normalized = email.trim().toLowerCase()
-  if (!EMAIL_REGEX.test(normalized)) return 'Email inválido.'
+  if (!email) return 'Email é obrigatório.'
+  if (!EMAIL_REGEX.test(email)) return 'Email inválido.'
   return null
 }
 
 function validatePassword(password: string): string | null {
-  if (!password || typeof password !== 'string') return 'Senha é obrigatória.'
-  if (password.length < MIN_PASSWORD_LENGTH) return `Senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`
+  if (!password) return 'Senha é obrigatória.'
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return `Senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`
+  }
+
   return null
 }
 
 function validateName(name: string): string | null {
-  if (!name || typeof name !== 'string') return 'Nome é obrigatório.'
-  if (name.trim().length < 2) return 'Nome deve ter no mínimo 2 caracteres.'
+  if (!name) return 'Nome é obrigatório.'
+  if (name.length < 2) return 'Nome deve ter no mínimo 2 caracteres.'
   return null
 }
 
@@ -42,8 +65,37 @@ function sanitizeUser(doc: FirebaseFirestore.DocumentData) {
   return safe
 }
 
+function getResetPasswordBaseUrl() {
+  const configuredBaseUrl =
+    process.env.RESET_PASSWORD_URL ||
+    process.env.FRONTEND_URL ||
+    process.env.APP_URL ||
+    process.env.PUBLIC_APP_URL
+
+  if (configuredBaseUrl) {
+    return configuredBaseUrl.trim()
+  }
+
+  return isProduction
+    ? DEFAULT_PRODUCTION_FRONTEND_URL
+    : DEFAULT_DEVELOPMENT_FRONTEND_URL
+}
+
+function buildResetPasswordLink(token: string) {
+  const baseUrl = getResetPasswordBaseUrl().replace(/\/+$/, '')
+  const resetUrl = baseUrl.includes('reset-password')
+    ? new URL(baseUrl)
+    : new URL(`${baseUrl}/reset-password.html`)
+
+  resetUrl.searchParams.set('token', token)
+  return resetUrl.toString()
+}
+
 export async function register(request: FastifyRequest, reply: FastifyReply) {
-  const { name, email, password } = request.body as { name: string; email: string; password: string }
+  const body = getBody(request)
+  const name = getTrimmedString(body.name)
+  const email = getTrimmedString(body.email).toLowerCase()
+  const password = getTrimmedString(body.password)
 
   const nameError = validateName(name)
   if (nameError) return reply.status(400).send({ error: nameError })
@@ -51,24 +103,21 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const emailError = validateEmail(email)
   if (emailError) return reply.status(400).send({ error: emailError })
 
-  const trimmedPassword = typeof password === 'string' ? password.trim() : password
-  const passwordError = validatePassword(trimmedPassword)
+  const passwordError = validatePassword(password)
   if (passwordError) return reply.status(400).send({ error: passwordError })
 
-  const normalizedEmail = email.trim().toLowerCase()
-
   const usersRef = db.collection('users')
-  const existing = await usersRef.where('email', '==', normalizedEmail).get()
+  const existing = await usersRef.where('email', '==', email).get()
 
   if (!existing.empty) {
-    return reply.status(409).send({ error: 'Este email já está cadastrado.' })
+    return reply.status(409).send({ error: 'Email já cadastrado.' })
   }
 
-  const hashedPassword = await bcrypt.hash(trimmedPassword, 10)
+  const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = {
     id: randomUUID(),
-    name: name.trim(),
-    email: normalizedEmail,
+    name,
+    email,
     password: hashedPassword,
     createdAt: new Date().toISOString(),
     plan: 'Nexus Pro',
@@ -85,32 +134,43 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   return reply.status(201).send({
     message: 'Usuário criado com sucesso.',
     token,
-    user: { id: newUser.id, name: newUser.name, email: newUser.email, plan: 'Nexus Pro', totalConnections: 0, createdAt: newUser.createdAt },
+    user: {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      plan: newUser.plan,
+      totalConnections: newUser.totalConnections,
+      createdAt: newUser.createdAt,
+    },
   })
 }
 
 export async function login(request: FastifyRequest, reply: FastifyReply) {
-  const { email, password } = request.body as { email: string; password: string }
+  const body = getBody(request)
+  const email = getTrimmedString(body.email).toLowerCase()
+  const password = getTrimmedString(body.password)
 
   if (!email || !password) {
     return reply.status(400).send({ error: 'Email e senha são obrigatórios.' })
   }
 
-  const normalizedEmail = email.trim().toLowerCase()
-  const trimmedPassword = typeof password === 'string' ? password.trim() : password
   const usersRef = db.collection('users')
-  const snapshot = await usersRef.where('email', '==', normalizedEmail).get()
+  const snapshot = await usersRef.where('email', '==', email).get()
 
   if (snapshot.empty) {
-    return reply.status(401).send({ error: 'Email ou senha incorretos.' })
+    return reply.status(401).send({ error: 'Credenciais inválidas.' })
   }
 
   const userDoc = snapshot.docs[0]
   const user = userDoc.data()
 
-  const validPassword = await bcrypt.compare(trimmedPassword, user.password)
+  if (!user.password || typeof user.password !== 'string') {
+    return reply.status(401).send({ error: 'Credenciais inválidas.' })
+  }
+
+  const validPassword = await bcrypt.compare(password, user.password)
   if (!validPassword) {
-    return reply.status(401).send({ error: 'Email ou senha incorretos.' })
+    return reply.status(401).send({ error: 'Credenciais inválidas.' })
   }
 
   const totalConnections = (user.totalConnections || 0) + 1
@@ -133,39 +193,50 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
       plan: user.plan || 'Nexus Pro',
       totalConnections,
       createdAt: user.createdAt,
+      lastLogin: new Date().toISOString(),
     },
   })
 }
 
 export async function forgotPassword(request: FastifyRequest, reply: FastifyReply) {
-  const { email } = request.body as { email: string }
+  const body = getBody(request)
+  const email = getTrimmedString(body.email).toLowerCase()
 
   if (!email) {
     return reply.status(400).send({ error: 'Informe o email para recuperação.' })
   }
 
+  const transporter = createMailTransporter()
+  if (!transporter && isProduction) {
+    return reply.status(503).send({
+      error: 'Recuperação de senha indisponível no momento.',
+    })
+  }
+
   const usersRef = db.collection('users')
-  const snapshot = await usersRef.where('email', '==', email.trim().toLowerCase()).get()
+  const snapshot = await usersRef.where('email', '==', email).get()
 
   if (!snapshot.empty) {
     const userDoc = snapshot.docs[0]
     const user = userDoc.data()
     const resetToken = randomUUID()
     const resetTokenExpiresAt = Date.now() + 1000 * 60 * 60
+    const resetLink = buildResetPasswordLink(resetToken)
 
     await usersRef.doc(user.id).update({ resetToken, resetTokenExpiresAt })
-
-    const frontendUrl = process.env.FRONTEND_URL || process.env.APP_URL || 'http://localhost:19006'
-    const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`
-    const transporter = createMailTransporter()
 
     if (transporter) {
       await transporter.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
-        to: email.trim().toLowerCase(),
+        to: email,
         subject: 'Nexus Horizon - Recuperação de senha',
         text: `Você solicitou a recuperação de senha. Abra este link para redefinir: ${resetLink}`,
         html: `<p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><a href="${resetLink}">${resetLink}</a>`,
+      })
+    } else {
+      return reply.send({
+        message: 'Link de redefinição gerado para desenvolvimento.',
+        resetLink,
       })
     }
   }
@@ -176,9 +247,13 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
 }
 
 export async function resetPassword(request: FastifyRequest, reply: FastifyReply) {
-  const { token, password } = request.body as { token: string; password: string }
+  const body = getBody(request)
+  const token = getTrimmedString(body.token)
+  const password = getTrimmedString(body.password)
 
-  if (!token) return reply.status(400).send({ error: 'Token é obrigatório.' })
+  if (!token) {
+    return reply.status(400).send({ error: 'Token é obrigatório.' })
+  }
 
   const passwordError = validatePassword(password)
   if (passwordError) return reply.status(400).send({ error: passwordError })

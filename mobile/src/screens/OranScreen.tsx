@@ -44,7 +44,7 @@ export function OranScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.md },
+  content: { padding: spacing.md, paddingBottom: spacing.xxl },
   summaryRow: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.md },
   summaryBox: { flex: 1, backgroundColor: colors.cardBg, borderRadius: 12, borderWidth: 1, borderColor: colors.border, padding: spacing.md, alignItems: 'center' },
   summaryLabel: { fontSize: 10, color: colors.gray, letterSpacing: 2, marginBottom: 8 },

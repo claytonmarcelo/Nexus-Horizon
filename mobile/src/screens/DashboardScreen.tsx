@@ -1,17 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
-} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
 import { deleteItem } from '../services/secureStorage'
+import { WaveScrollScreen } from '../components/WaveScrollScreen'
 
 interface ConnectivityData {
   type: string
@@ -25,22 +19,25 @@ export function DashboardScreen() {
   const [data, setData] = useState<ConnectivityData | null>(null)
   const [activeProvider, setActiveProvider] = useState('satellite')
 
-  const fetchData = useCallback(async (type: string) => {
-    try {
-      const response = await api.get(`/connectivity/${type}`)
-      setData(response.data)
-      setActiveProvider(type)
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        await deleteItem('token')
-        removeAuthToken()
-        navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
-        return
-      }
+  const fetchData = useCallback(
+    async (type: string) => {
+      try {
+        const response = await api.get(`/connectivity/${type}`)
+        setData(response.data)
+        setActiveProvider(type)
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          await deleteItem('token')
+          removeAuthToken()
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          return
+        }
 
-      Alert.alert('Erro', 'Falha ao buscar dados.')
-    }
-  }, [navigation])
+        Alert.alert('Erro', 'Falha ao buscar dados.')
+      }
+    },
+    [navigation]
+  )
 
   useFocusEffect(
     useCallback(() => {
@@ -56,31 +53,34 @@ export function DashboardScreen() {
   ]
 
   return (
-    <ScrollView style={styles.container}>
+    <WaveScrollScreen
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.providerRow}>
-        {providers.map((p, index) => (
+        {providers.map((provider, index) => (
           <TouchableOpacity
-            key={p.key}
+            key={provider.key}
             style={[
               styles.providerBtn,
               index < providers.length - 1 && styles.providerBtnMargin,
-              activeProvider === p.key && styles.providerBtnActive,
+              activeProvider === provider.key && styles.providerBtnActive,
             ]}
-            onPress={() => fetchData(p.key)}
+            onPress={() => fetchData(provider.key)}
           >
             <Text
               style={[
                 styles.providerText,
-                activeProvider === p.key && styles.providerTextActive,
+                activeProvider === provider.key && styles.providerTextActive,
               ]}
             >
-              {p.label}
+              {provider.label}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {data && (
+      {data ? (
         <View style={styles.card}>
           <Text style={styles.cardLabel}>STATUS</Text>
           <Text style={styles.cardValue}>{data.status}</Text>
@@ -100,22 +100,19 @@ export function DashboardScreen() {
             <View style={[styles.signalFill, { width: `${data.signal}%` }]} />
           </View>
         </View>
-      )}
+      ) : null}
 
       <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>TECNOLOGIAS ATIVAS</Text>
-        <Text style={styles.infoText}>
-          Direct-to-Cell · Open RAN · Li-Fi · 5G · Satélite
-        </Text>
+        <Text style={styles.infoText}>Direct-to-Cell · Open RAN · Li-Fi · 5G · Satélite</Text>
       </View>
-    </ScrollView>
+    </WaveScrollScreen>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
+  content: {
+    paddingBottom: spacing.xxl,
   },
   providerRow: {
     flexDirection: 'row',
@@ -128,13 +125,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
+    backgroundColor: 'rgba(13, 17, 23, 0.54)',
   },
   providerBtnMargin: {
     marginRight: spacing.sm,
   },
   providerBtnActive: {
     borderColor: colors.primary,
-    backgroundColor: 'rgba(0, 245, 255, 0.1)',
+    backgroundColor: 'rgba(0, 245, 255, 0.12)',
   },
   providerText: {
     color: colors.gray,
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
   card: {
     margin: spacing.md,
     marginTop: 0,
-    backgroundColor: colors.cardBg,
+    backgroundColor: 'rgba(22, 27, 34, 0.88)',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
@@ -200,7 +198,7 @@ const styles = StyleSheet.create({
   infoCard: {
     margin: spacing.md,
     marginTop: 0,
-    backgroundColor: colors.cardBg,
+    backgroundColor: 'rgba(22, 27, 34, 0.88)',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.secondary,
@@ -216,5 +214,6 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.sm,
     color: colors.gray,
     letterSpacing: 1,
+    lineHeight: 21,
   },
 })

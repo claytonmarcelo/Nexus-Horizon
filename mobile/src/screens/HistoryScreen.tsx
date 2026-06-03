@@ -39,7 +39,7 @@ export function HistoryScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.md },
+  content: { padding: spacing.md, paddingBottom: spacing.xxl },
   title: { fontSize: 11, color: colors.primary, letterSpacing: 2, marginBottom: spacing.md },
   item: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border },
   left: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flex: 1 },

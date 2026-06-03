@@ -11,51 +11,63 @@ import {
   Platform,
 } from 'react-native'
 import { colors, typography, spacing } from '../theme'
-import { api, setAuthToken } from '../services/api'
-import { setItem } from '../services/secureStorage'
+import { api } from '../services/api'
+import { WaveBackground } from '../components/WaveBackground'
 
 export function RegisterScreen({ navigation }: any) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
+    const normalizedName = name.trim()
+    const normalizedEmail = email.trim().toLowerCase()
+    const normalizedPassword = password.trim()
+
+    if (!normalizedName || !normalizedEmail || !normalizedPassword) {
       Alert.alert('Erro', 'Preencha todos os campos.')
       return
     }
 
-    if (password.length < 6) {
-      Alert.alert('Erro', 'Senha deve ter pelo menos 6 caracteres.')
+    if (normalizedPassword.length < 6) {
+      Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres.')
       return
     }
 
     setLoading(true)
+
     try {
-      console.log('[Register] Iniciando cadastro com email:', email)
-      const response = await api.post('/auth/register', { name, email, password })
-      console.log('[Register] Resposta:', response.data)
+      const response = await api.post('/auth/register', {
+        name: normalizedName,
+        email: normalizedEmail,
+        password: normalizedPassword,
+      })
 
-      const { token } = response.data
-
-      if (token) {
-        await setItem('token', token)
-        setAuthToken(token)
-        Alert.alert('Sucesso', 'Conta criada com sucesso!', [
-          { text: 'OK', onPress: () => navigation.replace('Dashboard') },
-        ])
-        return
+      if (!response.data) {
+        throw new Error('Não foi possível concluir o cadastro.')
       }
 
-      Alert.alert('Sucesso', 'Conta criada! Faça login.', [
-        { text: 'OK', onPress: () => navigation.navigate('Login') },
-      ])
+      Alert.alert(
+        'Cadastro concluído',
+        'Sua conta foi criada com sucesso. Você será levado para a tela de login para revisar seus dados e entrar no sistema.',
+        [
+          {
+            text: 'OK',
+            onPress: () =>
+              navigation.replace('Login', {
+                prefillEmail: normalizedEmail,
+                prefillPassword: normalizedPassword,
+                justRegistered: true,
+                registeredName: normalizedName,
+              }),
+          },
+        ]
+      )
     } catch (error: any) {
-      console.log('[Register] Erro:', error.message)
-      console.log('[Register] Response:', error.response?.data)
-
-      const errorMsg = error.response?.data?.error || error.message || 'Falha na conexão com servidor'
+      const errorMsg =
+        error.response?.data?.error || error.message || 'Falha na conexão com o servidor.'
       Alert.alert('Erro', errorMsg)
     } finally {
       setLoading(false)
@@ -67,6 +79,8 @@ export function RegisterScreen({ navigation }: any) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      <WaveBackground />
+
       <View style={styles.inner}>
         <Text style={styles.logo}>NEXUS</Text>
         <Text style={styles.subtitle}>CADASTRO</Text>
@@ -90,17 +104,29 @@ export function RegisterScreen({ navigation }: any) {
             placeholderTextColor={colors.gray}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoCorrect={false}
           />
 
           <Text style={styles.label}>SENHA</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-            placeholderTextColor={colors.gray}
-            secureTextEntry
-          />
+          <View style={styles.passwordRow}>
+            <TextInput
+              style={[styles.input, styles.passwordInput]}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="********"
+              placeholderTextColor={colors.gray}
+              secureTextEntry={!passwordVisible}
+              autoCapitalize="none"
+            />
+            <TouchableOpacity
+              style={styles.passwordToggle}
+              onPress={() => setPasswordVisible((current) => !current)}
+            >
+              <Text style={styles.passwordToggleText}>
+                {passwordVisible ? 'Ocultar' : 'Mostrar'}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={[styles.button, loading && styles.buttonDisabled]}
@@ -127,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+    overflow: 'hidden',
   },
   inner: {
     flex: 1,
@@ -149,7 +176,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '100%',
-    backgroundColor: colors.cardBg,
+    maxWidth: 560,
+    backgroundColor: 'rgba(22, 27, 34, 0.88)',
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
@@ -171,6 +199,26 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: typography.fontSizes.md,
     marginBottom: spacing.sm,
+  },
+  passwordRow: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
+  passwordInput: {
+    paddingRight: 88,
+  },
+  passwordToggle: {
+    position: 'absolute',
+    right: 12,
+    top: 0,
+    bottom: spacing.sm,
+    justifyContent: 'center',
+  },
+  passwordToggleText: {
+    color: colors.primary,
+    fontSize: typography.fontSizes.xs,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   button: {
     backgroundColor: colors.secondary,

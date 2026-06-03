@@ -19,6 +19,7 @@ if (!jwtSecret) {
     console.error('FATAL: JWT_SECRET é obrigatório em produção.')
     process.exit(1)
   }
+
   console.warn('WARN: JWT_SECRET não definido. Usando chave padrão apenas para desenvolvimento.')
 }
 
@@ -26,9 +27,19 @@ server.register(fastifyJwt, {
   secret: jwtSecret || 'nexus-horizon-dev-secret',
 })
 
+const defaultAllowedOrigins = [
+  'https://claytonmarcelo.github.io',
+  'http://localhost:3000',
+  'http://localhost:3333',
+  'http://localhost:8082',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3333',
+  'http://127.0.0.1:8082',
+]
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-  : [process.env.FRONTEND_URL || 'http://localhost:19006', 'http://localhost:3333', 'http://localhost:3000']
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+  : defaultAllowedOrigins
 
 server.register(fastifyCors, {
   origin: isProduction ? allowedOrigins : true,
@@ -66,10 +77,13 @@ server.setErrorHandler((error: FastifyError, request: FastifyRequest, reply: Fas
 server.register(authRoutes, { prefix: '/api' })
 server.register(connectivityRoutes, { prefix: '/api' })
 
-server.get('/health', async () => ({
+const healthPayload = () => ({
   status: 'Nexus Horizon online',
   timestamp: new Date().toISOString(),
-}))
+})
+
+server.get('/health', async () => healthPayload())
+server.get('/api/health', async () => healthPayload())
 
 const start = async () => {
   try {

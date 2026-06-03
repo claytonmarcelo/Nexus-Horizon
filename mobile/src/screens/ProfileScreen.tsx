@@ -1,22 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 import { colors, spacing } from '../theme'
-import { api } from '../services/api'
+import { api, removeAuthToken } from '../services/api'
+import { deleteItem } from '../services/secureStorage'
 
 export function ProfileScreen() {
+  const navigation = useNavigation() as any
   const [profile, setProfile] = useState<any>(null)
 
   useEffect(() => {
+    let isMounted = true
+
     const load = async () => {
       try {
         const res = await api.get('/auth/profile')
-        setProfile(res.data)
-      } catch {
-        Alert.alert('Erro', 'Não foi possível carregar o perfil.')
+
+        if (isMounted) {
+          setProfile(res.data)
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          await deleteItem('token')
+          removeAuthToken()
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          return
+        }
+
+        if (isMounted) {
+          Alert.alert('Erro', 'Não foi possível carregar o perfil.')
+        }
       }
     }
-    load()
-  }, [])
+
+    void load()
+
+    return () => {
+      isMounted = false
+    }
+  }, [navigation])
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -48,7 +71,7 @@ function Field({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  content: { padding: spacing.md, alignItems: 'center' },
+  content: { padding: spacing.md, paddingBottom: spacing.xxl, alignItems: 'center' },
   avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md, shadowColor: colors.primary, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.4, shadowRadius: 20, elevation: 10 },
   avatarText: { fontSize: 28, fontWeight: '800', color: colors.background },
   name: { fontSize: 20, fontWeight: '700', color: colors.white, marginBottom: 4 },

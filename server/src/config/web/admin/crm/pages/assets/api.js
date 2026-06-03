@@ -125,3 +125,12 @@ function requireAuth() {
 function goTo(page) {
   window.location.href = `/admin/crm/pages/${page}`
 }
+
+function togglePassword(inputId, button) {
+  const input = document.getElementById(inputId)
+  if (!input || !button) return
+
+  const shouldShow = input.type === 'password'
+  input.type = shouldShow ? 'text' : 'password'
+  button.textContent = shouldShow ? 'Ocultar' : 'Mostrar'
+}
