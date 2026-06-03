@@ -61,16 +61,20 @@ function DrawerContent(props: any) {
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={drawerStyles.scroll}>
-      <WaveBackground />
-      <Text style={drawerStyles.brand}>NEXUS</Text>
-      <Text style={drawerStyles.sub}>HORIZON</Text>
-      <DrawerItemList {...props} />
-      <TouchableOpacity style={drawerStyles.cacheBtn} onPress={handleClearCache}>
-        <Text style={drawerStyles.cacheText}>🗑️ Limpar Cache</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={drawerStyles.logoutBtn} onPress={handleLogout}>
-        <Text style={drawerStyles.logoutText}>SAIR</Text>
-      </TouchableOpacity>
+      <View style={drawerStyles.backgroundContainer}>
+        <WaveBackground />
+      </View>
+      <View style={drawerStyles.contentContainer}>
+        <Text style={drawerStyles.brand}>NEXUS</Text>
+        <Text style={drawerStyles.sub}>HORIZON</Text>
+        <DrawerItemList {...props} />
+        <TouchableOpacity style={drawerStyles.cacheBtn} onPress={handleClearCache}>
+          <Text style={drawerStyles.cacheText}>🗑️ Limpar Cache</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={drawerStyles.logoutBtn} onPress={handleLogout}>
+          <Text style={drawerStyles.logoutText}>SAIR</Text>
+        </TouchableOpacity>
+      </View>
     </DrawerContentScrollView>
   )
 }
@@ -175,6 +179,17 @@ const drawerStyles = StyleSheet.create({
     paddingBottom: 32,
     position: 'relative',
   },
+  backgroundContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 0,
+  },
+  contentContainer: {
+    zIndex: 1,
+  },
   brand: {
     fontSize: 28,
     fontWeight: '700',
@@ -182,7 +197,6 @@ const drawerStyles = StyleSheet.create({
     letterSpacing: 8,
     textAlign: 'center',
     marginBottom: 2,
-    zIndex: 1,
   },
   sub: {
     fontSize: 12,
@@ -191,7 +205,6 @@ const drawerStyles = StyleSheet.create({
     letterSpacing: 6,
     textAlign: 'center',
     marginBottom: 32,
-    zIndex: 1,
   },
   cacheBtn: {
     marginHorizontal: 16,
@@ -202,7 +215,6 @@ const drawerStyles = StyleSheet.create({
     borderColor: 'rgba(0, 245, 255, 0.4)',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 245, 255, 0.05)',
-    zIndex: 1,
   },
   cacheText: {
     color: colors.primary,
@@ -220,7 +232,6 @@ const drawerStyles = StyleSheet.create({
     borderColor: 'rgba(255,49,49,0.4)',
     alignItems: 'center',
     backgroundColor: 'rgba(255,49,49,0.05)',
-    zIndex: 1,
   },
   logoutText: {
     color: colors.danger,
