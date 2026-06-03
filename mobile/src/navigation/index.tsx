@@ -172,8 +172,8 @@ const drawerStyles = StyleSheet.create({
   scroll: {
     flex: 1,
     paddingTop: 60,
+    paddingBottom: 32,
     position: 'relative',
-    overflow: 'hidden',
   },
   brand: {
     fontSize: 28,
@@ -182,6 +182,7 @@ const drawerStyles = StyleSheet.create({
     letterSpacing: 8,
     textAlign: 'center',
     marginBottom: 2,
+    zIndex: 1,
   },
   sub: {
     fontSize: 12,
@@ -190,6 +191,7 @@ const drawerStyles = StyleSheet.create({
     letterSpacing: 6,
     textAlign: 'center',
     marginBottom: 32,
+    zIndex: 1,
   },
   cacheBtn: {
     marginHorizontal: 16,
@@ -200,6 +202,7 @@ const drawerStyles = StyleSheet.create({
     borderColor: 'rgba(0, 245, 255, 0.4)',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 245, 255, 0.05)',
+    zIndex: 1,
   },
   cacheText: {
     color: colors.primary,
@@ -210,12 +213,14 @@ const drawerStyles = StyleSheet.create({
   logoutBtn: {
     marginHorizontal: 16,
     marginTop: 16,
+    marginBottom: 16,
     padding: 14,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(255,49,49,0.4)',
     alignItems: 'center',
     backgroundColor: 'rgba(255,49,49,0.05)',
+    zIndex: 1,
   },
   logoutText: {
     color: colors.danger,
