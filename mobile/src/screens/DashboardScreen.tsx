@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
-import * as SecureStore from 'expo-secure-store'
+import { deleteItem } from '../services/secureStorage'
 
 interface ConnectivityData {
   type: string
@@ -32,11 +32,12 @@ export function DashboardScreen() {
       setActiveProvider(type)
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        await SecureStore.deleteItemAsync('token')
+        await deleteItem('token')
         removeAuthToken()
         navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
         return
       }
+
       Alert.alert('Erro', 'Falha ao buscar dados.')
     }
   }, [navigation])

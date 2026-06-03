@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import { colors, typography, spacing } from '../theme'
 import { api, setAuthToken } from '../services/api'
-import * as SecureStore from 'expo-secure-store'
+import { setItem } from '../services/secureStorage'
 
 export function RegisterScreen({ navigation }: any) {
   const [name, setName] = useState('')
@@ -36,11 +36,11 @@ export function RegisterScreen({ navigation }: any) {
       console.log('[Register] Iniciando cadastro com email:', email)
       const response = await api.post('/auth/register', { name, email, password })
       console.log('[Register] Resposta:', response.data)
-      
+
       const { token } = response.data
 
       if (token) {
-        await SecureStore.setItemAsync('token', token)
+        await setItem('token', token)
         setAuthToken(token)
         Alert.alert('Sucesso', 'Conta criada com sucesso!', [
           { text: 'OK', onPress: () => navigation.replace('Dashboard') },
@@ -54,7 +54,7 @@ export function RegisterScreen({ navigation }: any) {
     } catch (error: any) {
       console.log('[Register] Erro:', error.message)
       console.log('[Register] Response:', error.response?.data)
-      
+
       const errorMsg = error.response?.data?.error || error.message || 'Falha na conexão com servidor'
       Alert.alert('Erro', errorMsg)
     } finally {
@@ -97,7 +97,7 @@ export function RegisterScreen({ navigation }: any) {
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            placeholder="••••••••"
+            placeholder="********"
             placeholderTextColor={colors.gray}
             secureTextEntry
           />

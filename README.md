@@ -116,10 +116,10 @@ npm start
 # Em outro terminal, instale e rode o app mobile
 cd ../mobile
 npm install
-npx expo start
+npx expo start --port 8082 --clear
 ```
 
-A partir da raiz do repositório, você também pode iniciar o app mobile com `npm start` ou `npx expo start mobile`.
+A partir da raiz do repositório, você também pode iniciar o app mobile com `npm start`.
 `npx expo start` executado na raiz falha porque o projeto Expo fica dentro de `mobile/`.
 
 Acesse: **https://claytonmarcelo.github.io/Nexus-Horizon/**

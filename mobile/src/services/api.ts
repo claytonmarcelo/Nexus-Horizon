@@ -1,6 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { Platform } from 'react-native'
-import * as SecureStore from 'expo-secure-store'
+import { getItem } from './secureStorage'
 
 const DEFAULT_ANDROID = 'http://10.0.2.2:3333/api'
 const DEFAULT_IOS = 'http://localhost:3333/api'
@@ -42,7 +42,7 @@ export const api = axios.create({
 detectApiUrl().then(url => { api.defaults.baseURL = url })
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  const token = await SecureStore.getItemAsync('token')
+  const token = await getItem('token')
 
   if (token) {
     config.headers = {
