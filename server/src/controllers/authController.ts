@@ -351,3 +351,17 @@ export async function getProfile(request: FastifyRequest, reply: FastifyReply) {
   const user = userDoc.data()!
   return reply.send(sanitizeUser(user))
 }
+
+export async function deleteAccount(request: FastifyRequest, reply: FastifyReply) {
+  const { id } = request.user as { id: string }
+  const usersRef = db.collection('users')
+  const userDoc = await usersRef.doc(id).get()
+
+  if (!userDoc.exists) {
+    return reply.status(404).send({ error: 'Usuário não encontrado.' })
+  }
+
+  await usersRef.doc(id).delete()
+
+  return reply.send({ message: 'Conta excluída com sucesso. Esta ação não pode ser revertida.' })
+}

@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { register, login, forgotPassword, resetPassword, getProfile } from '../controllers/authController'
+import { register, login, forgotPassword, resetPassword, getProfile, deleteAccount } from '../controllers/authController'
 import { authMiddleware } from '../middlewares/authMiddleware'
 import { byIp, byIpAndEmail, createRateLimiter } from '../middlewares/rateLimit'
 
@@ -42,6 +42,7 @@ export async function authRoutes(server: FastifyInstance): Promise<void> {
   server.post('/auth/reset-password', { preHandler: [resetPasswordLimiter] }, resetPassword)
 
   server.get('/auth/profile', { preHandler: [authMiddleware] }, getProfile)
+  server.delete('/auth/account', { preHandler: [authMiddleware] }, deleteAccount)
 
   server.post('/auth/logout', async (request, reply) => {
     return reply.send({ message: 'Logout realizado com sucesso.' })

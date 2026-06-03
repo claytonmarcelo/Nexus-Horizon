@@ -19,6 +19,8 @@ type LoginContext = {
 export function ProfileScreen() {
   const navigation = useNavigation() as any
   const [profile, setProfile] = useState<any>(null)
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
   const currentContext = useMemo(() => getClientContext(), [])
   const loginContext = (profile?.lastLoginContext || null) as LoginContext | null
 
@@ -58,6 +60,23 @@ export function ProfileScreen() {
     ? `${loginContext.systemName} ${loginContext.systemVersion || ''}`.trim()
     : `${currentContext.systemName} ${currentContext.systemVersion}`.trim()
   const lastAccessRuntime = loginContext?.runtime || currentContext.runtime
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true)
+    try {
+      await api.delete('/auth/account')
+      await deleteItem('token')
+      removeAuthToken()
+      Alert.alert('Conta excluída', 'Sua conta foi excluída com sucesso. Esta ação não pode ser revertida.')
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.error || 'Falha ao excluir conta. Tente novamente.'
+      Alert.alert('Erro', errorMsg)
+    } finally {
+      setDeleteLoading(false)
+      setDeleteModalVisible(false)
+    }
+  }
 
   return (
     <WaveScrollScreen
@@ -111,6 +130,44 @@ export function ProfileScreen() {
           do dispositivo no login para facilitar validacao de acesso e acompanhamento da sessao.
         </Text>
       </View>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={() => setDeleteModalVisible(true)}>
+        <Text style={styles.deleteButtonText}>Excluir Conta</Text>
+      </TouchableOpacity>
+
+      <Modal visible={deleteModalVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Excluir Conta</Text>
+            <Text style={styles.modalSubtitle}>
+              Tem certeza que deseja excluir sua conta? Esta ação não pode ser revertida e todos
+              os seus dados serão permanentemente removidos.
+            </Text>
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.modalButtonCancel]}
+                onPress={() => setDeleteModalVisible(false)}
+                disabled={deleteLoading}
+              >
+                <Text style={styles.modalButtonTextCancel}>Não</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, styles.modalButtonConfirm]}
+                onPress={handleDeleteAccount}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? (
+                  <ActivityIndicator color={colors.background} />
+                ) : (
+                  <Text style={styles.modalButtonTextConfirm}>Sim, Excluir</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </WaveScrollScreen>
   )
 }
@@ -248,5 +305,81 @@ const styles = StyleSheet.create({
     color: colors.gray,
     letterSpacing: 1,
     lineHeight: 20,
+  },
+  deleteButton: {
+    width: '100%',
+    backgroundColor: 'rgba(255, 49, 49, 0.1)',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 49, 49, 0.3)',
+    padding: spacing.md,
+    marginTop: spacing.md,
+    alignItems: 'center',
+  },
+  deleteButtonText: {
+    color: colors.danger,
+    fontSize: typography.fontSizes.sm,
+    fontWeight: '700',
+    letterSpacing: 2,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.lg,
+  },
+  modalContainer: {
+    width: '100%',
+    maxWidth: 400,
+    backgroundColor: colors.cardBg,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.lg,
+  },
+  modalTitle: {
+    fontSize: typography.fontSizes.lg,
+    fontWeight: '700',
+    color: colors.danger,
+    marginBottom: spacing.sm,
+    textAlign: 'center',
+  },
+  modalSubtitle: {
+    fontSize: typography.fontSizes.sm,
+    color: colors.gray,
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: spacing.lg,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  modalButton: {
+    flex: 1,
+    padding: spacing.md,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  modalButtonCancel: {
+    backgroundColor: colors.grayDark,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  modalButtonConfirm: {
+    backgroundColor: colors.danger,
+  },
+  modalButtonTextCancel: {
+    color: colors.white,
+    fontSize: typography.fontSizes.sm,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  modalButtonTextConfirm: {
+    color: colors.background,
+    fontSize: typography.fontSizes.sm,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
 })
