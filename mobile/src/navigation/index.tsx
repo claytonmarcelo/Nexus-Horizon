@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, Text, StyleSheet, View, ActivityIndicator } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, View, ActivityIndicator, Alert } from 'react-native'
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
@@ -34,12 +34,40 @@ function DrawerContent(props: any) {
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
   }
 
+  const handleClearCache = async () => {
+    try {
+      // Salva o token antes de limpar
+      const token = await deleteItem('token')
+      
+      // Limpa AsyncStorage
+      const AsyncStorage = require('@react-native-async-storage/async-storage').default
+      await AsyncStorage.clear()
+      
+      // Limpa outros dados do SecureStore
+      await deleteItem('userContext')
+      await deleteItem('deviceContext')
+      
+      // Restaura o token para manter sessão
+      if (token !== null && token !== undefined) {
+        const { setAuthToken } = require('../services/api')
+        setAuthToken(token)
+      }
+      
+      Alert.alert('Sucesso', 'Cache limpo com sucesso. Você continua logado.')
+    } catch (error) {
+      Alert.alert('Erro', 'Falha ao limpar cache.')
+    }
+  }
+
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={drawerStyles.scroll}>
       <WaveBackground />
       <Text style={drawerStyles.brand}>NEXUS</Text>
       <Text style={drawerStyles.sub}>HORIZON</Text>
       <DrawerItemList {...props} />
+      <TouchableOpacity style={drawerStyles.cacheBtn} onPress={handleClearCache}>
+        <Text style={drawerStyles.cacheText}>🗑️ Limpar Cache</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={drawerStyles.logoutBtn} onPress={handleLogout}>
         <Text style={drawerStyles.logoutText}>SAIR</Text>
       </TouchableOpacity>
@@ -163,9 +191,25 @@ const drawerStyles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 32,
   },
+  cacheBtn: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    padding: 14,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 245, 255, 0.4)',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 245, 255, 0.05)',
+  },
+  cacheText: {
+    color: colors.primary,
+    fontWeight: '700',
+    letterSpacing: 2,
+    fontSize: 13,
+  },
   logoutBtn: {
     marginHorizontal: 16,
-    marginTop: 24,
+    marginTop: 16,
     padding: 14,
     borderRadius: 8,
     borderWidth: 1,
