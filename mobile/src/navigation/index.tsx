@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
@@ -14,7 +14,7 @@ import { ProfileScreen } from '../screens/ProfileScreen'
 import { HistoryScreen } from '../screens/HistoryScreen'
 import { colors } from '../theme'
 import { removeAuthToken } from '../services/api'
-import * as SecureStore from 'expo-secure-store'
+import { deleteItem } from '../services/secureStorage'
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -23,7 +23,7 @@ function DrawerContent(props: any) {
   const navigation = useNavigation() as any
 
   const handleLogout = async () => {
-    await SecureStore.deleteItemAsync('token')
+    await deleteItem('token')
     removeAuthToken()
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
   }
@@ -61,7 +61,7 @@ function MainDrawer() {
       <Drawer.Screen name="Open RAN" component={OranScreen} />
       <Drawer.Screen name="Direct-to-Cell" component={DtcScreen} />
       <Drawer.Screen name="Perfil" component={ProfileScreen} />
-      <Drawer.Screen name="Histórico" component={HistoryScreen} />
+      <Drawer.Screen name="Historico" component={HistoryScreen} />
     </Drawer.Navigator>
   )
 }
@@ -78,61 +78,18 @@ export function Navigation() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ title: 'CADASTRO' }}
-        />
-        <Stack.Screen
-          name="Dashboard"
-          component={MainDrawer}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'CADASTRO' }} />
+        <Stack.Screen name="Dashboard" component={MainDrawer} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   )
 }
 
 const drawerStyles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-    paddingTop: 60,
-  },
-  brand: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.primary,
-    letterSpacing: 8,
-    textAlign: 'center',
-    marginBottom: 2,
-  },
-  sub: {
-    fontSize: 12,
-    fontWeight: '300',
-    color: colors.secondary,
-    letterSpacing: 6,
-    textAlign: 'center',
-    marginBottom: 32,
-  },
-  logoutBtn: {
-    marginHorizontal: 16,
-    marginTop: 24,
-    padding: 14,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255,49,49,0.4)',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,49,49,0.05)',
-  },
-  logoutText: {
-    color: colors.danger,
-    fontWeight: '700',
-    letterSpacing: 3,
-    fontSize: 13,
-  },
+  scroll: { flex: 1, paddingTop: 60 },
+  brand: { fontSize: 28, fontWeight: '700', color: colors.primary, letterSpacing: 8, textAlign: 'center', marginBottom: 2 },
+  sub: { fontSize: 12, fontWeight: '300', color: colors.secondary, letterSpacing: 6, textAlign: 'center', marginBottom: 32 },
+  logoutBtn: { marginHorizontal: 16, marginTop: 24, padding: 14, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,49,49,0.4)', alignItems: 'center', backgroundColor: 'rgba(255,49,49,0.05)' },
+  logoutText: { color: colors.danger, fontWeight: '700', letterSpacing: 3, fontSize: 13 },
 })

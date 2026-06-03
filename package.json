@@ -4,14 +4,15 @@
   "description": "Nexus Horizon - Next-Gen Connectivity Platform",
   "private": true,
   "scripts": {
-    "dev:mobile": "cd mobile && npx expo start",
+    "start": "npx expo start mobile",
+    "dev:mobile": "npx expo start mobile",
     "dev:server": "cd server && npm run dev",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:mobile\"",
     "build:mobile": "cd mobile && npx expo build",
     "build:server": "cd server && npm run build",
     "build": "npm run build:server && npm run build:mobile",
     "start:server": "cd server && npm start",
-    "start:mobile": "cd mobile && npx expo start"
+    "start:mobile": "npx expo start mobile"
   },
   "keywords": [],
   "author": "",
