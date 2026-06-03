@@ -90,14 +90,10 @@ Nexus-Horizon/
 # Clone o repositório
 git clone https://github.com/claytonmarcelo/Nexus-Horizon.git
 
-# Entre na raiz do projeto
-cd Nexus-Horizon
+# Entre na pasta do servidor
+cd Nexus-Horizon/server
 
-# Instale as dependências da raiz
-npm install
-
-# Instale as dependências do servidor
-cd server
+# Instale as dependências
 npm install
 
 # Configure as variáveis de ambiente
@@ -112,15 +108,7 @@ npm install
 # Compile e rode
 npm run build
 npm start
-
-# Em outro terminal, instale e rode o app mobile
-cd ../mobile
-npm install
-npx expo start --port 8082 --clear
 ```
-
-A partir da raiz do repositório, você também pode iniciar o app mobile com `npm start`
-ou `npx expo start`. Ambos encaminham para o projeto Expo dentro de `mobile/`.
 
 Acesse: **https://claytonmarcelo.github.io/Nexus-Horizon/**
 

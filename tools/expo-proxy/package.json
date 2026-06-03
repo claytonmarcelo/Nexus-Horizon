@@ -1,0 +1,8 @@
+{
+  "name": "nexus-horizon-expo-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "bin": {
+    "expo": "./bin/expo.js"
+  }
+}

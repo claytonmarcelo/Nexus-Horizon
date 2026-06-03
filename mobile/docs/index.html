@@ -113,10 +113,6 @@
     input { width: 100%; background: rgba(13,13,13,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; color: #F0F0F0; font-size: 15px; outline: none; transition: all 0.3s; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4); }
     input:focus { border-color: #FF6B00; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(255,107,0,0.15), 0 0 20px rgba(255,107,0,0.08); }
     input::placeholder { color: #555; }
-    .password-field { position: relative; display: flex; align-items: center; }
-    .password-field input { padding-right: 92px; }
-    .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #FFB800; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; padding: 4px 0; }
-    .password-toggle:hover { color: #FFFFFF; }
 
     /* BUTTONS */
     .btn-primary { width: 100%; background: linear-gradient(135deg, #FF6B00 0%, #FFB800 50%, #FF6B00 100%); background-size: 200% auto; color: #0A0A0A; border: none; border-radius: 12px; padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: 3px; cursor: pointer; margin-top: 20px; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(255,107,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3); }
@@ -623,13 +619,9 @@
         <label class="label">EMAIL</label>
         <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
         <label class="label">SENHA</label>
-        <div class="password-field">
-          <input type="password" id="loginPassword" placeholder="********" autocomplete="current-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">Mostrar</button>
-        </div>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
         <div class="error" id="loginError"></div>
-        <button class="btn-primary" id="loginBtn" onclick="handleLogin()">ACESSAR SISTEMA</button>
-        <p class="link" onclick="goToResetPassword()">Esqueci minha senha</p>
+        <button class="btn-primary" onclick="handleLogin()">ACESSAR SISTEMA</button>
         <p class="link" onclick="showRegister()">Não tem conta? Cadastre-se</p>
       </div>
     </div>
@@ -640,13 +632,10 @@
         <label class="label">EMAIL</label>
         <input type="email" id="registerEmail" placeholder="seu@email.com" autocomplete="email">
         <label class="label">SENHA</label>
-        <div class="password-field">
-          <input type="password" id="registerPassword" placeholder="********" autocomplete="new-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">Mostrar</button>
-        </div>
+        <input type="password" id="registerPassword" placeholder="••••••••" autocomplete="new-password">
         <div class="error" id="registerError"></div>
         <div class="success" id="registerSuccess"></div>
-        <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">CRIAR CONTA</button>
+        <button class="btn-secondary" onclick="handleRegister()">CRIAR CONTA</button>
         <p class="link" onclick="showLogin()">Já tem conta? Faça login</p>
       </div>
     </div>
@@ -908,31 +897,7 @@
   </nav>
 
   <script>
-    const localHostNames = ['localhost', '127.0.0.1', '::1', '0.0.0.0']
-    const REMOTE_API = 'https://nexus-horizon.onrender.com/api'
-    let API = localHostNames.includes(window.location.hostname)
-      ? window.location.origin + '/api'
-      : REMOTE_API
-    let apiUrlTested = false
-    let validApiUrl = null
-
-    async function detectApiUrl() {
-      if (apiUrlTested && validApiUrl) return validApiUrl
-      const urls = [
-        window.location.origin + '/api',
-        'http://localhost:3333/api',
-        'http://127.0.0.1:3333/api',
-        REMOTE_API,
-      ]
-      for (const url of urls) {
-        try {
-          const res = await fetch(url.replace('/api', '') + '/health', { method: 'GET', cache: 'no-store', signal: AbortSignal.timeout(2000) })
-          if (res.ok) { apiUrlTested = true; validApiUrl = url; API = url; return url }
-        } catch (e) {}
-      }
-      apiUrlTested = true; validApiUrl = REMOTE_API; API = REMOTE_API; return REMOTE_API
-    }
-
+    const API = 'https://nexus-horizon.onrender.com/api'
     let token = localStorage.getItem('token')
     let userEmail = localStorage.getItem('userEmail') || ''
     let userName = localStorage.getItem('userName') || ''
@@ -977,47 +942,7 @@
       return {type,os,deviceName,icon}
     }
 
-    function togglePassword(inputId, button) {
-      const input = document.getElementById(inputId)
-      if (!input || !button) return
-
-      const shouldShow = input.type === 'password'
-      input.type = shouldShow ? 'text' : 'password'
-      button.textContent = shouldShow ? 'Ocultar' : 'Mostrar'
-    }
-
-    function goToResetPassword() {
-      window.location.href = 'reset-password.html'
-    }
-
-    function clearSession() {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userEmail')
-      localStorage.removeItem('userName')
-      token = null
-      userEmail = ''
-      userName = ''
-    }
-
-    async function bootstrapSession() {
-      if (!token) return
-
-      try {
-        const res = await fetch(`${API}/auth/profile`, { headers: { 'Authorization': `Bearer ${token}` } })
-        if (!res.ok) throw new Error('Sessão inválida')
-
-        const profile = await res.json()
-        userEmail = profile.email || userEmail
-        userName = profile.name || userName
-        localStorage.setItem('userEmail', userEmail)
-        localStorage.setItem('userName', userName)
-        showDashboard()
-      } catch (error) {
-        clearSession()
-      }
-    }
-
-    bootstrapSession()
+    if (token) showDashboard()
 
     function showLogin() { document.getElementById('loginScreen').classList.add('active'); document.getElementById('registerScreen').classList.remove('active') }
     function showRegister() { document.getElementById('loginScreen').classList.remove('active'); document.getElementById('registerScreen').classList.add('active') }
@@ -1027,7 +952,6 @@
       document.getElementById('dashboardContainer').style.display='block'
       document.body.style.alignItems='flex-start'
       document.getElementById('headerUser').textContent=userName||userEmail.split('@')[0]
-      if(chartInterval) clearInterval(chartInterval)
       currentProviderBtn=document.querySelector('.provider-btn')
       fetchData('satellite',currentProviderBtn); fetchDTC(); startLifiSimulator(); startAutoRefresh()
       setTimeout(drawMap,100); loadProfile(); detectDevice()
@@ -1085,61 +1009,45 @@
     }
 
     async function handleLogin() {
-      const email=document.getElementById('loginEmail').value.trim().toLowerCase()
-      const password=document.getElementById('loginPassword').value.trim()
+      const email=document.getElementById('loginEmail').value
+      const password=document.getElementById('loginPassword').value
       const errorEl=document.getElementById('loginError')
-      const btn=document.getElementById('loginBtn')
       errorEl.style.display='none'
-      if(!email || !password){errorEl.textContent='Preencha todos os campos';errorEl.style.display='block';return}
-      btn.disabled=true;btn.textContent='ENTRANDO...'
       try {
         const res=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})})
         const data=await res.json()
         if(!res.ok) throw new Error(data.error||'Falha no login')
         localStorage.setItem('token',data.token); localStorage.setItem('userEmail',email); localStorage.setItem('userName',data.user?.name||'')
         token=data.token; userEmail=email; userName=data.user?.name||''
-        btn.disabled=false;btn.textContent='ACESSAR SISTEMA'
         showDashboard()
-      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block';btn.disabled=false;btn.textContent='ACESSAR SISTEMA'}
+      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block'}
     }
 
     async function handleRegister() {
-      const name=document.getElementById('registerName').value.trim()
-      const email=document.getElementById('registerEmail').value.trim().toLowerCase()
-      const password=document.getElementById('registerPassword').value.trim()
+      const name=document.getElementById('registerName').value
+      const email=document.getElementById('registerEmail').value
+      const password=document.getElementById('registerPassword').value
       const errorEl=document.getElementById('registerError')
       const successEl=document.getElementById('registerSuccess')
-      const btn=document.getElementById('registerBtn')
       errorEl.style.display='none'; successEl.style.display='none'
-      if(!name || !email || !password){errorEl.textContent='Preencha todos os campos';errorEl.style.display='block';return}
-      if(password.length<6){errorEl.textContent='A senha deve ter pelo menos 6 caracteres';errorEl.style.display='block';return}
-      btn.disabled=true;btn.textContent='CRIANDO...'
       try {
         const res=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})})
         const data=await res.json()
         if(!res.ok) throw new Error(data.error||'Falha no cadastro')
-        if(data.token){
-          localStorage.setItem('token',data.token); localStorage.setItem('userEmail',email); localStorage.setItem('userName',data.user?.name||name)
-          token=data.token; userEmail=email; userName=data.user?.name||name
-          btn.disabled=false;btn.textContent='CRIAR CONTA'
-          showDashboard()
-          return
-        }
-        successEl.textContent='Conta criada! Faça login.'; successEl.style.display='block';btn.disabled=false;btn.textContent='CRIAR CONTA'
+        successEl.textContent='Conta criada! Faça login.'; successEl.style.display='block'
         setTimeout(()=>showLogin(),2000)
-      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block';btn.disabled=false;btn.textContent='CRIAR CONTA'}
+      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block'}
     }
 
     async function fetchData(type,btn) {
       document.querySelectorAll('.provider-btn').forEach(b=>b.classList.remove('active'))
-      if(btn) btn.classList.add('active'); currentProvider=type; currentProviderBtn=btn
+      btn.classList.add('active'); currentProvider=type; currentProviderBtn=btn
       const providers={satellite:'Satélite — SAT-BR-001',cellular:'Celular — TOWER-SP-042',lifi:'Li-Fi — LIFI-LAB-001',directcell:'Direct-to-Cell — DTC-BR-001'}
       document.getElementById('activeProvider').textContent=providers[type]
       try {
         const res=await fetch(`${API}/connectivity/${type}`,{headers:{'Authorization':`Bearer ${token}`}})
         if(res.status===401){handleLogout();return}
         const data=await res.json()
-        if(!res.ok) throw new Error(data.error||'Falha ao carregar os dados')
         document.getElementById('statusValue').textContent=data.status
         document.getElementById('latencyValue').textContent=data.latency
         document.getElementById('signalValue').textContent=data.signal
@@ -1304,7 +1212,8 @@
     }
 
     function handleLogout() {
-      clearSession()
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      token=null
       if(chartInterval) clearInterval(chartInterval)
       if(autoRefreshInterval) clearInterval(autoRefreshInterval)
       if(heartbeatTimer) clearInterval(heartbeatTimer)

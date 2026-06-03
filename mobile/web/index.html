@@ -34,10 +34,6 @@
     input { width: 100%; background: rgba(13,13,20,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; color: #F0F0F0; font-size: 15px; outline: none; transition: all 0.3s; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4); }
     input:focus { border-color: #00F5FF; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(0,245,255,0.15), 0 0 20px rgba(0,245,255,0.08); }
     input::placeholder { color: #444; }
-    .password-field { position: relative; display: flex; align-items: center; }
-    .password-field input { padding-right: 92px; }
-    .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #00F5FF; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; padding: 4px 0; }
-    .password-toggle:hover { color: #FFFFFF; }
 
     .btn-primary { width: 100%; background: linear-gradient(135deg, #00F5FF 0%, #7000FF 50%, #00F5FF 100%); background-size: 200% auto; color: #0A0A0A; border: none; border-radius: 12px; padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: 3px; cursor: pointer; margin-top: 20px; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,245,255,0.3); }
     .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.6s; }
@@ -105,12 +101,6 @@
     .info-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,245,255,0.2), transparent); }
     .info-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 10px; color: #7000FF; font-weight: 700; text-transform: uppercase; }
     .info-text { font-size: 13px; color: #777; letter-spacing: 1px; line-height: 1.8; }
-    .device-card { background: rgba(18,22,30,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0,245,255,0.18); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 0 30px rgba(0,245,255,0.04); }
-    .device-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 14px; color: #00F5FF; font-weight: 700; text-transform: uppercase; }
-    .device-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .device-field { background: rgba(13,13,20,0.6); border-radius: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.04); }
-    .device-field-label { font-size: 10px; color: #555; letter-spacing: 2px; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-    .device-field-value { font-size: 14px; color: #E8EDF2; line-height: 1.6; font-weight: 600; }
 
     .lifi-card { background: rgba(18,22,30,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0,245,255,0.15); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
     .lifi-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 16px; color: #00F5FF; font-weight: 700; text-transform: uppercase; }
@@ -166,13 +156,9 @@
         <label class="label">EMAIL</label>
         <input type="email" id="loginEmail" placeholder="seu@email.com">
         <label class="label">SENHA</label>
-        <div class="password-field">
-          <input type="password" id="loginPassword" placeholder="********" autocomplete="current-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">Mostrar</button>
-        </div>
+        <input type="password" id="loginPassword" placeholder="••••••••">
         <div class="error" id="loginError"></div>
         <button class="btn-primary" id="loginBtn" onclick="handleLogin()">ACESSAR SISTEMA</button>
-        <p class="link" onclick="goToResetPassword()">Esqueci minha senha</p>
         <p class="link" onclick="showRegister()">Não tem conta? Cadastre-se</p>
       </div>
     </div>
@@ -184,10 +170,7 @@
         <label class="label">EMAIL</label>
         <input type="email" id="registerEmail" placeholder="seu@email.com">
         <label class="label">SENHA</label>
-        <div class="password-field">
-          <input type="password" id="registerPassword" placeholder="********" autocomplete="new-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">Mostrar</button>
-        </div>
+        <input type="password" id="registerPassword" placeholder="••••••••">
         <div class="error" id="registerError"></div>
         <div class="success" id="registerSuccess"></div>
         <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">CRIAR CONTA</button>
@@ -244,24 +227,6 @@
       </div>
     </div>
 
-    <div class="device-card">
-      <div class="device-title">ACESSO ATUAL</div>
-      <div class="device-grid">
-        <div class="device-field">
-          <div class="device-field-label">DISPOSITIVO</div>
-          <div class="device-field-value" id="deviceLabelValue">Detectando...</div>
-        </div>
-        <div class="device-field">
-          <div class="device-field-label">SISTEMA</div>
-          <div class="device-field-value" id="deviceSystemValue">Detectando...</div>
-        </div>
-      </div>
-      <div class="device-field">
-        <div class="device-field-label">AMBIENTE</div>
-        <div class="device-field-value" id="deviceRuntimeValue">Detectando...</div>
-      </div>
-    </div>
-
     <div class="lifi-card">
       <div class="lifi-title">SIMULADOR Li-Fi — TRANSMISSÃO VIA LUZ</div>
       <div class="lifi-simulator">
@@ -288,7 +253,6 @@
       : window.location.origin + '/api'
     let apiUrlTested = false
     let validApiUrl = null
-    const REMOTE_API = 'https://nexus-horizon.onrender.com/api'
 
     async function detectApiUrl() {
       if (apiUrlTested && validApiUrl) return validApiUrl
@@ -297,18 +261,17 @@
         'http://127.0.0.1:3333/api',
         'http://' + window.location.hostname + ':3333/api',
         window.location.origin + '/api',
-        '/api',
-        REMOTE_API,
+        '/api'
       ]
       for (const url of urls) {
         try {
-          const healthUrl = `${url.replace(/\/api$/, '')}/health`
-          const res = await fetch(healthUrl, {
+          const res = await fetch(url + '/auth/profile', { 
             method: 'GET',
-            cache: 'no-store',
-            signal: AbortSignal.timeout(2000),
+            headers: { 'Authorization': 'Bearer test' },
+            timeout: 2000,
+            signal: AbortSignal.timeout(2000)
           }).catch(() => null)
-          if (res?.ok) {
+          if (res) {
             validApiUrl = url
             API = url
             apiUrlTested = true
@@ -316,15 +279,9 @@
           }
         } catch (e) {}
       }
-      validApiUrl = REMOTE_API
-      API = REMOTE_API
       apiUrlTested = true
       return API
     }
-    let token = localStorage.getItem('token')
-    let userEmail = localStorage.getItem('userEmail') || ''
-    let userName = localStorage.getItem('userName') || ''
-    let clientContext = null
     let lifiActive = true
     let chartData = new Array(60).fill(100)
     let chartInterval = null
@@ -334,91 +291,8 @@
     const HEARTBEAT_INTERVAL = 300000
     const SESSION_WARNING_TIME = 840000
 
-    function togglePassword(inputId, button) {
-      const input = document.getElementById(inputId)
-      if (!input || !button) return
-
-      const shouldShow = input.type === 'password'
-      input.type = shouldShow ? 'text' : 'password'
-      button.textContent = shouldShow ? 'Ocultar' : 'Mostrar'
-    }
-
-    function goToResetPassword() {
-      window.location.href = 'reset-password.html'
-    }
-
-    function clearSession() {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userEmail')
-      localStorage.removeItem('userName')
-      token = null
-      userEmail = ''
-      userName = ''
-      clientContext = null
-    }
-
-    function detectClientContext() {
-      const ua = navigator.userAgent
-      const width = window.innerWidth
-      let deviceLabel = width >= 1180 ? 'Desktop Web' : width >= 768 ? 'Tablet Web' : 'Mobile Web'
-      let systemName = 'Web'
-      let systemVersion = '--'
-      let runtime = 'Navegador Web'
-      let deviceType = width >= 1180 ? 'desktop' : width >= 768 ? 'tablet' : 'mobile'
-
-      if (/Android\s([\d.]+)/i.test(ua)) {
-        systemName = 'Android'
-        systemVersion = RegExp.$1
-        deviceLabel = width >= 768 ? 'Tablet Android' : 'Smartphone Android'
-        deviceType = width >= 768 ? 'tablet' : 'mobile'
-      } else if (/iPhone OS\s([\d_]+)/i.test(ua)) {
-        systemName = 'iOS'
-        systemVersion = RegExp.$1.replace(/_/g, '.')
-        deviceLabel = 'iPhone'
-        deviceType = 'mobile'
-      } else if (/iPad.*OS\s([\d_]+)/i.test(ua) || /MacIntel/i.test(navigator.platform) && navigator.maxTouchPoints > 1) {
-        systemName = 'iPadOS'
-        systemVersion = /OS\s([\d_]+)/i.test(ua) ? RegExp.$1.replace(/_/g, '.') : '--'
-        deviceLabel = 'iPad'
-        deviceType = 'tablet'
-      } else if (/Windows NT\s([\d.]+)/i.test(ua)) {
-        systemName = 'Windows'
-        systemVersion = RegExp.$1
-        deviceLabel = width >= 1180 ? 'Desktop Windows' : 'Notebook Windows'
-        deviceType = 'desktop'
-      } else if (/Mac OS X\s([\d_]+)/i.test(ua)) {
-        systemName = 'macOS'
-        systemVersion = RegExp.$1.replace(/_/g, '.')
-        deviceLabel = width >= 1180 ? 'iMac / Mac Studio' : 'MacBook'
-        deviceType = 'desktop'
-      } else if (/Linux/i.test(ua)) {
-        systemName = 'Linux'
-        deviceLabel = 'Desktop Linux'
-        deviceType = 'desktop'
-      }
-
-      if (/Edg\/([\d.]+)/.test(ua)) runtime = `Microsoft Edge ${RegExp.$1}`
-      else if (/Chrome\/([\d.]+)/.test(ua) && !/Edg\//.test(ua)) runtime = `Google Chrome ${RegExp.$1}`
-      else if (/Firefox\/([\d.]+)/.test(ua)) runtime = `Mozilla Firefox ${RegExp.$1}`
-      else if (/Version\/([\d.]+).*Safari/.test(ua) && !/Chrome\//.test(ua)) runtime = `Safari ${RegExp.$1}`
-
-      return { deviceType, deviceLabel, systemName, systemVersion, runtime }
-    }
-
-    function renderClientContext(context) {
-      if (!context) return
-
-      document.getElementById('deviceLabelValue').textContent =
-        context.deviceLabel || 'Dispositivo nao identificado'
-      document.getElementById('deviceSystemValue').textContent =
-        `${context.systemName || 'Sistema'} ${context.systemVersion || '--'}`.trim()
-      document.getElementById('deviceRuntimeValue').textContent =
-        context.runtime || 'Ambiente nao identificado'
-    }
-
     function startHeartbeat() {
       if(heartbeatTimer) clearInterval(heartbeatTimer)
-      if(sessionTimer) clearTimeout(sessionTimer)
       heartbeatTimer=setInterval(async()=>{try{await detectApiUrl();await fetch(`${API}/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}});checkConnectionQuality()}catch(e){}},HEARTBEAT_INTERVAL)
       sessionTimer=setTimeout(()=>{showToast('Sua sessão expirará em 1 minuto. Faça login novamente.','warning')},SESSION_WARNING_TIME)
     }
@@ -453,31 +327,7 @@
       setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(40px)';toast.style.transition='all 0.4s ease';setTimeout(()=>toast.remove(),400)},4000)
     }
 
-    async function bootstrapSession() {
-      if (!token) return
-
-      try {
-        await detectApiUrl()
-        const res = await fetch(`${API}/auth/profile`, {
-          headers: { 'Authorization': `Bearer ${token}` },
-        })
-
-        if (!res.ok) {
-          throw new Error('Sessão inválida')
-        }
-
-        const profile = await res.json()
-        userEmail = profile.email || userEmail
-        userName = profile.name || userName
-        localStorage.setItem('userEmail', userEmail)
-        localStorage.setItem('userName', userName)
-        showDashboard()
-      } catch (error) {
-        clearSession()
-      }
-    }
-
-    bootstrapSession()
+    if (token) showDashboard()
 
     function showLogin() { document.getElementById('loginScreen').classList.add('active'); document.getElementById('registerScreen').classList.remove('active') }
     function showRegister() { document.getElementById('loginScreen').classList.remove('active'); document.getElementById('registerScreen').classList.add('active') }
@@ -487,9 +337,6 @@
       document.getElementById('dashboardContainer').style.display = 'block'
       document.body.style.alignItems = 'flex-start'
       document.body.style.justifyContent = 'flex-start'
-      if (chartInterval) clearInterval(chartInterval)
-      clientContext = detectClientContext()
-      renderClientContext(clientContext)
       detectApiUrl().then(() => {
         fetchData('satellite', document.querySelector('.provider-btn'))
       })
@@ -501,27 +348,20 @@
     }
 
     async function handleLogin() {
-      const email = document.getElementById('loginEmail').value.trim().toLowerCase()
-      const password = document.getElementById('loginPassword').value.trim()
+      const email = document.getElementById('loginEmail').value
+      const password = document.getElementById('loginPassword').value
       const errorEl = document.getElementById('loginError')
       const btn = document.getElementById('loginBtn')
       errorEl.style.display = 'none'
       if (!email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
       btn.disabled = true; btn.textContent = 'ENTRANDO...'
       try {
-        clientContext = detectClientContext()
         await detectApiUrl()
-        const res = await fetch(`${API}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password, clientContext }) })
+        const res = await fetch(`${API}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no login')
         localStorage.setItem('token', data.token)
-        localStorage.setItem('userEmail', email)
-        localStorage.setItem('userName', data.user?.name || '')
         token = data.token
-        userEmail = email
-        userName = data.user?.name || ''
-        btn.disabled = false
-        btn.textContent = 'ACESSAR SISTEMA'
         showDashboard()
       } catch (err) {
         const message = err.message && err.message.toString().includes('Failed to fetch')
@@ -532,33 +372,20 @@
     }
 
     async function handleRegister() {
-      const name = document.getElementById('registerName').value.trim()
-      const email = document.getElementById('registerEmail').value.trim().toLowerCase()
-      const password = document.getElementById('registerPassword').value.trim()
+      const name = document.getElementById('registerName').value
+      const email = document.getElementById('registerEmail').value
+      const password = document.getElementById('registerPassword').value
       const errorEl = document.getElementById('registerError')
       const successEl = document.getElementById('registerSuccess')
       const btn = document.getElementById('registerBtn')
       errorEl.style.display = 'none'; successEl.style.display = 'none'
       if (!name || !email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
-      if (password.length < 6) { errorEl.textContent = 'A senha deve ter pelo menos 6 caracteres'; errorEl.style.display = 'block'; return }
       btn.disabled = true; btn.textContent = 'CRIANDO...'
       try {
         await detectApiUrl()
         const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
-        if (data.token) {
-          localStorage.setItem('token', data.token)
-          localStorage.setItem('userEmail', email)
-          localStorage.setItem('userName', data.user?.name || name)
-          token = data.token
-          userEmail = email
-          userName = data.user?.name || name
-          btn.disabled = false
-          btn.textContent = 'CRIAR CONTA'
-          showDashboard()
-          return
-        }
         successEl.textContent = 'Conta criada! Faça login.'; successEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
         setTimeout(() => showLogin(), 2000)
       } catch (err) {
@@ -571,15 +398,13 @@
 
     async function fetchData(type, btn) {
       document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'))
-      if (btn) btn.classList.add('active')
+      btn.classList.add('active')
       const providers = { satellite: 'Satélite — SAT-BR-001', cellular: 'Celular — TOWER-SP-042', lifi: 'Li-Fi — LIFI-LAB-001' }
       document.getElementById('activeProvider').textContent = providers[type]
       try {
         await detectApiUrl()
         const res = await fetch(`${API}/connectivity/${type}`, { headers: { 'Authorization': `Bearer ${token}` } })
         const data = await res.json()
-        if (res.status === 401) { handleLogout(); return }
-        if (!res.ok) throw new Error(data.error || 'Falha ao carregar os dados')
         document.getElementById('statusValue').textContent = data.status
         document.getElementById('latencyValue').textContent = data.latency
         document.getElementById('signalValue').textContent = data.signal
@@ -621,11 +446,7 @@
 
     function handleLogout() {
       localStorage.removeItem('token')
-      localStorage.removeItem('userEmail')
-      localStorage.removeItem('userName')
       token = null
-      userEmail = ''
-      userName = ''
       if (chartInterval) clearInterval(chartInterval)
       if (heartbeatTimer) clearInterval(heartbeatTimer)
       if (sessionTimer) clearTimeout(sessionTimer)
@@ -639,13 +460,6 @@
       if (e.key === 'Enter') {
         if (document.getElementById('loginScreen').classList.contains('active')) handleLogin()
         else handleRegister()
-      }
-    })
-
-    window.addEventListener('resize', () => {
-      if (token) {
-        clientContext = detectClientContext()
-        renderClientContext(clientContext)
       }
     })
   </script>

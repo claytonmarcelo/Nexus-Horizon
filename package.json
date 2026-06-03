@@ -19,6 +19,6 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.0",
-    "expo-cli": "^6.3.0"
+    "nexus-horizon-expo-proxy": "file:tools/expo-proxy"
   }
 }

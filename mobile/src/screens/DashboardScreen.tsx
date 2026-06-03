@@ -6,6 +6,7 @@ import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
 import { deleteItem } from '../services/secureStorage'
 import { WaveScrollScreen } from '../components/WaveScrollScreen'
+import { getClientContext } from '../services/deviceContext'
 
 interface ConnectivityData {
   type: string
@@ -18,6 +19,7 @@ export function DashboardScreen() {
   const navigation = useNavigation() as any
   const [data, setData] = useState<ConnectivityData | null>(null)
   const [activeProvider, setActiveProvider] = useState('satellite')
+  const clientContext = getClientContext()
 
   const fetchData = useCallback(
     async (type: string) => {
@@ -87,9 +89,10 @@ export function DashboardScreen() {
 
           <View style={styles.metricsRow}>
             <View style={styles.metric}>
-              <Text style={styles.metricLabel}>LATÊNCIA</Text>
+              <Text style={styles.metricLabel}>LATENCIA</Text>
               <Text style={styles.metricValue}>{data.latency} ms</Text>
             </View>
+
             <View style={styles.metric}>
               <Text style={styles.metricLabel}>SINAL</Text>
               <Text style={styles.metricValue}>{data.signal}%</Text>
@@ -104,7 +107,30 @@ export function DashboardScreen() {
 
       <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>TECNOLOGIAS ATIVAS</Text>
-        <Text style={styles.infoText}>Direct-to-Cell · Open RAN · Li-Fi · 5G · Satélite</Text>
+        <Text style={styles.infoText}>Direct-to-Cell · Open RAN · Li-Fi · 5G · Satelite</Text>
+      </View>
+
+      <View style={styles.deviceCard}>
+        <Text style={styles.deviceTitle}>ACESSO ATUAL</Text>
+
+        <View style={styles.deviceGrid}>
+          <View style={styles.deviceField}>
+            <Text style={styles.deviceLabel}>DISPOSITIVO</Text>
+            <Text style={styles.deviceValue}>{clientContext.deviceLabel}</Text>
+          </View>
+
+          <View style={styles.deviceField}>
+            <Text style={styles.deviceLabel}>SISTEMA</Text>
+            <Text style={styles.deviceValue}>
+              {clientContext.systemName} {clientContext.systemVersion}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.deviceFieldFull}>
+          <Text style={styles.deviceLabel}>AMBIENTE</Text>
+          <Text style={styles.deviceValue}>{clientContext.runtime}</Text>
+        </View>
       </View>
     </WaveScrollScreen>
   )
@@ -215,5 +241,48 @@ const styles = StyleSheet.create({
     color: colors.gray,
     letterSpacing: 1,
     lineHeight: 21,
+  },
+  deviceCard: {
+    margin: spacing.md,
+    marginTop: 0,
+    backgroundColor: 'rgba(22, 27, 34, 0.88)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 245, 255, 0.2)',
+    padding: spacing.lg,
+  },
+  deviceTitle: {
+    fontSize: typography.fontSizes.xs,
+    color: colors.primary,
+    letterSpacing: 2,
+    marginBottom: spacing.md,
+  },
+  deviceGrid: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginBottom: spacing.md,
+  },
+  deviceField: {
+    flex: 1,
+    backgroundColor: colors.grayDark,
+    borderRadius: 10,
+    padding: spacing.md,
+  },
+  deviceFieldFull: {
+    backgroundColor: colors.grayDark,
+    borderRadius: 10,
+    padding: spacing.md,
+  },
+  deviceLabel: {
+    fontSize: typography.fontSizes.xs,
+    color: colors.gray,
+    letterSpacing: 2,
+    marginBottom: spacing.xs,
+  },
+  deviceValue: {
+    fontSize: typography.fontSizes.sm,
+    color: colors.white,
+    fontWeight: '700',
+    lineHeight: 20,
   },
 })

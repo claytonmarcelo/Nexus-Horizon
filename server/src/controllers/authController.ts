@@ -3,6 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import bcrypt from 'bcryptjs'
 import nodemailer from 'nodemailer'
 import { db } from '../config/firebase'
+import { FieldValue } from 'firebase-admin/firestore'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_PASSWORD_LENGTH = 8
@@ -220,6 +221,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
   }
 
   const lastLogin = new Date().toISOString()
+  const newTotalConnections = (user.totalConnections || 0) + 1
   const lastLoginContext = clientContext
     ? {
         ...clientContext,
@@ -227,17 +229,11 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
       }
     : user.lastLoginContext || null
 
-  const { FieldValue } = require('firebase-admin/firestore')
-  const updatedUserData: Record<string, unknown> = {
+  await usersRef.doc(user.id).update({
     totalConnections: FieldValue.increment(1),
     lastLogin,
-  }
-
-  if (lastLoginContext) {
-    updatedUserData.lastLoginContext = lastLoginContext
-  }
-
-  await usersRef.doc(user.id).update(updatedUserData)
+    ...(lastLoginContext ? { lastLoginContext } : {}),
+  })
 
   const token = await reply.jwtSign(
     { id: user.id, email: user.email, name: user.name },
@@ -251,7 +247,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
       name: user.name,
       email: user.email,
       plan: user.plan || 'Nexus Pro',
-      totalConnections,
+      totalConnections: newTotalConnections,
       createdAt: user.createdAt,
       lastLogin,
       lastLoginContext,

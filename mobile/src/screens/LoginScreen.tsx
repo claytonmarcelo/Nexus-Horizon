@@ -16,6 +16,7 @@ import { colors, typography, spacing } from '../theme'
 import { api, setAuthToken } from '../services/api'
 import * as storage from '../services/secureStorage'
 import { WaveBackground } from '../components/WaveBackground'
+import { getClientContext } from '../services/deviceContext'
 
 export function LoginScreen({ navigation, route }: any) {
   const [email, setEmail] = useState('')
@@ -76,9 +77,11 @@ export function LoginScreen({ navigation, route }: any) {
     setLoading(true)
 
     try {
+      const clientContext = getClientContext()
       const response = await api.post('/auth/login', {
         email: normalizedEmail,
         password: normalizedPassword,
+        clientContext,
       })
 
       const { token } = response.data
