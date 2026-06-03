@@ -60,6 +60,14 @@ function MainDrawer() {
         drawerInactiveTintColor: colors.gray,
         drawerActiveBackgroundColor: 'rgba(0, 245, 255, 0.08)',
         drawerLabelStyle: { letterSpacing: 1, fontSize: 13 },
+        headerLeft: ({ tintColor }) => {
+          const navigation = useNavigation() as any
+          return (
+            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+              <Text style={{ color: tintColor, fontSize: 24, marginLeft: 16 }}>☰</Text>
+            </TouchableOpacity>
+          )
+        },
       }}
     >
       <Drawer.Screen
