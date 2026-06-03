@@ -2,60 +2,44 @@ import axios, { type InternalAxiosRequestConfig } from 'axios'
 import { Platform } from 'react-native'
 import * as SecureStore from 'expo-secure-store'
 
-let apiBaseUrl = ''
+const DEFAULT_ANDROID = 'http://10.0.2.2:3333/api'
+const DEFAULT_IOS = 'http://localhost:3333/api'
 
-// Detectar a URL da API dinamicamente
+const defaultUrl = Platform.OS === 'android' ? DEFAULT_ANDROID : DEFAULT_IOS
+
+let apiBaseUrl = defaultUrl
+
 async function detectApiUrl(): Promise<string> {
-  if (apiBaseUrl) return apiBaseUrl
+  if (apiBaseUrl && apiBaseUrl !== defaultUrl) return apiBaseUrl
 
-  const urls = [
-    'http://10.0.2.2:3333/api',      // Android emulator
-    'http://localhost:3333/api',      // iOS simulator
-    'http://127.0.0.1:3333/api',      // Fallback
-    `http://${getHostIp()}:3333/api`,  // Detectado automaticamente
-  ]
+  const urls = Platform.OS === 'android'
+    ? [DEFAULT_ANDROID, 'http://localhost:3333/api', 'http://127.0.0.1:3333/api']
+    : [DEFAULT_IOS, DEFAULT_ANDROID, 'http://127.0.0.1:3333/api']
 
   for (const url of urls) {
     try {
-      const response = await axios.get(`${url.replace('/api', '')}/health`, {
-        timeout: 2000,
-      })
+      const response = await axios.get(`${url.replace('/api', '')}/health`, { timeout: 2000 })
       if (response.status === 200) {
         apiBaseUrl = url
-        console.log('[API] Detected at:', apiBaseUrl)
+        console.log('[API] Detectado em:', apiBaseUrl)
         return apiBaseUrl
       }
     } catch (e) {
-      // Continue trying next URL
+      // Continuar tentando
     }
   }
 
-  // Fallback padrão
-  apiBaseUrl = Platform.OS === 'android'
-    ? 'http://10.0.2.2:3333/api'
-    : 'http://localhost:3333/api'
-  console.warn('[API] Using fallback:', apiBaseUrl)
+  console.warn('[API] Usando fallback:', apiBaseUrl)
   return apiBaseUrl
 }
 
-function getHostIp(): string {
-  // Tenta extrair do Expo debuggerHost ou usar IP padrão
-  // Este é o IP local onde o servidor está rodando
-  return '192.168.0.153' // IP da máquina local
-}
-
 export const api = axios.create({
-  baseURL: `http://10.0.2.2:3333/api`, // URL padrão, será atualizada
+  baseURL: defaultUrl,
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  headers: { 'Content-Type': 'application/json' },
 })
 
-// Inicializar detecção de API no carregamento
-detectApiUrl().then(url => {
-  api.defaults.baseURL = url
-})
+detectApiUrl().then(url => { api.defaults.baseURL = url })
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const token = await SecureStore.getItemAsync('token')

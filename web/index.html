@@ -282,6 +282,9 @@
       apiUrlTested = true
       return API
     }
+    let token = localStorage.getItem('token')
+    let userEmail = localStorage.getItem('userEmail') || ''
+    let userName = localStorage.getItem('userName') || ''
     let lifiActive = true
     let chartData = new Array(60).fill(100)
     let chartInterval = null
@@ -361,7 +364,11 @@
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no login')
         localStorage.setItem('token', data.token)
+        localStorage.setItem('userEmail', email)
+        localStorage.setItem('userName', data.user?.name || '')
         token = data.token
+        userEmail = email
+        userName = data.user?.name || ''
         showDashboard()
       } catch (err) {
         const message = err.message && err.message.toString().includes('Failed to fetch')
@@ -386,6 +393,16 @@
         const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
         const data = await res.json()
         if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
+        if (data.token) {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('userEmail', email)
+          localStorage.setItem('userName', data.user?.name || name)
+          token = data.token
+          userEmail = email
+          userName = data.user?.name || name
+          showDashboard()
+          return
+        }
         successEl.textContent = 'Conta criada! Faça login.'; successEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
         setTimeout(() => showLogin(), 2000)
       } catch (err) {
@@ -446,7 +463,11 @@
 
     function handleLogout() {
       localStorage.removeItem('token')
+      localStorage.removeItem('userEmail')
+      localStorage.removeItem('userName')
       token = null
+      userEmail = ''
+      userName = ''
       if (chartInterval) clearInterval(chartInterval)
       if (heartbeatTimer) clearInterval(heartbeatTimer)
       if (sessionTimer) clearTimeout(sessionTimer)

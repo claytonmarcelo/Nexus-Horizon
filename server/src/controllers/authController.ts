@@ -51,7 +51,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   const emailError = validateEmail(email)
   if (emailError) return reply.status(400).send({ error: emailError })
 
-  const passwordError = validatePassword(password)
+  const trimmedPassword = typeof password === 'string' ? password.trim() : password
+  const passwordError = validatePassword(trimmedPassword)
   if (passwordError) return reply.status(400).send({ error: passwordError })
 
   const normalizedEmail = email.trim().toLowerCase()
@@ -63,7 +64,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(409).send({ error: 'Este email já está cadastrado.' })
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(trimmedPassword, 10)
   const newUser = {
     id: randomUUID(),
     name: name.trim(),
@@ -84,7 +85,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   return reply.status(201).send({
     message: 'Usuário criado com sucesso.',
     token,
-    user: { id: newUser.id, name: newUser.name, email: newUser.email },
+    user: { id: newUser.id, name: newUser.name, email: newUser.email, plan: 'Nexus Pro', totalConnections: 0, createdAt: newUser.createdAt },
   })
 }
 
@@ -96,6 +97,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
   }
 
   const normalizedEmail = email.trim().toLowerCase()
+  const trimmedPassword = typeof password === 'string' ? password.trim() : password
   const usersRef = db.collection('users')
   const snapshot = await usersRef.where('email', '==', normalizedEmail).get()
 
@@ -106,7 +108,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
   const userDoc = snapshot.docs[0]
   const user = userDoc.data()
 
-  const validPassword = await bcrypt.compare(password, user.password)
+  const validPassword = await bcrypt.compare(trimmedPassword, user.password)
   if (!validPassword) {
     return reply.status(401).send({ error: 'Email ou senha incorretos.' })
   }
