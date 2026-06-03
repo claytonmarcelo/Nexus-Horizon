@@ -5,12 +5,20 @@ import nodemailer from 'nodemailer'
 import { db } from '../config/firebase'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const MIN_PASSWORD_LENGTH = 6
+const MIN_PASSWORD_LENGTH = 8
 const DEFAULT_PRODUCTION_FRONTEND_URL = 'https://claytonmarcelo.github.io/Nexus-Horizon'
 const DEFAULT_DEVELOPMENT_FRONTEND_URL = 'http://localhost:3333'
 const isProduction = process.env.NODE_ENV === 'production'
 
 type AuthBody = Record<string, unknown>
+type ClientContext = {
+  deviceType: string
+  deviceLabel: string
+  systemName: string
+  systemVersion: string
+  runtime: string
+  recordedAt?: string
+}
 
 function createMailTransporter() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env
@@ -50,6 +58,18 @@ function validatePassword(password: string): string | null {
   if (password.length < MIN_PASSWORD_LENGTH) {
     return `Senha deve ter no mínimo ${MIN_PASSWORD_LENGTH} caracteres.`
   }
+  if (!/[A-Z]/.test(password)) {
+    return 'A senha deve conter pelo menos uma letra maiúscula.'
+  }
+  if (!/[a-z]/.test(password)) {
+    return 'A senha deve conter pelo menos uma letra minúscula.'
+  }
+  if (!/[0-9]/.test(password)) {
+    return 'A senha deve conter pelo menos um número.'
+  }
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return 'A senha deve conter pelo menos um caractere especial.'
+  }
 
   return null
 }
@@ -63,6 +83,31 @@ function validateName(name: string): string | null {
 function sanitizeUser(doc: FirebaseFirestore.DocumentData) {
   const { password, resetToken, resetTokenExpiresAt, ...safe } = doc
   return safe
+}
+
+function sanitizeContextValue(value: unknown, fallback = '--') {
+  if (typeof value !== 'string') {
+    return fallback
+  }
+
+  const normalized = value.trim()
+  return normalized ? normalized.slice(0, 80) : fallback
+}
+
+function getClientContext(body: AuthBody): ClientContext | null {
+  if (typeof body.clientContext !== 'object' || body.clientContext === null) {
+    return null
+  }
+
+  const rawContext = body.clientContext as Record<string, unknown>
+
+  return {
+    deviceType: sanitizeContextValue(rawContext.deviceType, 'unknown'),
+    deviceLabel: sanitizeContextValue(rawContext.deviceLabel, 'Dispositivo nao identificado'),
+    systemName: sanitizeContextValue(rawContext.systemName, 'Sistema nao identificado'),
+    systemVersion: sanitizeContextValue(rawContext.systemVersion),
+    runtime: sanitizeContextValue(rawContext.runtime, 'Ambiente nao identificado'),
+  }
 }
 
 function getResetPasswordBaseUrl() {
@@ -149,6 +194,7 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
   const body = getBody(request)
   const email = getTrimmedString(body.email).toLowerCase()
   const password = getTrimmedString(body.password)
+  const clientContext = getClientContext(body)
 
   if (!email || !password) {
     return reply.status(400).send({ error: 'Email e senha são obrigatórios.' })
@@ -173,11 +219,25 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(401).send({ error: 'Credenciais inválidas.' })
   }
 
-  const totalConnections = (user.totalConnections || 0) + 1
-  await usersRef.doc(user.id).update({
-    totalConnections,
-    lastLogin: new Date().toISOString(),
-  })
+  const lastLogin = new Date().toISOString()
+  const lastLoginContext = clientContext
+    ? {
+        ...clientContext,
+        recordedAt: lastLogin,
+      }
+    : user.lastLoginContext || null
+
+  const { FieldValue } = require('firebase-admin/firestore')
+  const updatedUserData: Record<string, unknown> = {
+    totalConnections: FieldValue.increment(1),
+    lastLogin,
+  }
+
+  if (lastLoginContext) {
+    updatedUserData.lastLoginContext = lastLoginContext
+  }
+
+  await usersRef.doc(user.id).update(updatedUserData)
 
   const token = await reply.jwtSign(
     { id: user.id, email: user.email, name: user.name },
@@ -193,7 +253,8 @@ export async function login(request: FastifyRequest, reply: FastifyReply) {
       plan: user.plan || 'Nexus Pro',
       totalConnections,
       createdAt: user.createdAt,
-      lastLogin: new Date().toISOString(),
+      lastLogin,
+      lastLoginContext,
     },
   })
 }

@@ -23,8 +23,13 @@ if (!jwtSecret) {
   console.warn('WARN: JWT_SECRET não definido. Usando chave padrão apenas para desenvolvimento.')
 }
 
+if (!jwtSecret) {
+  console.error('FATAL: JWT_SECRET é obrigatório.')
+  process.exit(1)
+}
+
 server.register(fastifyJwt, {
-  secret: jwtSecret || 'nexus-horizon-dev-secret',
+  secret: jwtSecret,
 })
 
 const defaultAllowedOrigins = [
@@ -89,7 +94,9 @@ const start = async () => {
   try {
     const port = Number(process.env.PORT) || 3333
     await server.listen({ port, host: '0.0.0.0' })
-    console.log(`Nexus Horizon server running on port ${port}`)
+    if (!isProduction) {
+      console.log(`Nexus Horizon server running on port ${port}`)
+    }
   } catch (err) {
     console.error(err)
     process.exit(1)
