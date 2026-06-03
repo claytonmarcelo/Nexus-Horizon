@@ -5,6 +5,7 @@ import { WaveScrollScreen } from '../components/WaveScrollScreen'
 
 const quickSteps = [
   'Entre com seu email e senha para abrir o painel principal.',
+  'Use o botão de menu (☰) no canto superior esquerdo para acessar todas as opções.',
   'Escolha no menu a tecnologia que deseja acompanhar: Satelite, Li-Fi, Open RAN, Direct-to-Cell, Perfil ou Historico.',
   'Leia os cards de status, latencia e sinal para entender a qualidade da conexao em tempo real.',
 ]
@@ -14,6 +15,8 @@ const highlights = [
   'Li-Fi: demonstra transmissao de dados por luz visivel.',
   'Open RAN: acompanha o estado da rede aberta e seus nos.',
   'Direct-to-Cell: apresenta a conexao direta do satelite para o celular.',
+  'Segurança: validação de senha robusta e proteção de credenciais.',
+  'Limpeza de cache: função para limpar dados temporários mantendo sessão ativa.',
 ]
 
 export function AboutScreen() {
@@ -65,6 +68,7 @@ export function AboutScreen() {
       <View style={styles.signatureCard}>
         <Text style={styles.signatureLabel}>Desenvolvedor do projeto</Text>
         <Text style={styles.signatureName}>Clayton Marcelo</Text>
+        <Text style={styles.signatureVersion}>Versão 2.0 - Atualizado com segurança e performance</Text>
       </View>
     </WaveScrollScreen>
   )
@@ -192,5 +196,10 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.md,
     color: colors.white,
     fontWeight: '700',
+  },
+  signatureVersion: {
+    fontSize: typography.fontSizes.xs,
+    color: colors.gray,
+    marginTop: spacing.xs,
   },
 })
