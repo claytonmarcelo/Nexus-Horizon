@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Direct-to-Cell</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .dtc-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid rgba(192,192,192,0.3); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+    .dtc-title { font-size: 11px; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(90deg, #C0C0C0, #FFFFFF, #A0A0A0, #FFFFFF, #C0C0C0); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 3s linear infinite; }
+    .dtc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dtc-box { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 16px; border: 1px solid #1E1E1E; }
+    .dtc-box-label { font-size: 11px; color: #555; letter-spacing: 2px; margin-bottom: 8px; }
+    .dtc-box-value { font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #C0C0C0, #FFFFFF, #A0A0A0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .dtc-box-sub { font-size: 11px; color: #555; margin-top: 4px; }
+    @media (max-width: 600px) { .dtc-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div><h1>NEXUS HORIZON</h1><span style="font-size:11px;color:#666">Sistema de Conectividade</span></div>
+      <div class="header-right">
+        <span class="connection-badge excellent"><span class="connection-dot excellent"></span>LIVE</span>
+        <span class="header-clock"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab active" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+    <div class="dtc-card">
+      <div class="dtc-title">DIRECT-TO-CELL — SATÉLITE DIRETO PARA O CELULAR</div>
+      <div class="dtc-grid">
+        <div class="dtc-box"><div class="dtc-box-label">NÓ ATIVO</div><div class="dtc-box-value">DTC-BR-001</div><div class="dtc-box-sub">Cobertura: Brasil</div></div>
+        <div class="dtc-box"><div class="dtc-box-label">ALTITUDE ORBITAL</div><div class="dtc-box-value">550 km</div><div class="dtc-box-sub">Órbita baixa (LEO)</div></div>
+        <div class="dtc-box"><div class="dtc-box-label">LATÊNCIA</div><div class="dtc-box-value" id="dtcLatency">--</div><div class="dtc-box-sub">ms em tempo real</div></div>
+        <div class="dtc-box"><div class="dtc-box-label">SINAL</div><div class="dtc-box-value" id="dtcSignal">--</div><div class="dtc-box-sub">% de cobertura</div></div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">STATUS DA CONEXÃO</div>
+      <div class="metric-value" id="dtcStatus">Carregando...</div>
+      <div class="signal-bar" style="margin-top:8px"><div class="signal-fill" id="dtcSignalFill" style="width:0%"></div></div>
+    </div>
+    <div class="info-card">
+      <div class="info-title">O QUE É DIRECT-TO-CELL</div>
+      <div class="info-text">O satélite funciona como uma "torre de celular no espaço". Empresas como SpaceX e AST SpaceMobile testam nos EUA a conexão direta do satélite para o smartphone comum, sem antena extra. Acabaria com as "zonas mortas" em estradas, fazendas e áreas rurais do Brasil.</div>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+    fetchDTC()
+
+    async function fetchDTC() {
+      try {
+        const res = await apiFetch('/connectivity/directcell')
+        const data = await res.json()
+        document.getElementById('dtcLatency').textContent = data.latency
+        document.getElementById('dtcSignal').textContent = data.signal + '%'
+        document.getElementById('dtcStatus').textContent = data.status
+        document.getElementById('dtcSignalFill').style.width = `${data.signal}%`
+      } catch (err) {
+        if (err.message !== 'Unauthorized') console.error(err)
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      goTo('login.html')
+    }
+  </script>
+</body>
+</html>

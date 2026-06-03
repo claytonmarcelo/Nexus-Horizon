@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Mapa Satelital</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .map-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid #222; border-radius: 16px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; }
+    .map-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,107,0,0.6), rgba(255,184,0,0.6), rgba(255,255,255,0.4), transparent); }
+    .map-title { font-size: 11px; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(90deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .map-container { background: #080808; border-radius: 12px; overflow: hidden; height: 320px; border: 1px solid #1A1A1A; }
+    canvas { width: 100%; height: 100%; }
+    .sat-info { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+    .sat-node { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 12px; border: 1px solid #1E1E1E; cursor: pointer; transition: all 0.3s; }
+    .sat-node:hover { border-color: #FF6B00; }
+    .sat-node.active { border-color: #FF6B00; background: rgba(255,107,0,0.05); }
+    .sat-node-id { font-size: 11px; color: #FF6B00; letter-spacing: 1px; margin-bottom: 4px; }
+    .sat-node-status { font-size: 12px; color: #666; }
+    .sat-node-signal { font-size: 18px; font-weight: 700; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #00FF88; display: inline-block; margin-right: 4px; box-shadow: 0 0 4px #00FF88; }
+    .dot.red { background: #FF3131; box-shadow: 0 0 4px #FF3131; }
+    @media (max-width: 600px) { .sat-info { grid-template-columns: 1fr 1fr; } .map-container { height: 220px; } }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div><h1>NEXUS HORIZON</h1><span style="font-size:11px;color:#666">Sistema de Conectividade</span></div>
+      <div class="header-right">
+        <span class="connection-badge excellent"><span class="connection-dot excellent"></span>LIVE</span>
+        <span class="header-clock"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab active" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+    <div class="map-card">
+      <div class="map-title">MAPA DE NÓS ORBITAIS — COBERTURA BRASIL</div>
+      <div class="map-container"><canvas id="mapCanvas"></canvas></div>
+      <div class="sat-info" id="satInfo"></div>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+
+    const satellites = [
+      { id: 'SAT-BR-001', lat: 0.25, lng: 0.35, signal: 92, status: 'online', region: 'Norte' },
+      { id: 'SAT-BR-002', lat: 0.45, lng: 0.55, signal: 87, status: 'online', region: 'Sudeste' },
+      { id: 'SAT-BR-003', lat: 0.65, lng: 0.42, signal: 78, status: 'online', region: 'Sul' },
+      { id: 'SAT-BR-004', lat: 0.35, lng: 0.72, signal: 0, status: 'offline', region: 'Nordeste' },
+      { id: 'SAT-BR-005', lat: 0.55, lng: 0.28, signal: 95, status: 'online', region: 'Centro-Oeste' },
+      { id: 'SAT-BR-006', lat: 0.20, lng: 0.60, signal: 65, status: 'online', region: 'Amazônia' },
+    ]
+
+    setTimeout(drawMap, 100)
+
+    function drawMap() {
+      const canvas = document.getElementById('mapCanvas')
+      if (!canvas) return
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+      const ctx = canvas.getContext('2d')
+      const W = canvas.width, H = canvas.height
+      ctx.fillStyle = '#080808'
+      ctx.fillRect(0, 0, W, H)
+      for (let i = 0; i < 100; i++) {
+        ctx.beginPath()
+        ctx.arc(Math.random() * W, Math.random() * H, Math.random() * 1.5, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.25 + 0.05})`
+        ctx.fill()
+      }
+      ctx.strokeStyle = 'rgba(255,107,0,0.06)'
+      ctx.lineWidth = 0.5
+      for (let i = 0; i <= 6; i++) {
+        ctx.beginPath(); ctx.moveTo(0, (H / 6) * i); ctx.lineTo(W, (H / 6) * i); ctx.stroke()
+        ctx.beginPath(); ctx.moveTo((W / 6) * i, 0); ctx.lineTo((W / 6) * i, H); ctx.stroke()
+      }
+      satellites.forEach(sat => {
+        const x = sat.lng * W, y = sat.lat * H
+        const online = sat.status === 'online'
+        if (online) {
+          ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI * 2)
+          ctx.strokeStyle = 'rgba(255,107,0,0.2)'; ctx.lineWidth = 1; ctx.stroke()
+          ctx.beginPath(); ctx.arc(x, y, 50, 0, Math.PI * 2)
+          ctx.strokeStyle = 'rgba(255,184,0,0.08)'; ctx.stroke()
+        }
+        ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2)
+        ctx.fillStyle = online ? '#FF6B00' : '#FF3131'
+        ctx.fill()
+        if (online) {
+          ctx.shadowColor = '#FFB800'; ctx.shadowBlur = 16
+          ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2)
+          ctx.fillStyle = '#FFFFFF'; ctx.fill(); ctx.shadowBlur = 0
+        }
+        ctx.fillStyle = online ? '#FF6B00' : '#FF3131'
+        ctx.font = '11px Segoe UI'
+        ctx.fillText(sat.id, x + 10, y - 8)
+        ctx.fillStyle = '#666'
+        ctx.font = '10px Segoe UI'
+        ctx.fillText(sat.region, x + 10, y + 6)
+      })
+      document.getElementById('satInfo').innerHTML = satellites.map(sat => `
+        <div class="sat-node ${sat.status === 'online' ? 'active' : ''}">
+          <div class="sat-node-id"><span class="dot ${sat.status === 'offline' ? 'red' : ''}"></span>${sat.id}</div>
+          <div class="sat-node-status">${sat.region}</div>
+          <div class="sat-node-signal" style="color:${sat.status === 'online' ? '#FF6B00' : '#FF3131'}">${sat.status === 'online' ? sat.signal + '%' : 'OFFLINE'}</div>
+        </div>
+      `).join('')
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      goTo('login.html')
+    }
+
+    window.addEventListener('resize', drawMap)
+  </script>
+</body>
+</html>

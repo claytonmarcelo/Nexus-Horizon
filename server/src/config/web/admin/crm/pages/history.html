@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon — Histórico</title>
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .history-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid #222; border-radius: 16px; padding: 24px; }
+    .history-title { font-size: 11px; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(90deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #1A1A1A; }
+    .history-item:last-child { border-bottom: none; }
+    .history-left { display: flex; align-items: center; gap: 12px; }
+    .history-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+    .history-icon.sat { background: rgba(255,107,0,0.1); color: #FF6B00; border: 1px solid rgba(255,107,0,0.4); }
+    .history-icon.cell { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid rgba(255,184,0,0.4); }
+    .history-icon.lifi { background: rgba(0,255,136,0.1); color: #00FF88; border: 1px solid rgba(0,255,136,0.4); }
+    .history-icon.dtc { background: rgba(192,192,192,0.1); color: #C0C0C0; border: 1px solid rgba(192,192,192,0.4); }
+    .history-info { font-size: 13px; color: #E0E0E0; }
+    .history-time { font-size: 11px; color: #555; margin-top: 2px; }
+    .history-right { text-align: right; }
+    .history-signal { font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #FF6B00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .history-latency { font-size: 11px; color: #555; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <div><h1>NEXUS HORIZON</h1><span style="font-size:11px;color:#666">Sistema de Conectividade</span></div>
+      <div class="header-right">
+        <span class="connection-badge excellent"><span class="connection-dot excellent"></span>LIVE</span>
+        <span class="header-clock"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="goTo('dashboard.html')">CONECTIVIDADE</button>
+      <button class="nav-tab" onclick="goTo('satellite.html')">MAPA SATELITAL</button>
+      <button class="nav-tab" onclick="goTo('lifi.html')">SIMULADOR Li-Fi</button>
+      <button class="nav-tab" onclick="goTo('oran.html')">OPEN RAN</button>
+      <button class="nav-tab" onclick="goTo('dtc.html')">DIRECT-TO-CELL</button>
+      <button class="nav-tab" onclick="goTo('profile.html')">PERFIL</button>
+      <button class="nav-tab active" onclick="goTo('history.html')">HISTÓRICO</button>
+    </div>
+    <div class="history-card">
+      <div class="history-title">HISTÓRICO DE CONEXÕES</div>
+      <div class="history-item"><div class="history-left"><div class="history-icon sat">SAT</div><div><div class="history-info">Satélite — SAT-BR-001</div><div class="history-time">Hoje, 20:33</div></div></div><div class="history-right"><div class="history-signal">92%</div><div class="history-latency">28ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon lifi">LFI</div><div><div class="history-info">Li-Fi — LIFI-LAB-001</div><div class="history-time">Hoje, 19:55</div></div></div><div class="history-right"><div class="history-signal">100%</div><div class="history-latency">1ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon cell">5G</div><div><div class="history-info">Celular — TOWER-SP-042</div><div class="history-time">Hoje, 19:12</div></div></div><div class="history-right"><div class="history-signal">87%</div><div class="history-latency">8ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon dtc">DTC</div><div><div class="history-info">Direct-to-Cell — DTC-BR-001</div><div class="history-time">Hoje, 18:47</div></div></div><div class="history-right"><div class="history-signal">82%</div><div class="history-latency">15ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon sat">SAT</div><div><div class="history-info">Satélite — SAT-BR-005</div><div class="history-time">Hoje, 18:00</div></div></div><div class="history-right"><div class="history-signal">95%</div><div class="history-latency">22ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon cell">5G</div><div><div class="history-info">Celular — TOWER-RJ-018</div><div class="history-time">Ontem, 22:15</div></div></div><div class="history-right"><div class="history-signal">76%</div><div class="history-latency">11ms</div></div></div>
+      <div class="history-item"><div class="history-left"><div class="history-icon lifi">LFI</div><div><div class="history-info">Li-Fi — LIFI-LAB-001</div><div class="history-time">Ontem, 20:30</div></div></div><div class="history-right"><div class="history-signal">100%</div><div class="history-latency">1ms</div></div></div>
+    </div>
+  </div>
+  <script src="assets/api.js"></script>
+  <script>
+    requireAuth()
+    function handleLogout() {
+      localStorage.removeItem('token'); localStorage.removeItem('userEmail'); localStorage.removeItem('userName')
+      goTo('login.html')
+    }
+  </script>
+</body>
+</html>

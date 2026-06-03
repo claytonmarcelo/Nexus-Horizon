@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Horizon</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background: #070A0F; color: #fff; font-family: 'Inter', 'Segoe UI', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow-x: hidden; }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0A; }
+    ::-webkit-scrollbar-thumb { background: #1A1A2E; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00F5FF; }
+
+    @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes skeleton { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+    .container { width: 100%; max-width: 420px; padding: 24px; }
+    .logo { text-align: center; margin-bottom: 32px; }
+    .logo h1 { font-size: 48px; font-weight: 900; letter-spacing: 12px; text-align: center; background: linear-gradient(135deg, #00F5FF 0%, #7000FF 50%, #00F5FF 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 2.5s linear infinite; }
+    .logo h2 { font-size: 16px; font-weight: 300; letter-spacing: 8px; text-align: center; background: linear-gradient(135deg, #7000FF, #00F5FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo p { font-size: 13px; color: #8B949E; letter-spacing: 2px; margin-top: 4px; text-align: center; }
+    .logo .tagline { font-size: 10px; color: #555; letter-spacing: 3px; margin-top: 2px; text-align: center; text-transform: uppercase; }
+
+    .card { background: rgba(18,22,30,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 28px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 48px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,245,255,0.2), rgba(112,0,255,0.3), rgba(0,245,255,0.2), transparent); }
+
+    .label { font-size: 10px; letter-spacing: 3px; margin-bottom: 6px; margin-top: 16px; display: block; color: #00F5FF; font-weight: 700; text-transform: uppercase; }
+    input { width: 100%; background: rgba(13,13,20,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px; color: #F0F0F0; font-size: 15px; outline: none; transition: all 0.3s; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4); }
+    input:focus { border-color: #00F5FF; box-shadow: inset 0 2px 8px rgba(0,0,0,0.4), 0 0 0 3px rgba(0,245,255,0.15), 0 0 20px rgba(0,245,255,0.08); }
+    input::placeholder { color: #444; }
+
+    .btn-primary { width: 100%; background: linear-gradient(135deg, #00F5FF 0%, #7000FF 50%, #00F5FF 100%); background-size: 200% auto; color: #0A0A0A; border: none; border-radius: 12px; padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: 3px; cursor: pointer; margin-top: 20px; transition: all 0.4s; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,245,255,0.3); }
+    .btn-primary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.6s; }
+    .btn-primary:hover { background-position: right center; box-shadow: 0 8px 35px rgba(0,245,255,0.5); transform: translateY(-2px) scale(1.01); }
+    .btn-primary:hover::before { left: 100%; }
+    .btn-primary:active { transform: translateY(0) scale(0.99); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-secondary { width: 100%; background: linear-gradient(135deg, rgba(112,0,255,0.2), rgba(0,245,255,0.08)); color: #E0E0E0; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 16px; font-size: 13px; font-weight: 800; letter-spacing: 3px; cursor: pointer; margin-top: 20px; transition: all 0.4s; position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+    .btn-secondary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: left 0.6s; }
+    .btn-secondary:hover { border-color: rgba(0,245,255,0.4); box-shadow: 0 4px 20px rgba(0,245,255,0.15); transform: translateY(-2px); }
+    .btn-secondary:hover::before { left: 100%; }
+
+    .link { text-align: center; margin-top: 20px; font-size: 13px; color: #666; cursor: pointer; transition: all 0.3s; }
+    .link:hover { color: #00F5FF; letter-spacing: 1px; }
+
+    .error { background: rgba(255,49,49,0.12); border: 1px solid rgba(255,49,49,0.4); border-radius: 12px; padding: 14px; color: #FF6B6B; font-size: 13px; margin-top: 16px; display: none; backdrop-filter: blur(10px); animation: fadeIn 0.3s ease; }
+    .success { background: rgba(0,245,255,0.12); border: 1px solid rgba(0,245,255,0.4); border-radius: 12px; padding: 14px; color: #00F5FF; font-size: 13px; margin-top: 16px; display: none; backdrop-filter: blur(10px); animation: fadeIn 0.3s ease; }
+
+    .screen { display: none; animation: fadeIn 0.35s ease; }
+    .screen.active { display: block; }
+
+    .dashboard { max-width: 800px; width: 100%; padding: 24px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid transparent; position: relative; }
+    .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #00F5FF, #7000FF, #00F5FF, transparent); }
+    .header h1 { font-size: 20px; font-weight: 900; letter-spacing: 4px; background: linear-gradient(135deg, #00F5FF, #7000FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .header span { font-size: 11px; color: #666; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+
+    .connection-badge { display: flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; font-weight: 600; transition: all 0.3s; }
+    .connection-badge.excellent { background: rgba(0,245,255,0.1); color: #00F5FF; border: 1px solid rgba(0,245,255,0.3); }
+    .connection-badge.good { background: rgba(255,184,0,0.1); color: #FFB800; border: 1px solid rgba(255,184,0,0.3); }
+    .connection-badge.poor { background: rgba(255,49,49,0.1); color: #FF6B6B; border: 1px solid rgba(255,49,49,0.3); }
+    .connection-dot { width: 6px; height: 6px; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+    .connection-dot.excellent { background: #00F5FF; box-shadow: 0 0 6px #00F5FF; }
+    .connection-dot.good { background: #FFB800; box-shadow: 0 0 6px #FFB800; }
+    .connection-dot.poor { background: #FF3131; box-shadow: 0 0 6px #FF3131; }
+
+    .header-clock { font-size: 11px; color: #555; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+
+    .logout { color: #FF6B6B; font-size: 12px; cursor: pointer; letter-spacing: 2px; background: rgba(255,49,49,0.06); border: 1px solid rgba(255,49,49,0.25); border-radius: 8px; padding: 6px 14px; transition: all 0.3s; font-weight: 600; }
+    .logout:hover { background: rgba(255,49,49,0.12); box-shadow: 0 0 12px rgba(255,49,49,0.2); border-color: rgba(255,49,49,0.5); }
+
+    .providers { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .provider-btn { flex: 1; min-width: 80px; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color: #555; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; backdrop-filter: blur(10px); font-size: 11px; }
+    .provider-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); transition: left 0.5s; }
+    .provider-btn:hover::before { left: 100%; }
+    .provider-btn:hover { border-color: rgba(0,245,255,0.3); color: #00F5FF; }
+    .provider-btn.active { border-color: #00F5FF; background: rgba(0,245,255,0.12); color: #00F5FF; box-shadow: 0 0 20px rgba(0,245,255,0.15); }
+
+    .metric-card { background: rgba(18,22,30,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: all 0.3s; }
+    .metric-card:hover { border-color: rgba(0,245,255,0.2); box-shadow: 0 8px 48px rgba(0,245,255,0.06); }
+    .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,245,255,0.4), rgba(112,0,255,0.4), transparent); }
+    .metric-label { font-size: 10px; letter-spacing: 3px; margin-bottom: 8px; color: #00F5FF; font-weight: 700; text-transform: uppercase; }
+    .metric-value { font-size: 14px; color: #D0D0D0; margin-bottom: 16px; }
+    .metrics-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .metric-box { flex: 1; min-width: 80px; background: rgba(13,13,20,0.6); backdrop-filter: blur(8px); border-radius: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.04); transition: all 0.3s; }
+    .metric-box:hover { border-color: rgba(0,245,255,0.2); }
+    .metric-box-label { font-size: 10px; color: #555; letter-spacing: 2px; margin-bottom: 4px; font-weight: 600; text-transform: uppercase; }
+    .metric-box-value { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #00F5FF, #7000FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .signal-bar { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+    .signal-fill { height: 100%; background: linear-gradient(90deg, #00F5FF, #7000FF); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 8px rgba(0,245,255,0.4); }
+
+    .info-card { background: rgba(18,22,30,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(112,0,255,0.2); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 0 30px rgba(112,0,255,0.04); position: relative; overflow: hidden; }
+    .info-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,245,255,0.2), transparent); }
+    .info-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 10px; color: #7000FF; font-weight: 700; text-transform: uppercase; }
+    .info-text { font-size: 13px; color: #777; letter-spacing: 1px; line-height: 1.8; }
+
+    .lifi-card { background: rgba(18,22,30,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0,245,255,0.15); border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+    .lifi-title { font-size: 10px; letter-spacing: 3px; margin-bottom: 16px; color: #00F5FF; font-weight: 700; text-transform: uppercase; }
+    .lifi-simulator { display: flex; gap: 16px; align-items: flex-start; }
+    .lifi-light { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00F5FF, #7000FF); box-shadow: 0 0 30px rgba(0,245,255,0.5), 0 0 60px rgba(112,0,255,0.3); transition: all 0.3s; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #0A0A0A; font-weight: 800; letter-spacing: 1px; text-align: center; flex-shrink: 0; animation: pulse 2s ease-in-out infinite; }
+    .lifi-light.off { background: linear-gradient(135deg, #1A1A2E, #0D0D1A); box-shadow: none; color: #555; animation: none; }
+    .lifi-info { flex: 1; }
+    .lifi-status { font-size: 13px; color: #D0D0D0; margin-bottom: 8px; }
+    .lifi-speed { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #00F5FF, #7000FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .lifi-speed-label { font-size: 11px; color: #888; letter-spacing: 2px; }
+    .chart-container { position: relative; height: 80px; background: rgba(13,13,20,0.6); border-radius: 12px; overflow: hidden; margin-top: 12px; border: 1px solid rgba(255,255,255,0.04); }
+    canvas { width: 100%; height: 100%; }
+    .lifi-btn { background: rgba(0,245,255,0.08); border: 1px solid rgba(0,245,255,0.4); color: #00F5FF; border-radius: 8px; padding: 8px 16px; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; margin-top: 12px; transition: all 0.3s; position: relative; overflow: hidden; }
+    .lifi-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.4s; }
+    .lifi-btn:hover::before { left: 100%; }
+    .lifi-btn:hover { box-shadow: 0 0 12px rgba(0,245,255,0.3); }
+    .lifi-btn.blocked { background: rgba(255,49,49,0.08); border-color: rgba(255,49,49,0.4); color: #FF3131; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast { pointer-events: auto; padding: 14px 20px; border-radius: 14px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); box-shadow: 0 8px 40px rgba(0,0,0,0.5); animation: fadeIn 0.4s ease; max-width: 380px; line-height: 1.5; border: 1px solid transparent; }
+    .toast.success { background: rgba(0,245,255,0.12); border-color: rgba(0,245,255,0.3); color: #00F5FF; }
+    .toast.error { background: rgba(255,49,49,0.12); border-color: rgba(255,49,49,0.3); color: #FF6B6B; }
+    .toast.info { background: rgba(112,0,255,0.1); border-color: rgba(112,0,255,0.25); color: #7000FF; }
+    .toast.warning { background: rgba(255,184,0,0.1); border-color: rgba(255,184,0,0.25); color: #FFB800; }
+
+    @media (max-width: 600px) {
+      .container { padding: 20px 16px; }
+      .logo h1 { font-size: 32px; letter-spacing: 8px; }
+      .dashboard { padding: 16px 12px; max-width: 100%; }
+      .header { flex-wrap: wrap; gap: 8px; }
+      .header h1 { font-size: 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .lifi-simulator { flex-direction: column; align-items: center; }
+      .header-clock { display: none; }
+      .toast-container { right: 12px; left: 12px; }
+      .toast { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="authContainer">
+    <div class="logo">
+      <h1>NEXUS</h1>
+      <h2>HORIZON</h2>
+      <p>Next-Gen Connectivity</p>
+      <p class="tagline">Sistema Premium de Conectividade</p>
+    </div>
+
+    <div class="screen active" id="loginScreen">
+      <div class="card">
+        <label class="label">EMAIL</label>
+        <input type="email" id="loginEmail" placeholder="seu@email.com">
+        <label class="label">SENHA</label>
+        <input type="password" id="loginPassword" placeholder="••••••••">
+        <div class="error" id="loginError"></div>
+        <button class="btn-primary" id="loginBtn" onclick="handleLogin()">ACESSAR SISTEMA</button>
+        <p class="link" onclick="showRegister()">Não tem conta? Cadastre-se</p>
+      </div>
+    </div>
+
+    <div class="screen" id="registerScreen">
+      <div class="card">
+        <label class="label">NOME</label>
+        <input type="text" id="registerName" placeholder="Seu nome">
+        <label class="label">EMAIL</label>
+        <input type="email" id="registerEmail" placeholder="seu@email.com">
+        <label class="label">SENHA</label>
+        <input type="password" id="registerPassword" placeholder="••••••••">
+        <div class="error" id="registerError"></div>
+        <div class="success" id="registerSuccess"></div>
+        <button class="btn-secondary" id="registerBtn" onclick="handleRegister()">CRIAR CONTA</button>
+        <p class="link" onclick="showLogin()">Já tem conta? Faça login</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard" id="dashboardContainer" style="display:none">
+    <div class="header">
+      <div>
+        <h1>NEXUS HORIZON</h1>
+        <span>Sistema de Conectividade</span>
+      </div>
+      <div class="header-right">
+        <span class="connection-badge excellent"><span class="connection-dot excellent"></span>LIVE</span>
+        <span class="header-clock"></span>
+        <button class="logout" onclick="handleLogout()">SAIR</button>
+      </div>
+    </div>
+
+    <div class="providers">
+      <button class="provider-btn active" onclick="fetchData('satellite', this)">SAT</button>
+      <button class="provider-btn" onclick="fetchData('cellular', this)">5G</button>
+      <button class="provider-btn" onclick="fetchData('lifi', this)">Li-Fi</button>
+    </div>
+
+    <div class="grid">
+      <div class="metric-card">
+        <div class="metric-label">STATUS</div>
+        <div class="metric-value" id="statusValue">Carregando...</div>
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-box-label">LATÊNCIA</div>
+            <div class="metric-box-value" id="latencyValue">--</div>
+            <div style="font-size:11px;color:#555">ms</div>
+          </div>
+          <div class="metric-box">
+            <div class="metric-box-label">SINAL</div>
+            <div class="metric-box-value" id="signalValue">--</div>
+            <div style="font-size:11px;color:#555">%</div>
+          </div>
+        </div>
+        <div class="signal-bar">
+          <div class="signal-fill" id="signalFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">TECNOLOGIAS ATIVAS</div>
+        <div class="info-text" style="margin-bottom:12px">Direct-to-Cell · Open RAN · Li-Fi</div>
+        <div class="info-title">PROVEDOR ATIVO</div>
+        <div class="info-text" id="activeProvider">Satélite — SAT-BR-001</div>
+      </div>
+    </div>
+
+    <div class="lifi-card">
+      <div class="lifi-title">SIMULADOR Li-Fi — TRANSMISSÃO VIA LUZ</div>
+      <div class="lifi-simulator">
+        <div>
+          <div class="lifi-light" id="lifiLight" onclick="toggleLifi()">LUZ<br>ON</div>
+          <button class="lifi-btn" id="lifiBtn" onclick="toggleLifi()">BLOQUEAR SINAL</button>
+        </div>
+        <div class="lifi-info">
+          <div class="lifi-status" id="lifiStatus">Transmitindo dados via luz...</div>
+          <div class="lifi-speed" id="lifiSpeed">100</div>
+          <div class="lifi-speed-label">Gbps</div>
+          <div class="chart-container">
+            <canvas id="lifiChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const localHostNames = ['localhost', '127.0.0.1', '::1']
+    let API = localHostNames.includes(window.location.hostname)
+      ? 'http://localhost:3333/api'
+      : window.location.origin + '/api'
+    let apiUrlTested = false
+    let validApiUrl = null
+
+    async function detectApiUrl() {
+      if (apiUrlTested && validApiUrl) return validApiUrl
+      const urls = [
+        'http://localhost:3333/api',
+        'http://127.0.0.1:3333/api',
+        'http://' + window.location.hostname + ':3333/api',
+        window.location.origin + '/api',
+        '/api'
+      ]
+      for (const url of urls) {
+        try {
+          const res = await fetch(url + '/auth/profile', { 
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer test' },
+            timeout: 2000,
+            signal: AbortSignal.timeout(2000)
+          }).catch(() => null)
+          if (res) {
+            validApiUrl = url
+            API = url
+            apiUrlTested = true
+            return url
+          }
+        } catch (e) {}
+      }
+      apiUrlTested = true
+      return API
+    }
+    let lifiActive = true
+    let chartData = new Array(60).fill(100)
+    let chartInterval = null
+    let heartbeatTimer = null
+    let sessionTimer = null
+    let connectionQuality = 'excellent'
+    const HEARTBEAT_INTERVAL = 300000
+    const SESSION_WARNING_TIME = 840000
+
+    function startHeartbeat() {
+      if(heartbeatTimer) clearInterval(heartbeatTimer)
+      heartbeatTimer=setInterval(async()=>{try{await detectApiUrl();await fetch(`${API}/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}});checkConnectionQuality()}catch(e){}},HEARTBEAT_INTERVAL)
+      sessionTimer=setTimeout(()=>{showToast('Sua sessão expirará em 1 minuto. Faça login novamente.','warning')},SESSION_WARNING_TIME)
+    }
+
+    function checkConnectionQuality(){
+      const start=performance.now()
+      detectApiUrl().then(()=>{
+        fetch(`${API.replace('/api','')}/health`,{method:'GET',cache:'no-store'}).then(()=>{
+          document.querySelectorAll('.connection-badge').forEach(el=>{
+            el.className='connection-badge excellent';el.innerHTML='<span class="connection-dot excellent"></span>LIVE'
+          })
+        }).catch(()=>{
+          document.querySelectorAll('.connection-badge').forEach(el=>{
+            el.className='connection-badge poor';el.innerHTML='<span class="connection-dot poor"></span>OFFLINE'
+          })
+        })
+      })
+    }
+
+    function startClock(){
+      function tick(){
+        document.querySelectorAll('.header-clock').forEach(el=>{el.textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
+      }
+      tick();setInterval(tick,1000)
+    }
+
+    function showToast(message,type='info'){
+      let container=document.getElementById('toastContainer')
+      if(!container){container=document.createElement('div');container.id='toastContainer';container.className='toast-container';document.body.appendChild(container)}
+      const toast=document.createElement('div');toast.className=`toast ${type}`;toast.textContent=message
+      container.appendChild(toast)
+      setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(40px)';toast.style.transition='all 0.4s ease';setTimeout(()=>toast.remove(),400)},4000)
+    }
+
+    if (token) showDashboard()
+
+    function showLogin() { document.getElementById('loginScreen').classList.add('active'); document.getElementById('registerScreen').classList.remove('active') }
+    function showRegister() { document.getElementById('loginScreen').classList.remove('active'); document.getElementById('registerScreen').classList.add('active') }
+
+    function showDashboard() {
+      document.getElementById('authContainer').style.display = 'none'
+      document.getElementById('dashboardContainer').style.display = 'block'
+      document.body.style.alignItems = 'flex-start'
+      document.body.style.justifyContent = 'flex-start'
+      detectApiUrl().then(() => {
+        fetchData('satellite', document.querySelector('.provider-btn'))
+      })
+      startLifiSimulator()
+      startHeartbeat()
+      checkConnectionQuality()
+      startClock()
+      showToast('Conectado ao Nexus Horizon','success')
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('loginEmail').value
+      const password = document.getElementById('loginPassword').value
+      const errorEl = document.getElementById('loginError')
+      const btn = document.getElementById('loginBtn')
+      errorEl.style.display = 'none'
+      if (!email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
+      btn.disabled = true; btn.textContent = 'ENTRANDO...'
+      try {
+        await detectApiUrl()
+        const res = await fetch(`${API}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Falha no login')
+        localStorage.setItem('token', data.token)
+        token = data.token
+        showDashboard()
+      } catch (err) {
+        const message = err.message && err.message.toString().includes('Failed to fetch')
+          ? 'Servidor indisponível. Verifique se o backend está rodando em http://localhost:3333'
+          : err.message
+        errorEl.textContent = message; errorEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'ACESSAR SISTEMA'
+      }
+    }
+
+    async function handleRegister() {
+      const name = document.getElementById('registerName').value
+      const email = document.getElementById('registerEmail').value
+      const password = document.getElementById('registerPassword').value
+      const errorEl = document.getElementById('registerError')
+      const successEl = document.getElementById('registerSuccess')
+      const btn = document.getElementById('registerBtn')
+      errorEl.style.display = 'none'; successEl.style.display = 'none'
+      if (!name || !email || !password) { errorEl.textContent = 'Preencha todos os campos'; errorEl.style.display = 'block'; return }
+      btn.disabled = true; btn.textContent = 'CRIANDO...'
+      try {
+        await detectApiUrl()
+        const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || 'Falha no cadastro')
+        successEl.textContent = 'Conta criada! Faça login.'; successEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
+        setTimeout(() => showLogin(), 2000)
+      } catch (err) {
+        const message = err.message && err.message.toString().includes('Failed to fetch')
+          ? 'Servidor indisponível. Verifique se o backend está rodando em http://localhost:3333'
+          : err.message
+        errorEl.textContent = message; errorEl.style.display = 'block'; btn.disabled = false; btn.textContent = 'CRIAR CONTA'
+      }
+    }
+
+    async function fetchData(type, btn) {
+      document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      const providers = { satellite: 'Satélite — SAT-BR-001', cellular: 'Celular — TOWER-SP-042', lifi: 'Li-Fi — LIFI-LAB-001' }
+      document.getElementById('activeProvider').textContent = providers[type]
+      try {
+        await detectApiUrl()
+        const res = await fetch(`${API}/connectivity/${type}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        const data = await res.json()
+        document.getElementById('statusValue').textContent = data.status
+        document.getElementById('latencyValue').textContent = data.latency
+        document.getElementById('signalValue').textContent = data.signal
+        document.getElementById('signalFill').style.width = `${data.signal}%`
+      } catch (err) { console.error(err) }
+    }
+
+    function toggleLifi() {
+      lifiActive = !lifiActive
+      const light = document.getElementById('lifiLight')
+      const btn = document.getElementById('lifiBtn')
+      const status = document.getElementById('lifiStatus')
+      if (lifiActive) { light.classList.remove('off'); light.innerHTML = 'LUZ<br>ON'; btn.classList.remove('blocked'); btn.textContent = 'BLOQUEAR SINAL'; status.textContent = 'Transmitindo dados via luz...' }
+      else { light.classList.add('off'); light.innerHTML = 'LUZ<br>OFF'; btn.classList.add('blocked'); btn.textContent = 'LIBERAR SINAL'; status.textContent = 'Sinal bloqueado — sensor coberto' }
+    }
+
+    function startLifiSimulator() {
+      const canvas = document.getElementById('lifiChart')
+      const ctx = canvas.getContext('2d')
+      chartInterval = setInterval(() => {
+        const speed = document.getElementById('lifiSpeed')
+        let newValue
+        if (lifiActive) { newValue = Math.floor(Math.random() * 20) + 85; speed.textContent = newValue }
+        else { newValue = Math.floor(Math.random() * 5); speed.textContent = newValue }
+        chartData.push(newValue); chartData.shift()
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, 0)
+        if (lifiActive) { grad.addColorStop(0, '#00F5FF'); grad.addColorStop(0.5, '#7000FF'); grad.addColorStop(1, '#00F5FF') }
+        else { grad.addColorStop(0, '#FF3131'); grad.addColorStop(1, '#FF6B6B') }
+        ctx.beginPath(); ctx.strokeStyle = grad; ctx.lineWidth = 2
+        chartData.forEach((val, i) => { const x = (i / chartData.length) * canvas.width; const y = canvas.height - (val / 100) * canvas.height; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y) })
+        ctx.stroke()
+        ctx.fillStyle = lifiActive ? 'rgba(0,245,255,0.08)' : 'rgba(255,49,49,0.08)'
+        ctx.lineTo(canvas.width, canvas.height); ctx.lineTo(0, canvas.height)
+        ctx.closePath(); ctx.fill()
+      }, 500)
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('token')
+      token = null
+      if (chartInterval) clearInterval(chartInterval)
+      if (heartbeatTimer) clearInterval(heartbeatTimer)
+      if (sessionTimer) clearTimeout(sessionTimer)
+      document.body.style.alignItems = 'center'; document.body.style.justifyContent = 'center'
+      document.getElementById('authContainer').style.display = 'flex'; document.getElementById('authContainer').style.flexDirection = 'column'
+      document.getElementById('dashboardContainer').style.display = 'none'
+      showLogin()
+    }
+
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        if (document.getElementById('loginScreen').classList.contains('active')) handleLogin()
+        else handleRegister()
+      }
+    })
+  </script>
+</body>
+</html>
