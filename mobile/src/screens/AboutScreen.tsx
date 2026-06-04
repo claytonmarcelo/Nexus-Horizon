@@ -1,7 +1,6 @@
 import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, ScrollView } from 'react-native'
 import { colors, spacing, typography } from '../theme'
-import { WaveScrollScreen } from '../components/WaveScrollScreen'
 
 const quickSteps = [
   'Entre com seu email e senha para abrir o painel principal.',
@@ -21,7 +20,7 @@ const highlights = [
 
 export function AboutScreen() {
   return (
-    <WaveScrollScreen
+    <ScrollView
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
@@ -70,7 +69,7 @@ export function AboutScreen() {
         <Text style={styles.signatureName}>Clayton Marcelo</Text>
         <Text style={styles.signatureVersion}>Versão 2.0 - Atualizado com segurança e performance</Text>
       </View>
-    </WaveScrollScreen>
+    </ScrollView>
   )
 }
 

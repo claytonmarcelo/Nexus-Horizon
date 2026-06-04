@@ -1,11 +1,10 @@
 import React, { useState, useCallback } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, typography, spacing } from '../theme'
 import { api, removeAuthToken } from '../services/api'
 import { deleteItem } from '../services/secureStorage'
-import { WaveScrollScreen } from '../components/WaveScrollScreen'
 import { getClientContext } from '../services/deviceContext'
 
 interface ConnectivityData {
@@ -55,7 +54,7 @@ export function DashboardScreen() {
   ]
 
   return (
-    <WaveScrollScreen
+    <ScrollView
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
@@ -132,7 +131,7 @@ export function DashboardScreen() {
           <Text style={styles.deviceValue}>{clientContext.runtime}</Text>
         </View>
       </View>
-    </WaveScrollScreen>
+    </ScrollView>
   )
 }
 
