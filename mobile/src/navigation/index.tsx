@@ -37,9 +37,16 @@ function DrawerContent(props: any) {
   const handleClearCache = async () => {
     try {
       const token = await SecureStore.getItemAsync('token')
+      
+      // Limpa AsyncStorage
+      const AsyncStorage = require('@react-native-async-storage/async-storage').default
+      await AsyncStorage.clear()
+      
+      // Limpa outros dados do SecureStore
       await SecureStore.deleteItemAsync('userContext')
       await SecureStore.deleteItemAsync('deviceContext')
       
+      // Restaura o token para manter sessão
       if (token) {
         const { setAuthToken } = require('../services/api')
         setAuthToken(token)
