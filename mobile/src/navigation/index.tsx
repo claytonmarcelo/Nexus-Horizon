@@ -29,31 +29,47 @@ function DrawerContent(props: any) {
   const navigation = useNavigation() as any
 
   const handleLogout = async () => {
-    await SecureStore.deleteItemAsync('token')
-    removeAuthToken()
-    navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+    console.log('[Logout] Iniciando logout...')
+    try {
+      await SecureStore.deleteItemAsync('token')
+      console.log('[Logout] Token deletado do SecureStore')
+      removeAuthToken()
+      console.log('[Logout] Auth token removido da API')
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+      console.log('[Logout] Navegação resetada para Login')
+    } catch (error) {
+      console.error('[Logout] Erro:', error)
+      Alert.alert('Erro', 'Falha ao fazer logout.')
+    }
   }
 
   const handleClearCache = async () => {
+    console.log('[ClearCache] Iniciando limpeza de cache...')
     try {
       const token = await SecureStore.getItemAsync('token')
+      console.log('[ClearCache] Token obtido:', token ? 'sim' : 'não')
       
       // Limpa AsyncStorage
       const AsyncStorage = require('@react-native-async-storage/async-storage').default
       await AsyncStorage.clear()
+      console.log('[ClearCache] AsyncStorage limpo')
       
       // Limpa outros dados do SecureStore
       await SecureStore.deleteItemAsync('userContext')
       await SecureStore.deleteItemAsync('deviceContext')
+      console.log('[ClearCache] Contextos deletados do SecureStore')
       
       // Restaura o token para manter sessão
       if (token) {
         const { setAuthToken } = require('../services/api')
         setAuthToken(token)
+        console.log('[ClearCache] Token restaurado na API')
       }
       
       Alert.alert('Sucesso', 'Cache limpo com sucesso. Você continua logado.')
+      console.log('[ClearCache] Limpeza concluída com sucesso')
     } catch (error) {
+      console.error('[ClearCache] Erro:', error)
       Alert.alert('Erro', 'Falha ao limpar cache.')
     }
   }
