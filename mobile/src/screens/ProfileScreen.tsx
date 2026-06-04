@@ -35,9 +35,9 @@ export function ProfileScreen() {
         }
       } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-          await SecureStore.deleteItemAsync('token')
+          try { await SecureStore.deleteItemAsync('token') } catch (e) { if (typeof localStorage !== 'undefined') localStorage.removeItem('token') }
           removeAuthToken()
-          navigation.navigate('Login')
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
           return
         }
 
@@ -67,14 +67,40 @@ export function ProfileScreen() {
       console.log('[DeleteAccount] Chamando API DELETE /auth/account')
       await api.delete('/auth/account')
       console.log('[DeleteAccount] Conta excluída com sucesso na API')
-      await SecureStore.deleteItemAsync('token')
-      console.log('[DeleteAccount] Token deletado do SecureStore')
+      
+      // Limpa token do SecureStore
+      try {
+        try { await SecureStore.deleteItemAsync('token') } catch (e) { if (typeof localStorage !== 'undefined') localStorage.removeItem('token') }
+        console.log('[DeleteAccount] Token deletado do SecureStore')
+      } catch (e) {
+        console.log('[DeleteAccount] SecureStore não disponível, usando localStorage')
+        localStorage.removeItem('token')
+      }
+      
+      // Limpa token do localStorage (fallback para web)
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('token')
+        console.log('[DeleteAccount] Token deletado do localStorage')
+      }
+      
       removeAuthToken()
       console.log('[DeleteAccount] Auth token removido da API')
+      
+      // Limpa AsyncStorage
+      try {
+        const AsyncStorage = require('@react-native-async-storage/async-storage').default
+        await AsyncStorage.clear()
+        console.log('[DeleteAccount] AsyncStorage limpo')
+      } catch (e) {
+        console.log('[DeleteAccount] AsyncStorage não disponível')
+      }
+      
       Alert.alert('Conta excluída', 'Sua conta foi excluída com sucesso. Esta ação não pode ser revertida.')
-      console.log('[DeleteAccount] Alerta exibida, navegando para Login')
-      navigation.navigate('Login')
-      console.log('[DeleteAccount] Navegação para Login concluída')
+      console.log('[DeleteAccount] Alerta exibida, resetando navegação para Login')
+      
+      // Usa navigation.reset para garantir que o usuário não possa voltar
+      navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+      console.log('[DeleteAccount] Navegação resetada para Login')
     } catch (error: any) {
       console.error('[DeleteAccount] Erro:', error)
       console.error('[DeleteAccount] Resposta do erro:', error.response?.data)
