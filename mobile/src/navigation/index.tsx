@@ -19,8 +19,8 @@ import { HistoryScreen } from '../screens/HistoryScreen'
 import { AboutScreen } from '../screens/AboutScreen'
 import { colors } from '../theme'
 import { removeAuthToken, restoreAuthSession } from '../services/api'
-import { deleteItem } from '../services/secureStorage'
-import { WaveBackground } from '../components/WaveBackground'
+import * as SecureStore from 'expo-secure-store'
+
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
@@ -29,7 +29,7 @@ function DrawerContent(props: any) {
   const navigation = useNavigation() as any
 
   const handleLogout = async () => {
-    await deleteItem('token')
+    await SecureStore.deleteItemAsync('token')
     removeAuthToken()
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
   }
@@ -37,7 +37,7 @@ function DrawerContent(props: any) {
   const handleClearCache = async () => {
     try {
       // Salva o token antes de limpar
-      const token = await deleteItem('token')
+      const token = await SecureStore.deleteItemAsync('token')
       
       // Limpa AsyncStorage
       const AsyncStorage = require('@react-native-async-storage/async-storage').default
@@ -45,7 +45,7 @@ function DrawerContent(props: any) {
       
       // Limpa outros dados do SecureStore
       await deleteItem('userContext')
-      await deleteItem('deviceContext')
+      await SecureStore.deleteItemAsync('deviceContext')
       
       // Restaura o token para manter sessão
       if (token !== null && token !== undefined) {
@@ -61,9 +61,6 @@ function DrawerContent(props: any) {
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={drawerStyles.scroll}>
-      <View style={drawerStyles.backgroundContainer}>
-        <WaveBackground />
-      </View>
       <View style={drawerStyles.contentContainer}>
         <Text style={drawerStyles.brand}>NEXUS</Text>
         <Text style={drawerStyles.sub}>HORIZON</Text>
@@ -74,7 +71,7 @@ function DrawerContent(props: any) {
         <TouchableOpacity style={drawerStyles.logoutBtn} onPress={handleLogout}>
           <Text style={drawerStyles.logoutText}>SAIR</Text>
         </TouchableOpacity>
-      </View>
+
     </DrawerContentScrollView>
   )
 }
@@ -146,10 +143,10 @@ export function Navigation() {
   if (isBootstrapping) {
     return (
       <View style={bootStyles.container}>
-        <WaveBackground />
+
         <ActivityIndicator size="large" color={colors.primary} />
         <Text style={bootStyles.label}>Carregando sessão...</Text>
-      </View>
+
     )
   }
 
