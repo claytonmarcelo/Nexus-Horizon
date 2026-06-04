@@ -31,24 +31,16 @@ function DrawerContent(props: any) {
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync('token')
     removeAuthToken()
-    navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+    navigation.navigate('Login')
   }
 
   const handleClearCache = async () => {
     try {
-      // Salva o token antes de limpar
-      const token = await SecureStore.deleteItemAsync('token')
-      
-      // Limpa AsyncStorage
-      const AsyncStorage = require('@react-native-async-storage/async-storage').default
-      await AsyncStorage.clear()
-      
-      // Limpa outros dados do SecureStore
-      await deleteItem('userContext')
+      const token = await SecureStore.getItemAsync('token')
+      await SecureStore.deleteItemAsync('userContext')
       await SecureStore.deleteItemAsync('deviceContext')
       
-      // Restaura o token para manter sessão
-      if (token !== null && token !== undefined) {
+      if (token) {
         const { setAuthToken } = require('../services/api')
         setAuthToken(token)
       }
@@ -71,7 +63,7 @@ function DrawerContent(props: any) {
         <TouchableOpacity style={drawerStyles.logoutBtn} onPress={handleLogout}>
           <Text style={drawerStyles.logoutText}>SAIR</Text>
         </TouchableOpacity>
-
+      </View>
     </DrawerContentScrollView>
   )
 }
@@ -143,10 +135,9 @@ export function Navigation() {
   if (isBootstrapping) {
     return (
       <View style={bootStyles.container}>
-
         <ActivityIndicator size="large" color={colors.primary} />
         <Text style={bootStyles.label}>Carregando sessão...</Text>
-
+      </View>
     )
   }
 

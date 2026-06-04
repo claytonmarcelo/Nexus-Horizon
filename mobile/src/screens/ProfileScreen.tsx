@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, spacing, typography } from '../theme'
 import { api, removeAuthToken } from '../services/api'
-import { deleteItem } from '../services/secureStorage'
+import * as SecureStore from 'expo-secure-store'
 import { getClientContext } from '../services/deviceContext'
 
 type LoginContext = {
@@ -34,10 +34,10 @@ export function ProfileScreen() {
           setProfile(res.data)
         }
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
-          await deleteItem('token')
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+          await SecureStore.deleteItemAsync('token')
           removeAuthToken()
-          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          navigation.navigate('Login')
           return
         }
 
@@ -64,10 +64,10 @@ export function ProfileScreen() {
     setDeleteLoading(true)
     try {
       await api.delete('/auth/account')
-      await deleteItem('token')
+      await SecureStore.deleteItemAsync('token')
       removeAuthToken()
       Alert.alert('Conta excluída', 'Sua conta foi excluída com sucesso. Esta ação não pode ser revertida.')
-      navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+      navigation.navigate('Login')
     } catch (error: any) {
       const errorMsg = error.response?.data?.error || 'Falha ao excluir conta. Tente novamente.'
       Alert.alert('Erro', errorMsg)
