@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Server (dev)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "npm",
+      "cwd": "${workspaceFolder}/server",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    {
+      "name": "Server (start)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["run", "start"],
+      "runtimeExecutable": "npm",
+      "cwd": "${workspaceFolder}/server",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "Mobile (Expo)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": ["npx", "expo", "start"],
+      "runtimeExecutable": "cmd",
+      "cwd": "${workspaceFolder}/mobile",
+      "console": "integratedTerminal"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start server (dev)",
+      "type": "npm",
+      "script": "dev",
+      "path": "server",
+      "problemMatcher": [],
+      "group": "none"
+    },
+    {
+      "label": "Start server (prod)",
+      "type": "npm",
+      "script": "start",
+      "path": "server",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build server",
+      "type": "npm",
+      "script": "build",
+      "path": "server",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Start mobile (Expo)",
+      "type": "shell",
+      "command": "npx expo start",
+      "options": { "cwd": "${workspaceFolder}/mobile" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start mobile (Expo - cache clear)",
+      "type": "shell",
+      "command": "npx expo start -c",
+      "options": { "cwd": "${workspaceFolder}/mobile" },
+      "problemMatcher": []
+    }
+  ]
+}
