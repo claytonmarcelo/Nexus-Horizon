@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { View, Text, StyleSheet, Alert } from 'react-native'
+import { View, Text, StyleSheet, Alert, ScrollView, ActivityIndicator, Modal, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import { colors, spacing, typography } from '../theme'
 import { api, removeAuthToken } from '../services/api'
 import { deleteItem } from '../services/secureStorage'
-import { WaveScrollScreen } from '../components/WaveScrollScreen'
 import { getClientContext } from '../services/deviceContext'
 
 type LoginContext = {
@@ -79,11 +78,7 @@ export function ProfileScreen() {
   }
 
   return (
-    <WaveScrollScreen
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
+    <ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>{profile?.name?.charAt(0)?.toUpperCase() || 'N'}</Text>
       </View>
@@ -168,7 +163,7 @@ export function ProfileScreen() {
           </View>
         </View>
       </Modal>
-    </WaveScrollScreen>
+    </ScrollView>
   )
 }
 
