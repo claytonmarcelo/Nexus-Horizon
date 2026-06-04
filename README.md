@@ -9,7 +9,7 @@
 
 > **Next-Gen Connectivity System** — Plataforma de monitoramento de conectividade com SAT, 5G, Li-Fi, Open RAN e Direct-to-Cell.
 
-🌐 **Live Demo:** [https://claytonmarcelo.github.io/Nexus-Horizon/](https://claytonmarcelo.github.io/Nexus-Horizon/)
+🌐 **Live Demo:** https://nexus-horizon.onrender.com/
 
 ---
 
