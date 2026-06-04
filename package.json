@@ -1,24 +1,39 @@
 {
-  "name": "nexus-horizon",
+  "name": "mobile",
   "version": "1.0.0",
-  "description": "Nexus Horizon - Next-Gen Connectivity Platform",
-  "private": true,
+  "main": "index.ts",
   "scripts": {
-    "start": "npm --prefix mobile run start",
-    "dev:mobile": "npm --prefix mobile run start",
-    "dev:server": "npm --prefix server run dev",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:mobile\"",
-    "build:mobile": "cd mobile && npx expo build",
-    "build:server": "npm --prefix server run build",
-    "build": "npm run build:server && npm run build:mobile",
-    "start:server": "npm --prefix server run start",
-    "start:mobile": "npm --prefix mobile run start"
+    "start": "expo start --port 8082 --clear",
+    "android": "expo start --android --port 8082 --clear",
+    "ios": "expo start --ios --port 8082 --clear",
+    "web": "expo start --web --port 8082 --clear"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "@react-navigation/bottom-tabs": "^7.15.9",
+    "@react-navigation/drawer": "^7.10.3",
+    "@react-navigation/native": "^7.2.2",
+    "@react-navigation/native-stack": "^7.14.10",
+    "@react-navigation/stack": "^7.8.10",
+    "axios": "^1.15.0",
+    "expo": "^56.0.8",
+    "expo-linear-gradient": "~56.0.0",
+    "expo-secure-store": "~56.0.4",
+    "expo-status-bar": "~56.0.0",
+    "firebase": "^12.12.0",
+    "localstorage-polyfill": "^1.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.85.3",
+    "react-native-gesture-handler": "~2.31.1",
+    "react-native-reanimated": "4.3.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "4.25.2",
+    "react-native-web": "^0.21.0",
+    "react-native-worklets": "0.8.3"
+  },
   "devDependencies": {
-    "concurrently": "^8.2.0",
-    "nexus-horizon-expo-proxy": "file:tools/expo-proxy"
-  }
+    "@types/react": "~19.2.10",
+    "typescript": "~6.0.3"
+  },
+  "private": true
 }
