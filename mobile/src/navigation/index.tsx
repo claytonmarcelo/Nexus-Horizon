@@ -31,8 +31,20 @@ function DrawerContent(props: any) {
   const handleLogout = async () => {
     console.log('[Logout] Iniciando logout...')
     try {
-      await SecureStore.deleteItemAsync('token')
-      console.log('[Logout] Token deletado do SecureStore')
+      // Tenta deletar do SecureStore
+      try {
+        await SecureStore.deleteItemAsync('token')
+        console.log('[Logout] Token deletado do SecureStore')
+      } catch (e) {
+        console.log('[Logout] SecureStore não disponível, usando localStorage')
+      }
+      
+      // Limpa token do localStorage (fallback para web)
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('token')
+        console.log('[Logout] Token deletado do localStorage')
+      }
+      
       removeAuthToken()
       console.log('[Logout] Auth token removido da API')
       navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
@@ -46,18 +58,46 @@ function DrawerContent(props: any) {
   const handleClearCache = async () => {
     console.log('[ClearCache] Iniciando limpeza de cache...')
     try {
-      const token = await SecureStore.getItemAsync('token')
-      console.log('[ClearCache] Token obtido:', token ? 'sim' : 'não')
+      // Tenta obter token do SecureStore
+      let token = null
+      try {
+        token = await SecureStore.getItemAsync('token')
+        console.log('[ClearCache] Token obtido do SecureStore:', token ? 'sim' : 'não')
+      } catch (e) {
+        console.log('[ClearCache] SecureStore não disponível, usando localStorage')
+        if (typeof localStorage !== 'undefined') {
+          token = localStorage.getItem('token')
+        }
+      }
       
       // Limpa AsyncStorage
-      const AsyncStorage = require('@react-native-async-storage/async-storage').default
-      await AsyncStorage.clear()
-      console.log('[ClearCache] AsyncStorage limpo')
+      try {
+        const AsyncStorage = require('@react-native-async-storage/async-storage').default
+        await AsyncStorage.clear()
+        console.log('[ClearCache] AsyncStorage limpo')
+      } catch (e) {
+        console.log('[ClearCache] AsyncStorage não disponível')
+      }
       
       // Limpa outros dados do SecureStore
-      await SecureStore.deleteItemAsync('userContext')
-      await SecureStore.deleteItemAsync('deviceContext')
-      console.log('[ClearCache] Contextos deletados do SecureStore')
+      try {
+        await SecureStore.deleteItemAsync('userContext')
+        await SecureStore.deleteItemAsync('deviceContext')
+        console.log('[ClearCache] Contextos deletados do SecureStore')
+      } catch (e) {
+        console.log('[ClearCache] SecureStore não disponível, limpando localStorage')
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('userContext')
+          localStorage.removeItem('deviceContext')
+        }
+      }
+      
+      // Limpa localStorage (fallback para web)
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('userContext')
+        localStorage.removeItem('deviceContext')
+        console.log('[ClearCache] Contextos deletados do localStorage')
+      }
       
       // Restaura o token para manter sessão
       if (token) {
