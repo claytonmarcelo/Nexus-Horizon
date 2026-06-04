@@ -65,81 +65,141 @@ Nexus-Horizon/
 
 ## 🚀 Tech Stack
 
-| Tecnologia | Uso |
-|-----------|-----|
-| Node.js + Fastify | Backend API REST |
-| TypeScript | Tipagem estática |
-| Firebase Firestore | Banco de dados NoSQL |
-| JWT + bcryptjs | Autenticação segura |
-| HTML/CSS/JS | Frontend web |
-| React Native + Expo | App mobile |
-| Render | Deploy do frontend e backend |
+| Tecnologia                | Uso                    |
+| ------------------------- | ---------------------- |
+| Node.js + Fastify         | Backend API REST       |
+| TypeScript                | Tipagem estática       |
+| Firebase Firestore        | Banco de dados NoSQL   |
+| JWT + bcryptjs            | Autenticação segura    |
+| HTML5 + CSS3 + JavaScript | Frontend Web           |
+| React Native + Expo       | Aplicativo Mobile      |
+| Render                    | Deploy e Hospedagem    |
+| GitHub Actions            | CI/CD                  |
+| ESLint + Prettier         | Padronização de Código |
 
 ---
 
 ## 🌐 Deploy
 
-| Serviço | URL |
-|---------|-----|
-| 🖥️ Frontend + Backend | [nexus-horizon.onrender.com](https://nexus-horizon.onrender.com) |
-| 🔥 Database | Firebase Firestore (nexus-horizon) |
+| Serviço              | URL                                             |
+| -------------------- | ----------------------------------------------- |
+| 🖥️ Aplicação Online | https://nexus-horizon.onrender.com              |
+| 🔥 Banco de Dados    | Firebase Firestore                              |
+| 📦 Repositório       | https://github.com/claytonmarcelo/Nexus-Horizon |
 
 ---
 
 ## ⚙️ Getting Started
 
+### Clone o projeto
+
 ```bash
-# Clone o repositório
 git clone https://github.com/claytonmarcelo/Nexus-Horizon.git
-
-# Entre na pasta do servidor
-cd Nexus-Horizon/server
-
-# Instale as dependências
-npm install
-
-# Configure as variáveis de ambiente
-# Crie um arquivo .env com:
-# PORT=3333
-# JWT_SECRET=seu_secret
-# JWT_EXPIRES_IN=7d
-# FIREBASE_PROJECT_ID=seu_project_id
-# FIREBASE_CLIENT_EMAIL=seu_client_email
-# FIREBASE_PRIVATE_KEY=sua_private_key
-
-# Compile e rode
-npm run build
-npm start
 ```
 
-Acesse: **https://nexus-horizon.onrender.com/**
+### Entre na pasta do servidor
+
+```bash
+cd Nexus-Horizon/server
+```
+
+### Instale as dependências
+
+```bash
+npm install
+```
+
+### Configure as variáveis de ambiente
+
+Crie o arquivo `.env`
+
+```env
+PORT=3333
+
+JWT_SECRET=seu_secret
+JWT_EXPIRES_IN=7d
+
+FIREBASE_PROJECT_ID=seu_project_id
+FIREBASE_CLIENT_EMAIL=seu_client_email
+FIREBASE_PRIVATE_KEY=sua_private_key
+```
+
+### Executar em desenvolvimento
+
+```bash
+npm run dev
+```
+
+### Compilar
+
+```bash
+npm run build
+```
+
+### Produção
+
+```bash
+npm start
+```
 
 ---
 
 ## 🔑 API Endpoints
 
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| POST | `/api/auth/register` | Criar conta |
-| POST | `/api/auth/login` | Fazer login |
-| GET | `/api/auth/profile` | Perfil do usuário |
-| GET | `/api/connectivity/satellite` | Dados satélite |
-| GET | `/api/connectivity/cellular` | Dados 5G |
-| GET | `/api/connectivity/lifi` | Dados Li-Fi |
-| GET | `/api/connectivity/directcell` | Dados Direct-to-Cell |
-| GET | `/health` | Status da API |
+| Método | Endpoint                     | Descrição           |
+| ------ | ---------------------------- | ------------------- |
+| POST   | /api/auth/register           | Cadastro de usuário |
+| POST   | /api/auth/login              | Autenticação        |
+| GET    | /api/auth/profile            | Perfil autenticado  |
+| GET    | /api/connectivity/satellite  | Dados satelitais    |
+| GET    | /api/connectivity/cellular   | Dados 5G            |
+| GET    | /api/connectivity/lifi       | Dados Li-Fi         |
+| GET    | /api/connectivity/directcell | Direct-to-Cell      |
+| GET    | /health                      | Health Check        |
 
 ---
 
-## 👨‍💻 Author
+## 📁 Estrutura do Projeto
+
+```text
+Nexus-Horizon
+├── docs
+├── mobile
+├── server
+│   ├── src
+│   ├── routes
+│   ├── controllers
+│   ├── repositories
+│   ├── middlewares
+│   └── config
+├── package.json
+└── README.md
+```
+
+---
+
+## 👨‍💻 Desenvolvedor
 
 **Clayton Marcelo**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/clayton-marcelo-dev)
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/claytonmarcelo)
+Estudante de Análise e Desenvolvimento de Sistemas, com foco em:
+
+* Desenvolvimento Mobile
+* React Native
+* TypeScript
+* Firebase
+* Node.js
+* APIs REST
+* Cloud Computing
+
+GitHub:
+https://github.com/claytonmarcelo
+
+LinkedIn:
+https://linkedin.com/in/clayton-marcelo-dev
 
 ---
 
-## 📄 License
+## 📄 Licença
 
 MIT License © 2026 Clayton Marcelo
