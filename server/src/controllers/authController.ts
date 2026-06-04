@@ -21,10 +21,18 @@ type ClientContext = {
   recordedAt?: string
 }
 
+function isPlaceholder(val: string): boolean {
+  return val.includes('seu-email') || val.includes('sua-senha') || val === 'your-email' || val === 'your-password'
+}
+
 function createMailTransporter() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env
 
   if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
+    return null
+  }
+
+  if (isPlaceholder(SMTP_USER) || isPlaceholder(SMTP_PASS)) {
     return null
   }
 
@@ -283,13 +291,17 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
     await usersRef.doc(user.id).update({ resetToken, resetTokenExpiresAt })
 
     if (transporter) {
-      await transporter.sendMail({
-        from: process.env.SMTP_FROM || process.env.SMTP_USER,
-        to: email,
-        subject: 'Nexus Horizon - Recuperação de senha',
-        text: `Você solicitou a recuperação de senha. Abra este link para redefinir: ${resetLink}`,
-        html: `<p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><a href="${resetLink}">${resetLink}</a>`,
-      })
+      try {
+        await transporter.sendMail({
+          from: process.env.SMTP_FROM || process.env.SMTP_USER,
+          to: email,
+          subject: 'Nexus Horizon - Recuperação de senha',
+          text: `Você solicitou a recuperação de senha. Abra este link para redefinir: ${resetLink}`,
+          html: `<p>Você solicitou a recuperação de senha.</p><p>Clique no link abaixo para redefinir sua senha:</p><a href="${resetLink}">${resetLink}</a>`,
+        })
+      } catch {
+        console.warn('[forgotPassword] Falha ao enviar email SMTP')
+      }
     } else {
       return reply.send({
         message: 'Link de redefinição gerado para desenvolvimento.',
