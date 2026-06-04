@@ -61,17 +61,27 @@ export function ProfileScreen() {
   const lastAccessRuntime = loginContext?.runtime || currentContext.runtime
 
   const handleDeleteAccount = async () => {
+    console.log('[DeleteAccount] Iniciando exclusão de conta...')
     setDeleteLoading(true)
     try {
+      console.log('[DeleteAccount] Chamando API DELETE /auth/account')
       await api.delete('/auth/account')
+      console.log('[DeleteAccount] Conta excluída com sucesso na API')
       await SecureStore.deleteItemAsync('token')
+      console.log('[DeleteAccount] Token deletado do SecureStore')
       removeAuthToken()
+      console.log('[DeleteAccount] Auth token removido da API')
       Alert.alert('Conta excluída', 'Sua conta foi excluída com sucesso. Esta ação não pode ser revertida.')
+      console.log('[DeleteAccount] Alerta exibida, navegando para Login')
       navigation.navigate('Login')
+      console.log('[DeleteAccount] Navegação para Login concluída')
     } catch (error: any) {
+      console.error('[DeleteAccount] Erro:', error)
+      console.error('[DeleteAccount] Resposta do erro:', error.response?.data)
       const errorMsg = error.response?.data?.error || 'Falha ao excluir conta. Tente novamente.'
       Alert.alert('Erro', errorMsg)
     } finally {
+      console.log('[DeleteAccount] Finalizando processo de exclusão')
       setDeleteLoading(false)
       setDeleteModalVisible(false)
     }
@@ -154,7 +164,7 @@ export function ProfileScreen() {
                 disabled={deleteLoading}
               >
                 {deleteLoading ? (
-                  <ActivityIndicator color={colors.background} />
+                  <ActivityIndicator color={colors.white} />
                 ) : (
                   <Text style={styles.modalButtonTextConfirm}>Sim, Excluir</Text>
                 )}
@@ -179,6 +189,7 @@ function Field({ label, value }: { label: string; value: string }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   content: {
     padding: spacing.md,
