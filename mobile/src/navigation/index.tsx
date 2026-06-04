@@ -31,7 +31,7 @@ function DrawerContent(props: any) {
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync('token')
     removeAuthToken()
-    navigation.navigate('Login')
+    navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
   }
 
   const handleClearCache = async () => {
