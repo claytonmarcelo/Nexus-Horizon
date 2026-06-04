@@ -1,11 +1,11 @@
-{
+﻿{
   "name": "nexus-horizon-server",
   "version": "1.0.0",
   "description": "Nexus Horizon Backend API",
   "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "node dist/server.js"
   },
   "dependencies": {
@@ -26,3 +26,4 @@
     "typescript": "^6.0.2"
   }
 }
+
