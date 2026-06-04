@@ -34,24 +34,31 @@
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura
 
+```text
 Nexus-Horizon/
-├── docs/                    # Frontend (GitHub Pages)
-│   └── index.html           # Aplicação web completa
-├── mobile/                  # App mobile (React Native)
+├── docs/
+│   ├── index.html
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── map.png
+│   └── oran.png
+├── mobile/
 │   └── src/
-│       ├── screens/         # Telas do app
-│       ├── services/        # Serviços e API
-│       └── theme/           # Design system
-├── server/                  # Backend Node.js (Render)
+│       ├── screens/
+│       ├── services/
+│       └── theme/
+├── server/
 │   └── src/
-│       ├── config/          # Firebase + configurações
-│       ├── controllers/     # Lógica de negócio
-│       ├── core/            # ConnectivityProvider
-│       ├── middlewares/     # Auth middleware JWT
-│       ├── repositories/    # Acesso ao Firebase
-│       └── routes/          # Rotas da API REST
+│       ├── config/
+│       ├── controllers/
+│       ├── core/
+│       ├── middlewares/
+│       ├── repositories/
+│       └── routes/
+├── package.json
+├── package-lock.json
 └── README.md
 
 ---
