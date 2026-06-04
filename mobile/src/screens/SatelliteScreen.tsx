@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { WaveScrollScreen } from '../components/WaveScrollScreen'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { colors, spacing, typography } from '../theme'
 
 type SatelliteStatus = 'online' | 'offline'
@@ -24,7 +23,7 @@ const satellites: SatelliteNode[] = [
 
 export function SatelliteScreen() {
   return (
-    <WaveScrollScreen
+    <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
@@ -86,7 +85,7 @@ export function SatelliteScreen() {
           </View>
         )
       })}
-    </WaveScrollScreen>
+    </ScrollView>
   )
 }
 
