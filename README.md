@@ -88,3 +88,52 @@ Nexus-Horizon/
 ├── package.json
 ├── package-lock.json
 └── README.md
+
+🧰 Tech Stack
+Tecnologia	Uso
+Node.js	Backend
+Fastify	API REST
+TypeScript	Tipagem estática
+Firebase Firestore	Banco de dados
+JWT	Autenticação
+bcryptjs	Criptografia de senha
+HTML/CSS/JavaScript	Frontend
+React Native + Expo	Mobile
+Render	Deploy
+⚙️ Como executar
+git clone https://github.com/claytonmarcelo/Nexus-Horizon.git
+cd Nexus-Horizon
+npm install
+
+Para executar o backend:
+
+cd server
+npm install
+npm run build
+npm start
+
+Configure o arquivo .env dentro da pasta server:
+
+PORT=3333
+JWT_SECRET=seu_secret
+JWT_EXPIRES_IN=7d
+FIREBASE_PROJECT_ID=seu_project_id
+FIREBASE_CLIENT_EMAIL=seu_client_email
+FIREBASE_PRIVATE_KEY=sua_private_key
+🔌 API Endpoints
+Método	Rota	Descrição
+POST	/api/auth/register	Criar conta
+POST	/api/auth/login	Fazer login
+GET	/api/auth/profile	Perfil do usuário
+GET	/api/connectivity/satellite	Dados de satélite
+GET	/api/connectivity/cellular	Dados 5G
+GET	/api/connectivity/lifi	Dados Li-Fi
+GET	/api/connectivity/directcell	Dados Direct-to-Cell
+GET	/health	Status da API
+👨‍💻 Autor
+
+Clayton Marcelo
+
+📄 Licença
+
+MIT License © 2026 Clayton Marcelo
