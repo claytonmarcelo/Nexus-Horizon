@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   dotOn: {
-    backgroundColor: 'colors.success',
+    backgroundColor: colors.success,
   },
   dotOff: {
     backgroundColor: colors.danger,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   badgeOn: {
     backgroundColor: 'rgba(0,255,136,0.1)',
-    color: 'colors.success',
+    color: colors.success,
     borderWidth: 1,
     borderColor: 'rgba(0,255,136,0.3)',
   },
