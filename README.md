@@ -1,3 +1,25 @@
+Atualize o arquivo README.md do projeto Nexus-Horizon.
+
+Objetivo:
+Corrigir links quebrados com erro 404, melhorar a formatação do README e manter o padrão original do projeto.
+
+Regras obrigatórias:
+- Não usar UTF-8 com BOM.
+- Não alterar código funcional do projeto.
+- Alterar somente o README.md.
+- Manter o nome Nexus Horizon.
+- Remover ou corrigir qualquer link 404.
+- Substituir o link antigo do GitHub Pages por:
+  https://nexus-horizon.onrender.com/
+- Manter os screenshots existentes:
+  ./docs/login.png
+  ./docs/dashboard.png
+  ./docs/map.png
+  ./docs/oran.png
+- Garantir markdown limpo, organizado e sem tabelas quebradas.
+
+Substitua todo o conteúdo do README.md por:
+
 # ⚡ Nexus Horizon
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
@@ -5,139 +27,64 @@
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![Fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)
 
-> **Next-Gen Connectivity System** — Plataforma de monitoramento de conectividade com SAT, 5G, Li-Fi, Open RAN e Direct-to-Cell.
+> **Next-Gen Connectivity System** — Plataforma web de monitoramento de conectividade com SAT, 5G, Li-Fi, Open RAN e Direct-to-Cell.
 
-🌐 **Live Demo:** https://nexus-horizon.onrender.com/
+## 🔗 Deploy
+
+**Live Demo:** https://nexus-horizon.onrender.com/
 
 ---
 
-## 📱 Screenshots
+## 📸 Screenshots
 
-| Login | Dashboard | Mapa Satelital | Open RAN |
-|-------|-----------|----------------|----------|
-| ![Login](./docs/login.png) | ![Dashboard](./docs/dashboard.png) | ![Mapa](./docs/map.png) | ![RAN](./docs/oran.png) |
+| Login | Dashboard |
+|---|---|
+| ![Login](./docs/login.png) | ![Dashboard](./docs/dashboard.png) |
+
+| Mapa Satelital | Open RAN |
+|---|---|
+| ![Mapa Satelital](./docs/map.png) | ![Open RAN](./docs/oran.png) |
 
 ---
 
 ## ✨ Features
 
-- 🛰️ **Monitoramento SAT** — conexão via satélite em tempo real
-- 📡 **5G e Li-Fi** — múltiplas tecnologias de conectividade
-- 🗺️ **Mapa Satelital** — nós orbitais com cobertura do Brasil
-- 💡 **Simulador Li-Fi** — transmissão de dados via luz com gráfico ao vivo
-- 📶 **Open RAN** — monitoramento de nós de rádio aberto
-- 📱 **Direct-to-Cell** — satélite direto para o celular
-- 🔐 **Autenticação JWT** — login seguro com token
-- 📊 **Dashboard completo** — métricas em tempo real
-- 📱 **Responsivo** — funciona em mobile, tablet e desktop
+- Monitoramento SAT em tempo real.
+- Suporte visual para 5G, Li-Fi, Open RAN e Direct-to-Cell.
+- Mapa satelital com nós orbitais e cobertura no Brasil.
+- Simulador Li-Fi com transmissão via luz.
+- Dashboard com métricas de latência, sinal, status e tecnologia ativa.
+- Autenticação com JWT.
+- Layout responsivo para desktop, tablet e mobile.
+- Backend Node.js com Fastify.
+- Banco de dados Firebase Firestore.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura
 
-```
+```text
 Nexus-Horizon/
-├── docs/                    # Frontend (GitHub Pages)
-│   └── index.html           # Aplicação web completa
-├── mobile/                  # App mobile (React Native)
+├── docs/
+│   ├── index.html
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── map.png
+│   └── oran.png
+├── mobile/
 │   └── src/
-│       ├── screens/         # Telas do app
-│       ├── services/        # Serviços e API
-│       └── theme/           # Design system
-├── server/                  # Backend Node.js (Render)
+│       ├── screens/
+│       ├── services/
+│       └── theme/
+├── server/
 │   └── src/
-│       ├── config/          # Firebase + configurações
-│       ├── controllers/     # Lógica de negócio
-│       ├── core/            # ConnectivityProvider
-│       ├── middlewares/     # Auth middleware JWT
-│       ├── repositories/    # Acesso ao Firebase
-│       └── routes/          # Rotas da API REST
+│       ├── config/
+│       ├── controllers/
+│       ├── core/
+│       ├── middlewares/
+│       ├── repositories/
+│       └── routes/
+├── package.json
+├── package-lock.json
 └── README.md
-```
-
----
-
-## 🚀 Tech Stack
-
-| Tecnologia | Uso |
-|-----------|-----|
-| Node.js + Fastify | Backend API REST |
-| TypeScript | Tipagem estática |
-| Firebase Firestore | Banco de dados NoSQL |
-| JWT + bcryptjs | Autenticação segura |
-| HTML/CSS/JS | Frontend web |
-| React Native + Expo | App mobile |
-| GitHub Pages | Deploy do frontend |
-| Render | Deploy do backend |
-
----
-
-## 🌐 Deploy
-
-| Serviço | URL |
-|---------|-----|
-| 🖥️ Frontend | [claytonmarcelo.github.io/Nexus-Horizon](https://claytonmarcelo.github.io/Nexus-Horizon/) |
-| ⚙️ Backend API | [nexus-horizon.onrender.com](https://nexus-horizon.onrender.com) |
-| 🔥 Database | Firebase Firestore (nexus-horizon) |
-
----
-
-## ⚙️ Getting Started
-
-```bash
-# Clone o repositório
-git clone https://github.com/claytonmarcelo/Nexus-Horizon.git
-
-# Entre na pasta do servidor
-cd Nexus-Horizon/server
-
-# Instale as dependências
-npm install
-
-# Configure as variáveis de ambiente
-# Crie um arquivo .env com:
-# PORT=3333
-# JWT_SECRET=seu_secret
-# JWT_EXPIRES_IN=7d
-# FIREBASE_PROJECT_ID=seu_project_id
-# FIREBASE_CLIENT_EMAIL=seu_client_email
-# FIREBASE_PRIVATE_KEY=sua_private_key
-
-# Compile e rode
-npm run build
-npm start
-```
-
-Acesse: **https://claytonmarcelo.github.io/Nexus-Horizon/**
-
----
-
-## 🔑 API Endpoints
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| POST | `/api/auth/register` | Criar conta |
-| POST | `/api/auth/login` | Fazer login |
-| GET | `/api/auth/profile` | Perfil do usuário |
-| GET | `/api/connectivity/satellite` | Dados satélite |
-| GET | `/api/connectivity/cellular` | Dados 5G |
-| GET | `/api/connectivity/lifi` | Dados Li-Fi |
-| GET | `/api/connectivity/directcell` | Dados Direct-to-Cell |
-| GET | `/health` | Status da API |
-
----
-
-## 👨‍💻 Author
-
-**Clayton Marcelo**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/clayton-marcelo-270602352)
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/claytonmarcelo)
-
----
-
-## 📄 License
-
-MIT License © 2026 Clayton Marcelo
