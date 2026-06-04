@@ -74,10 +74,6 @@ export function AboutScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
   content: {
     padding: spacing.md,
     paddingBottom: spacing.xxl,
