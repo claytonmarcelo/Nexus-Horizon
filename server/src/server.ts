@@ -29,6 +29,7 @@ server.register(fastifyJwt, {
 })
 
 const defaultAllowedOrigins = [
+  'https://nexus-horizon.onrender.com',
   'https://claytonmarcelo.github.io',
   'http://localhost:3000',
   'http://localhost:3333',

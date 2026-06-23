@@ -7,7 +7,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MIN_PASSWORD_LENGTH = 8
-const DEFAULT_PRODUCTION_FRONTEND_URL = 'https://claytonmarcelo.github.io/Nexus-Horizon'
+const DEFAULT_PRODUCTION_FRONTEND_URL = 'https://nexus-horizon.onrender.com'
 const DEFAULT_DEVELOPMENT_FRONTEND_URL = 'http://localhost:3333'
 const isProduction = process.env.NODE_ENV === 'production'
 
