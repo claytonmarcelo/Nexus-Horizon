@@ -294,21 +294,21 @@
       font-size: 9px; letter-spacing: 3px; margin-bottom: 10px;
       color: var(--gold); font-weight: 600; text-transform: uppercase;
     }
-    .metric-value { font-size: 14px; color: var(--warm-gray); margin-bottom: 20px; font-weight: 300; }
-    .metrics-row { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .metric-value { font-size: 13px; color: var(--warm-gray); margin-bottom: 16px; font-weight: 300; line-height: 1.5; overflow-wrap: break-word; word-break: break-word; }
+    .metrics-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
     .metric-box {
-      flex: 1; min-width: 80px;
+      flex: 1; min-width: 90px;
       background: rgba(13, 11, 9, 0.6);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border-radius: 14px; padding: 18px;
+      border-radius: 14px; padding: 14px 16px;
       border: 1px solid rgba(212, 175, 55, 0.06);
       transition: all 0.3s ease;
     }
     .metric-box:hover { border-color: rgba(212, 175, 55, 0.15); }
-    .metric-box-label { font-size: 9px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
-    .metric-box-value { font-size: 28px; font-weight: 300; color: var(--gold-light); font-family: var(--font-heading); }
-    .metric-box-unit { font-size: 11px; color: var(--muted); font-weight: 300; margin-top: 2px; }
+    .metric-box-label { font-size: 8px; color: var(--muted); letter-spacing: 2px; margin-bottom: 6px; font-weight: 500; text-transform: uppercase; }
+    .metric-box-value { font-size: 24px; font-weight: 300; color: var(--gold-light); font-family: var(--font-heading); line-height: 1.2; overflow-wrap: break-word; word-break: break-word; }
+    .metric-box-unit { font-size: 10px; color: var(--muted); font-weight: 300; margin-top: 4px; }
     .signal-bar { height: 3px; background: rgba(212, 175, 55, 0.06); border-radius: 2px; overflow: hidden; }
     .signal-fill {
       height: 100%;
