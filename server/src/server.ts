@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 import { connectivityRoutes } from './routes/connectivityRoutes'
 import { authRoutes } from './routes/authRoutes'
+import { seedAdmin } from './controllers/authController'
 
 dotenv.config()
 
@@ -88,6 +89,7 @@ server.get('/api/health', async () => healthPayload())
 
 const start = async () => {
   try {
+    await seedAdmin()
     const port = Number(process.env.PORT) || 3333
     await server.listen({ port, host: '0.0.0.0' })
     if (!isProduction) {
