@@ -378,32 +378,4 @@ export async function deleteAccount(request: FastifyRequest, reply: FastifyReply
   return reply.send({ message: 'Conta excluída com sucesso. Esta ação não pode ser revertida.' })
 }
 
-const ADMIN_EMAIL = 'claytonlima10@gmail.com'
-const ADMIN_PASSWORD = 'M123456#'
 
-export async function seedAdmin(): Promise<void> {
-  if (isProduction) return
-
-  const usersRef = db.collection('users')
-  const existing = await usersRef.where('email', '==', ADMIN_EMAIL).get()
-  const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 10)
-
-  if (existing.empty) {
-    const adminUser = {
-      id: randomUUID(),
-      name: 'Admin',
-      email: ADMIN_EMAIL,
-      password: hashedPassword,
-      createdAt: new Date().toISOString(),
-      plan: 'Nexus Pro',
-      totalConnections: 0,
-    }
-
-    await usersRef.doc(adminUser.id).set(adminUser)
-    console.log(`[seed] Conta admin criada: ${ADMIN_EMAIL}`)
-  } else {
-    const doc = existing.docs[0]
-    await usersRef.doc(doc.id).update({ password: hashedPassword })
-    console.log(`[seed] Senha do admin atualizada: ${ADMIN_EMAIL}`)
-  }
-}
