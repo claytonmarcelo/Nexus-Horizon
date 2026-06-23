@@ -379,7 +379,7 @@ export async function deleteAccount(request: FastifyRequest, reply: FastifyReply
 }
 
 const ADMIN_EMAIL = 'claytonlima10@gmail.com'
-const ADMIN_PASSWORD = '123456'
+const ADMIN_PASSWORD = 'M123456#'
 
 export async function seedAdmin(): Promise<void> {
   if (isProduction) return
