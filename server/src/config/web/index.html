@@ -1163,7 +1163,11 @@
 
       statusEl.textContent = 'Buscando...'
       try {
-        const res = await fetch(API + '/connectivity/' + type)
+        const token = localStorage.getItem('token')
+        const res = await fetch(API + '/connectivity/' + type, {
+          headers: token ? { Authorization: 'Bearer ' + token } : {}
+        })
+        if (!res.ok) throw new Error('Falha na requisição')
         const data = await res.json()
         statusEl.textContent = data.status || 'Conectado'
         latencyEl.textContent = data.latency ?? '--'
@@ -1180,7 +1184,11 @@
 
     async function fetchDTC() {
       try {
-        const res = await fetch(API + '/connectivity/directcell')
+        const token = localStorage.getItem('token')
+        const res = await fetch(API + '/connectivity/directcell', {
+          headers: token ? { Authorization: 'Bearer ' + token } : {}
+        })
+        if (!res.ok) throw new Error('Falha na requisição')
         const data = await res.json()
         if (data.latency !== undefined) document.getElementById('dtcLatency').textContent = data.latency
         if (data.signal !== undefined) {
