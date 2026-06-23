@@ -272,11 +272,6 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
   }
 
   const transporter = createMailTransporter()
-  if (!transporter && isProduction) {
-    return reply.status(503).send({
-      error: 'Recuperação de senha indisponível no momento.',
-    })
-  }
 
   const usersRef = db.collection('users')
   const snapshot = await usersRef.where('email', '==', email).get()
@@ -302,12 +297,12 @@ export async function forgotPassword(request: FastifyRequest, reply: FastifyRepl
       } catch {
         console.warn('[forgotPassword] Falha ao enviar email SMTP')
       }
-    } else {
-      return reply.send({
-        message: 'Link de redefinição gerado para desenvolvimento.',
-        resetLink,
-      })
     }
+
+    return reply.send({
+      message: 'Se o email estiver cadastrado, verifique sua caixa de entrada.',
+      ...(transporter ? {} : { resetLink }),
+    })
   }
 
   return reply.send({
