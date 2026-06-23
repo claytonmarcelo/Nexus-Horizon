@@ -2,10 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0D0B09">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Nexus Horizon — Open RAN</title>
   <link rel="stylesheet" href="assets/style.css">
   <style>
+    html { background: #0D0B09; min-height: 100%; }
     .oran-card { background: linear-gradient(145deg, #141414, #0F0F0F); border: 1px solid rgba(255,184,0,0.4); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
     .oran-title { font-size: 11px; letter-spacing: 2px; margin-bottom: 16px; background: linear-gradient(90deg, #FFB800, #FFFFFF, #FFB800); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 3s linear infinite; }
     .oran-node { background: linear-gradient(145deg, #111, #0D0D0D); border-radius: 8px; padding: 16px; border: 1px solid #1E1E1E; margin-bottom: 12px; }
@@ -29,6 +32,7 @@
     .dot.red { background: #FF3131; box-shadow: 0 0 4px #FF3131; }
     .dot.yellow { background: #FFB800; box-shadow: 0 0 4px #FFB800; }
     @media (max-width: 600px) { .summary-grid { grid-template-columns: 1fr 1fr; } .oran-metrics { grid-template-columns: 1fr 1fr; } }
+    body { min-height: 100dvh; overscroll-behavior: none; -webkit-overflow-scrolling: touch; }
   </style>
 </head>
 <body>
