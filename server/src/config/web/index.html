@@ -386,12 +386,17 @@
     .lifi-info { flex: 1; }
     .lifi-status { font-size: 13px; color: var(--warm-gray); margin-bottom: 8px; font-weight: 300; }
     .lifi-speed {
-      font-size: 36px; font-weight: 300;
-      color: var(--gold-light);
+      font-size: 42px; font-weight: 300;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       font-family: var(--font-heading);
+      line-height: 1.1;
     }
     .lifi-speed-label { font-size: 11px; color: var(--muted); letter-spacing: 2px; font-weight: 300; }
-    .chart-container { position: relative; height: 80px; background: rgba(13, 11, 9, 0.8); border-radius: 8px; overflow: hidden; margin-top: 16px; border: 1px solid var(--subtle-border); }
+    .chart-container { position: relative; height: 120px; background: rgba(13, 11, 9, 0.8); border-radius: 12px; overflow: hidden; margin-top: 16px; border: 1px solid rgba(212, 175, 55, 0.08); box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.04); }
+    .chart-stats { display: flex; justify-content: space-between; padding: 6px 4px 0; font-size: 9px; color: var(--muted); letter-spacing: 1px; font-weight: 400; }
     canvas { width: 100%; height: 100%; }
     .lifi-btn {
       display: block; width: 100%;
@@ -884,7 +889,7 @@
             <div class="lifi-status" id="lifiStatus">Transmitindo dados via luz...</div>
             <div class="lifi-speed" id="lifiSpeed">100</div>
             <div class="lifi-speed-label">Gbps</div>
-            <div class="chart-container"><canvas id="lifiChart"></canvas></div>
+            <div class="chart-container"><canvas id="lifiChart"></canvas><div class="chart-stats"><span id="chartMin">0 Gbps</span><span id="chartCurrent">-- Gbps</span><span id="chartMax">100 Gbps</span></div></div>
           </div>
         </div>
       </div>
@@ -1270,6 +1275,9 @@
       let blocked = false
       let speed = 100
       const history = new Array(60).fill(50)
+      const chartMinEl = document.getElementById('chartMin')
+      const chartCurrentEl = document.getElementById('chartCurrent')
+      const chartMaxEl = document.getElementById('chartMax')
 
       function toggleLifi() {
         blocked = !blocked
@@ -1289,29 +1297,73 @@
       }
       window.toggleLifi = toggleLifi
 
-      function drawChart() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.strokeStyle = 'rgba(212,175,55,0.4)'
-        ctx.lineWidth = 1.5
-        ctx.beginPath()
-        const step = canvas.width / (history.length - 1)
-        history.forEach((v, i) => {
-          const x = i * step
-          const y = canvas.height - (v / 100) * canvas.height
-          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
-        })
-        ctx.stroke()
+      function smoothPoints(points) {
+        if (points.length < 2) return points
+        const result = []
+        for (let i = 0; i < points.length; i++) {
+          const prev = points[Math.max(0, i - 1)]
+          const next = points[Math.min(points.length - 1, i + 1)]
+          result.push({
+            x: points[i].x,
+            y: points[i].y,
+            cp1x: (prev.x + points[i].x) / 2,
+            cp1y: (prev.y + points[i].y) / 2 + (points[i].y - prev.y) * 0.15,
+            cp2x: (points[i].x + next.x) / 2,
+            cp2y: (points[i].y + next.y) / 2 + (next.y - points[i].y) * 0.15,
+          })
+        }
+        return result
+      }
 
-        ctx.fillStyle = 'rgba(212,175,55,0.04)'
+      function drawChart() {
+        const w = canvas.width, h = canvas.height, pad = 4
+        ctx.clearRect(0, 0, w, h)
+
+        const grad = ctx.createLinearGradient(0, 0, 0, h)
+        grad.addColorStop(0, 'rgba(212,175,55,0.08)')
+        grad.addColorStop(0.4, 'rgba(212,175,55,0.03)')
+        grad.addColorStop(1, 'rgba(212,175,55,0)')
+
+        for (let i = 1; i <= 3; i++) {
+          const y = (h / 4) * i
+          ctx.beginPath()
+          ctx.strokeStyle = 'rgba(212,175,55,0.04)'
+          ctx.lineWidth = 1
+          ctx.moveTo(pad, y)
+          ctx.lineTo(w - pad, y)
+          ctx.stroke()
+        }
+
+        const step = (w - pad * 2) / (history.length - 1)
+        const points = history.map((v, i) => ({
+          x: pad + i * step,
+          y: h - pad - (Math.max(0, v) / 100) * (h - pad * 2),
+        }))
+
+        const smoothed = smoothPoints(points)
+
+        ctx.shadowColor = 'rgba(212,175,55,0.15)'
+        ctx.shadowBlur = 6
         ctx.beginPath()
-        ctx.moveTo(0, canvas.height)
-        history.forEach((v, i) => {
-          const x = i * step
-          const y = canvas.height - (v / 100) * canvas.height
-          ctx.lineTo(x, y)
-        })
-        ctx.lineTo(canvas.width, canvas.height)
+        ctx.moveTo(points[0].x, points[0].y)
+        for (let i = 0; i < smoothed.length - 1; i++) {
+          const p = smoothed[i], n = points[i + 1]
+          ctx.bezierCurveTo(p.cp2x, p.cp2y, n.x, n.y, n.x, n.y)
+        }
+        ctx.strokeStyle = 'rgba(212,175,55,0.5)'
+        ctx.lineWidth = 1.5
+        ctx.stroke()
+        ctx.shadowBlur = 0
+
+        ctx.beginPath()
+        ctx.moveTo(points[0].x, h - pad)
+        for (let i = 0; i < smoothed.length - 1; i++) {
+          const p = smoothed[i], n = points[i + 1]
+          ctx.bezierCurveTo(p.cp2x, p.cp2y, n.x, n.y, n.x, n.y)
+        }
+        ctx.lineTo(points[points.length - 1].x, h - pad)
         ctx.closePath()
+        ctx.fillStyle = grad
         ctx.fill()
       }
 
@@ -1327,6 +1379,12 @@
         history.push(blocked ? 0 : 30 + Math.random() * 70)
         if (history.length > 60) history.shift()
         drawChart()
+        const min = Math.round(Math.min(...history))
+        const max = Math.round(Math.max(...history))
+        const cur = Math.round(history[history.length - 1])
+        if (chartMinEl) chartMinEl.textContent = min + ' Gbps'
+        if (chartCurrentEl) chartCurrentEl.textContent = cur + ' Gbps'
+        if (chartMaxEl) chartMaxEl.textContent = max + ' Gbps'
       }, 1000)
     }
 
