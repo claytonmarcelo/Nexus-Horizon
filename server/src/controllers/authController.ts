@@ -386,23 +386,24 @@ export async function seedAdmin(): Promise<void> {
 
   const usersRef = db.collection('users')
   const existing = await usersRef.where('email', '==', ADMIN_EMAIL).get()
-
-  if (!existing.empty) {
-    console.log(`[seed] Conta admin já existe: ${ADMIN_EMAIL}`)
-    return
-  }
-
   const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 10)
-  const adminUser = {
-    id: randomUUID(),
-    name: 'Admin',
-    email: ADMIN_EMAIL,
-    password: hashedPassword,
-    createdAt: new Date().toISOString(),
-    plan: 'Nexus Pro',
-    totalConnections: 0,
-  }
 
-  await usersRef.doc(adminUser.id).set(adminUser)
-  console.log(`[seed] Conta admin criada: ${ADMIN_EMAIL}`)
+  if (existing.empty) {
+    const adminUser = {
+      id: randomUUID(),
+      name: 'Admin',
+      email: ADMIN_EMAIL,
+      password: hashedPassword,
+      createdAt: new Date().toISOString(),
+      plan: 'Nexus Pro',
+      totalConnections: 0,
+    }
+
+    await usersRef.doc(adminUser.id).set(adminUser)
+    console.log(`[seed] Conta admin criada: ${ADMIN_EMAIL}`)
+  } else {
+    const doc = existing.docs[0]
+    await usersRef.doc(doc.id).update({ password: hashedPassword })
+    console.log(`[seed] Senha do admin atualizada: ${ADMIN_EMAIL}`)
+  }
 }
