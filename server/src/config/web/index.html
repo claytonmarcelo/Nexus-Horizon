@@ -2,13 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0A0A0A">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Nexus Horizon</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
-    html { background: #0A0A0A; min-height: 100%; }
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
@@ -16,13 +13,10 @@
       color: #fff;
       font-family: 'Inter', 'Segoe UI', sans-serif;
       min-height: 100vh;
-      min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow-x: hidden;
-      overscroll-behavior: none;
-      -webkit-overflow-scrolling: touch;
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -449,8 +443,7 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .lifi-speed-label { font-size: 11px; color: #888; letter-spacing: 2px; }
-    .chart-container { position: relative; height: 120px; background: #0D0D0D; border-radius: 8px; overflow: hidden; margin-top: 12px; border: 1px solid #1E1E1E; }
-    .chart-stats { display: flex; justify-content: space-between; padding: 6px 4px 0; font-size: 9px; color: #666; letter-spacing: 1px; font-weight: 600; }
+    .chart-container { position: relative; height: 80px; background: #0D0D0D; border-radius: 8px; overflow: hidden; margin-top: 12px; border: 1px solid #1E1E1E; }
     canvas { width: 100%; height: 100%; }
     .lifi-btn {
       background: rgba(255,107,0,0.08);
@@ -771,27 +764,6 @@
       .toast { font-size: 12px; padding: 12px 16px; }
     }
 
-    @keyframes modalIn { from { opacity:0; transform:scale(0.96) translateY(12px); } to { opacity:1; transform:scale(1) translateY(0); } }
-    @keyframes overlayIn { from { opacity:0; } to { opacity:1; } }
-    .modal-overlay { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 24px; animation: overlayIn 0.3s ease; }
-    .modal-overlay.closing { opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
-    .modal-box { background: rgba(20,20,20,0.92); backdrop-filter: blur(32px); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; max-width: 440px; width: 100%; padding: 0; box-shadow: 0 24px 80px rgba(0,0,0,0.7); position: relative; overflow: hidden; animation: modalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-    .modal-box.closing { opacity: 0; transform: scale(0.96) translateY(12px); transition: all 0.3s ease; pointer-events: none; }
-    .modal-box::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 1px; background: linear-gradient(90deg, transparent, #FF6B00, #FFB800, transparent); }
-    .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.6); color: #666; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.3s; }
-    .modal-close:hover { border-color: #FF6B00; color: #FFB800; background: rgba(255,107,0,0.06); }
-    .modal-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 32px auto 0; font-size: 24px; border: 1px solid rgba(255,255,255,0.08); }
-    .modal-icon.success { background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.3); color: #00FF88; }
-    .modal-icon.error { background: rgba(255,49,49,0.08); border-color: rgba(255,49,49,0.3); color: #FF6B6B; }
-    .modal-icon.warning { background: rgba(255,184,0,0.08); border-color: rgba(255,184,0,0.3); color: #FFB800; }
-    .modal-icon.info { background: rgba(255,107,0,0.08); border-color: rgba(255,107,0,0.3); color: #FF6B00; }
-    .modal-body { padding: 24px 32px 32px; text-align: center; }
-    .modal-title { font-size: 20px; font-weight: 700; background: linear-gradient(90deg, #FF6B00, #FFB800, #FFFFFF, #FFB800, #FF6B00); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 2.5s linear infinite; margin-top: 16px; margin-bottom: 8px; line-height: 1.3; }
-    .modal-message { font-size: 14px; color: #999; line-height: 1.7; font-weight: 400; margin-bottom: 24px; }
-    .modal-actions { display: flex; gap: 12px; }
-    .modal-actions .btn-primary { margin-top: 0; flex: 1; }
-    .modal-actions .btn-secondary { margin-top: 0; flex: 1; }
-    @media (max-width: 600px) { .modal-box { border-radius: 20px; } .modal-body { padding: 20px 24px 24px; } .modal-title { font-size: 18px; } .modal-icon { width: 48px; height: 48px; font-size: 20px; margin-top: 28px; } }
 
   </style>
 </head>
@@ -930,7 +902,7 @@
             <div class="lifi-status" id="lifiStatus">Transmitindo dados via luz...</div>
             <div class="lifi-speed" id="lifiSpeed">100</div>
             <div class="lifi-speed-label">Gbps</div>
-            <div class="chart-container"><canvas id="lifiChart"></canvas><div class="chart-stats"><span id="chartMin">0 Gbps</span><span id="chartCurrent">-- Gbps</span><span id="chartMax">100 Gbps</span></div></div>
+            <div class="chart-container"><canvas id="lifiChart"></canvas></div>
           </div>
         </div>
       </div>
@@ -1094,506 +1066,421 @@
   <script>
     const API = window.location.origin + '/api'
 
-    let currentProvider = 'satellite'
-    let currentProviderBtn = null
-    let lifiInterval = null
+    async function apiFetch(url, options = {}, retries = 2) {
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const res = await fetch(url, options)
+          if (!res.ok && res.status === 401) {
+            localStorage.removeItem('token')
+            window.location.href = '/'
+            throw new Error('Sess√£o expirada')
+          }
+          return res
+        } catch (err) {
+          if (i === retries) throw err
+          await new Promise(r => setTimeout(r, 1000 * (i + 1)))
+        }
+      }
+    }
+
+    let token = localStorage.getItem('token')
+    let userEmail = localStorage.getItem('userEmail') || ''
+    let userName = localStorage.getItem('userName') || ''
+    let lifiActive = true
+    let chartData = new Array(60).fill(100)
+    let chartInterval = null
     let autoRefreshInterval = null
     let autoRefreshCount = 10
+    let currentProvider = 'satellite'
+    let currentProviderBtn = null
+    let heartbeatTimer = null
+    let sessionTimer = null
+    let connectionQuality = 'excellent'
+    let lastPing = 0
+    const HEARTBEAT_INTERVAL = 300000
+    const SESSION_WARNING_TIME = 840000
 
-    function togglePassword(fieldId, btn) {
-      const input = document.getElementById(fieldId)
-      const isPassword = input.type === 'password'
-      input.type = isPassword ? 'text' : 'password'
-      btn.textContent = isPassword ? 'Ocultar' : 'Mostrar'
+    const satellites = [
+      { id: 'SAT-BR-001', lat: 0.25, lng: 0.35, signal: 92, status: 'online', region: 'Norte' },
+      { id: 'SAT-BR-002', lat: 0.45, lng: 0.55, signal: 87, status: 'online', region: 'Sudeste' },
+      { id: 'SAT-BR-003', lat: 0.65, lng: 0.42, signal: 78, status: 'online', region: 'Sul' },
+      { id: 'SAT-BR-004', lat: 0.35, lng: 0.72, signal: 0, status: 'offline', region: 'Nordeste' },
+      { id: 'SAT-BR-005', lat: 0.55, lng: 0.28, signal: 95, status: 'online', region: 'Centro-Oeste' },
+      { id: 'SAT-BR-006', lat: 0.20, lng: 0.60, signal: 65, status: 'online', region: 'Amaz√¥nia' },
+    ]
+
+    function detectDevice() {
+      const ua = navigator.userAgent, w = window.innerWidth
+      let icon = 'üíª', info = '', type = 'desktop', os = '', deviceName = ''
+      if (/android/i.test(ua)) { os = 'Android'; const m = ua.match(/Android\s([\d.]+)/); if(m) os+=' '+m[1]; icon='üì±'; type='mobile'; deviceName='Smartphone Android'; const b=ua.match(/(Samsung|Xiaomi|Motorola|LG|Huawei|OnePlus|Realme|OPPO|Vivo)/i); if(b) deviceName=b[1] }
+      else if (/iPad/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)) { os='iPadOS'; const m=ua.match(/OS\s([\d_]+)/); if(m) os+=' '+m[1].replace(/_/g,'.'); icon='üì±'; type='tablet'; deviceName='iPad' }
+      else if (/iPhone/i.test(ua)) { os='iOS'; const m=ua.match(/OS\s([\d_]+)/); if(m) os+=' '+m[1].replace(/_/g,'.'); icon='üì±'; type='mobile'; deviceName='iPhone' }
+      else if (/Windows/i.test(ua)) { os='Windows'; const m=ua.match(/Windows NT\s([\d.]+)/); if(m){const v=parseFloat(m[1]); if(v>=10) os='Windows 11/10'; else if(v===6.3) os='Windows 8.1'; else if(v===6.2) os='Windows 8'; else os='Windows'} if(w>=1280){icon='üñ•Ô∏è';deviceName='Desktop'}else{icon='üíª';deviceName='Notebook'} type='desktop' }
+      else if (/Mac/i.test(ua)) { os='macOS'; icon='üíª'; deviceName='MacBook/iMac'; type='desktop' }
+      else if (/Linux/i.test(ua)) { os='Linux'; icon='üíª'; deviceName='Computador Linux'; type='desktop' }
+      if (w<=600&&type!=='mobile'){icon='üì±';type='mobile'} else if(w>600&&w<=1024&&type!=='tablet'){icon='üì±';type='tablet';deviceName='Tablet'}
+      info=`${deviceName} ¬∑ ${os} ¬∑ ${w}px`
+      document.getElementById('deviceIcon').textContent=icon
+      document.getElementById('deviceInfo').textContent=info
+      document.getElementById('profileDevice').textContent=deviceName||'Desconhecido'
+      document.getElementById('profileOS').textContent=os||navigator.platform
+      return {type,os,deviceName,icon}
     }
 
-    function showRegister() {
-      document.getElementById('loginScreen').classList.remove('active')
-      document.getElementById('registerScreen').classList.add('active')
-    }
+    function togglePassword(inputId, button) {
+      const input = document.getElementById(inputId)
+      if (!input || !button) return
 
-    function showLogin() {
-      document.getElementById('registerScreen').classList.remove('active')
-      document.getElementById('loginScreen').classList.add('active')
+      const shouldShow = input.type === 'password'
+      input.type = shouldShow ? 'text' : 'password'
+      button.textContent = shouldShow ? 'Ocultar' : 'Mostrar'
     }
 
     function goToResetPassword() {
-      window.location.href = '/reset-password.html'
+      window.location.href = 'reset-password.html'
     }
 
-    function showToast(message, type) {
-      const container = document.getElementById('toastContainer')
-      const toast = document.createElement('div')
-      toast.className = 'toast ' + (type || 'info')
-      toast.textContent = message
-      container.appendChild(toast)
-      setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast) }, 4000)
+    function clearSession() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userEmail')
+      localStorage.removeItem('userName')
+      token = null
+      userEmail = ''
+      userName = ''
+    }
+
+    async function bootstrapSession() {
+      if (!token) return
+
+      try {
+        const res = await apiFetch(`${API}/auth/profile`, { headers: { 'Authorization': `Bearer ${token}` } })
+        if (!res.ok) throw new Error('Sess√£o inv√°lida')
+
+        const profile = await res.json()
+        userEmail = profile.email || userEmail
+        userName = profile.name || userName
+        localStorage.setItem('userEmail', userEmail)
+        localStorage.setItem('userName', userName)
+        showDashboard()
+      } catch (error) {
+        clearSession()
+      }
+    }
+
+    bootstrapSession()
+
+    function showLogin() { document.getElementById('loginScreen').classList.add('active'); document.getElementById('registerScreen').classList.remove('active') }
+    function showRegister() { document.getElementById('loginScreen').classList.remove('active'); document.getElementById('registerScreen').classList.add('active') }
+
+    function showDashboard() {
+      document.getElementById('authContainer').style.display='none'
+      document.getElementById('dashboardContainer').style.display='block'
+      document.body.style.alignItems='flex-start'
+      document.getElementById('headerUser').textContent=userName||userEmail.split('@')[0]
+      if(chartInterval) clearInterval(chartInterval)
+      currentProviderBtn=document.querySelector('.provider-btn')
+      fetchData('satellite',currentProviderBtn); fetchDTC(); startLifiSimulator(); startAutoRefresh()
+      setTimeout(drawMap,100); loadProfile(); detectDevice()
+      startHeartbeat()
+      checkConnectionQuality()
+      startClock()
+      showToast('Conectado ao Nexus Horizon','success')
+    }
+
+    async function loadProfile() {
+      try {
+        const res=await apiFetch(`${API}/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}})
+        const data=await res.json()
+        const name=data.name||userEmail.split('@')[0]
+        document.getElementById('profileAvatar').textContent=name.charAt(0).toUpperCase()
+        document.getElementById('profileName').textContent=name
+        document.getElementById('profileEmail').textContent=data.email
+        document.getElementById('profilePlan').textContent=data.plan||'Nexus Pro'
+        document.getElementById('profileConnections').textContent=data.totalConnections||0
+        document.getElementById('profileSince').textContent=data.createdAt?new Date(data.createdAt).getFullYear():2026
+        document.getElementById('profileLastLogin').textContent=data.lastLogin?new Date(data.lastLogin).toLocaleString('pt-BR'):'Agora'
+        document.getElementById('headerUser').textContent=name
+      } catch(err){console.error(err)}
+    }
+
+    function startAutoRefresh() {
+      if(autoRefreshInterval) clearInterval(autoRefreshInterval)
+      autoRefreshCount=10
+      autoRefreshInterval=setInterval(()=>{
+        autoRefreshCount--
+        const el=document.getElementById('autoRefreshLabel')
+        if(el) el.textContent=`Atualiza√ß√£o autom√°tica: ${autoRefreshCount}s`
+        if(autoRefreshCount<=0){autoRefreshCount=10;if(currentProviderBtn) fetchData(currentProvider,currentProviderBtn)}
+      },1000)
+    }
+
+    function showPage(page,btn) {
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+      document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'))
+      document.getElementById(`page-${page}`).classList.add('active')
+      if(btn) btn.classList.add('active')
+      if(page==='satellite') setTimeout(drawMap,100)
+      if(page==='dtc') fetchDTC()
+    }
+
+    function mobileNav(page,btn) {
+      document.querySelectorAll('.mobile-nav-item').forEach(t=>t.classList.remove('active'))
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+      btn.classList.add('active')
+      document.getElementById(`page-${page}`).classList.add('active')
+      if(page==='satellite') setTimeout(drawMap,100)
+      if(page==='dtc') fetchDTC()
     }
 
     async function handleLogin() {
-      const email = document.getElementById('loginEmail').value.trim()
-      const password = document.getElementById('loginPassword').value
-      const errorEl = document.getElementById('loginError')
-      const btn = document.getElementById('loginBtn')
-      errorEl.style.display = 'none'
-      btn.disabled = true
-
-      if (!email || !password) {
-        errorEl.textContent = 'Preencha todos os campos.'
-        errorEl.style.display = 'block'
-        btn.disabled = false
-        return
-      }
-
+      const email=document.getElementById('loginEmail').value.trim().toLowerCase()
+      const password=document.getElementById('loginPassword').value.trim()
+      const errorEl=document.getElementById('loginError')
+      const btn=document.getElementById('loginBtn')
+      errorEl.style.display='none'
+      if(!email || !password){errorEl.textContent='Preencha todos os campos';errorEl.style.display='block';return}
+      btn.disabled=true;btn.textContent='ENTRANDO...'
       try {
-        const res = await fetch(API + '/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        })
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.error || 'Erro ao fazer login')
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        showDashboard(data.user)
-        showToast('Login realizado com sucesso.', 'success')
-      } catch (e) {
-        errorEl.textContent = e.message
-        errorEl.style.display = 'block'
-      } finally {
-        btn.disabled = false
-      }
+        const res=await apiFetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})})
+        const data=await res.json()
+        if(!res.ok) throw new Error(data.error||'Falha no login')
+        localStorage.setItem('token',data.token); localStorage.setItem('userEmail',email); localStorage.setItem('userName',data.user?.name||'')
+        token=data.token; userEmail=email; userName=data.user?.name||''
+        btn.disabled=false;btn.textContent='ACESSAR SISTEMA'
+        showDashboard()
+      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block';btn.disabled=false;btn.textContent='ACESSAR SISTEMA'}
     }
 
     async function handleRegister() {
-      const name = document.getElementById('registerName').value.trim()
-      const email = document.getElementById('registerEmail').value.trim()
-      const password = document.getElementById('registerPassword').value
-      const errorEl = document.getElementById('registerError')
-      const successEl = document.getElementById('registerSuccess')
-      const btn = document.getElementById('registerBtn')
-      errorEl.style.display = 'none'
-      successEl.style.display = 'none'
-      btn.disabled = true
-
-      if (!name || !email || !password) {
-        errorEl.textContent = 'Preencha todos os campos.'
-        errorEl.style.display = 'block'
-        btn.disabled = false
-        return
-      }
-
+      const name=document.getElementById('registerName').value.trim()
+      const email=document.getElementById('registerEmail').value.trim().toLowerCase()
+      const password=document.getElementById('registerPassword').value.trim()
+      const errorEl=document.getElementById('registerError')
+      const successEl=document.getElementById('registerSuccess')
+      const btn=document.getElementById('registerBtn')
+      errorEl.style.display='none'; successEl.style.display='none'
+      if(!name || !email || !password){errorEl.textContent='Preencha todos os campos';errorEl.style.display='block';return}
+      if(password.length<6){errorEl.textContent='A senha deve ter pelo menos 6 caracteres';errorEl.style.display='block';return}
+      btn.disabled=true;btn.textContent='CRIANDO...'
       try {
-        const res = await fetch(API + '/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password })
-        })
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.error || 'Erro ao cadastrar')
-        successEl.textContent = 'Conta criada! Fa+∫a login.'
-        successEl.style.display = 'block'
-        showToast('Conta criada com sucesso!', 'success')
-        setTimeout(() => showLogin(), 1500)
-      } catch (e) {
-        errorEl.textContent = e.message
-        errorEl.style.display = 'block'
-      } finally {
-        btn.disabled = false
-      }
+        const res=await fetch(`${API}/auth/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password})})
+        const data=await res.json()
+        if(!res.ok) throw new Error(data.error||'Falha no cadastro')
+        if(data.token){
+          localStorage.setItem('token',data.token); localStorage.setItem('userEmail',email); localStorage.setItem('userName',data.user?.name||name)
+          token=data.token; userEmail=email; userName=data.user?.name||name
+          btn.disabled=false;btn.textContent='CRIAR CONTA'
+          showDashboard()
+          return
+        }
+        successEl.textContent='Conta criada! Fa√ßa login.'; successEl.style.display='block';btn.disabled=false;btn.textContent='CRIAR CONTA'
+        setTimeout(()=>showLogin(),2000)
+      } catch(err){errorEl.textContent=err.message;errorEl.style.display='block';btn.disabled=false;btn.textContent='CRIAR CONTA'}
     }
 
-    function showDashboard(user) {
-      document.getElementById('authContainer').style.display = 'none'
-      document.getElementById('dashboardContainer').style.display = 'block'
-      document.getElementById('headerUser').textContent = user.name
-      fetchData('satellite', null)
-      initMap()
-      startLifiSimulator()
-      fetchProfile()
-      fetchHistory()
-      startAutoRefresh()
-    }
-
-    async function fetchData(type, btn) {
-      currentProvider = type
-      if (btn) {
-        currentProviderBtn = btn
-        document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'))
-        btn.classList.add('active')
-      }
-      const statusEl = document.getElementById('statusValue')
-      const latencyEl = document.getElementById('latencyValue')
-      const signalEl = document.getElementById('signalValue')
-      const signalFillEl = document.getElementById('signalFill')
-      const techEl = document.getElementById('techValue')
-      const providerEl = document.getElementById('activeProvider')
-
-      statusEl.textContent = 'Buscando...'
+    async function fetchData(type,btn) {
+      document.querySelectorAll('.provider-btn').forEach(b=>b.classList.remove('active'))
+      if(btn) btn.classList.add('active'); currentProvider=type; currentProviderBtn=btn
+      const providers={satellite:'Sat√©lite ‚Äî SAT-BR-001',cellular:'Celular ‚Äî TOWER-SP-042',lifi:'Li-Fi ‚Äî LIFI-LAB-001',directcell:'Direct-to-Cell ‚Äî DTC-BR-001'}
+      document.getElementById('activeProvider').textContent=providers[type]
       try {
-        const token = localStorage.getItem('token')
-        const res = await fetch(API + '/connectivity/' + type, {
-          headers: token ? { Authorization: 'Bearer ' + token } : {}
-        })
-        if (!res.ok) throw new Error('Falha na requisi+∫+˙o')
-        const data = await res.json()
-        statusEl.textContent = data.status || 'Conectado'
-        latencyEl.textContent = data.latency ?? '--'
-        signalEl.textContent = data.signal ?? '--'
-        const signalVal = Math.min(100, Math.max(0, parseInt(data.signal) || 0))
-        signalFillEl.style.width = signalVal + '%'
-        techEl.textContent = data.technology || type.toUpperCase()
-        providerEl.textContent = (data.provider || type) + ' ‘«ˆ ' + (data.node || 'N/A')
-      } catch {
-        statusEl.textContent = 'Falha na conex+˙o'
-        signalFillEl.style.width = '0%'
-      }
+        const res=await apiFetch(`${API}/connectivity/${type}`,{headers:{'Authorization':`Bearer ${token}`}})
+        const data=await res.json()
+        if(!res.ok) throw new Error(data.error||'Falha ao carregar os dados')
+        document.getElementById('statusValue').textContent=data.status
+        document.getElementById('latencyValue').textContent=data.latency
+        document.getElementById('signalValue').textContent=data.signal
+        document.getElementById('signalFill').style.width=`${data.signal}%`
+        document.getElementById('techValue').textContent=data.technology||type
+        autoRefreshCount=10
+      } catch(err){console.error(err)}
     }
 
     async function fetchDTC() {
       try {
-        const token = localStorage.getItem('token')
-        const res = await fetch(API + '/connectivity/directcell', {
-          headers: token ? { Authorization: 'Bearer ' + token } : {}
-        })
-        if (!res.ok) throw new Error('Falha na requisi+∫+˙o')
-        const data = await res.json()
-        if (data.latency !== undefined) document.getElementById('dtcLatency').textContent = data.latency
-        if (data.signal !== undefined) {
-          document.getElementById('dtcSignal').textContent = data.signal
-          const val = Math.min(100, Math.max(0, parseInt(data.signal) || 0))
-          document.getElementById('dtcSignalFill').style.width = val + '%'
+        const res=await apiFetch(`${API}/connectivity/directcell`,{headers:{'Authorization':`Bearer ${token}`}})
+        const data=await res.json()
+        document.getElementById('dtcLatency').textContent=data.latency
+        document.getElementById('dtcSignal').textContent=data.signal+'%'
+        document.getElementById('dtcStatus').textContent=data.status
+        document.getElementById('dtcSignalFill').style.width=`${data.signal}%`
+      } catch(err){console.error(err)}
+    }
+
+    function drawMap() {
+      const canvas=document.getElementById('mapCanvas')
+      if(!canvas) return
+      canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight
+      const ctx=canvas.getContext('2d')
+      const W=canvas.width,H=canvas.height
+      ctx.fillStyle='#080808'; ctx.fillRect(0,0,W,H)
+      for(let i=0;i<100;i++){
+        ctx.beginPath(); ctx.arc(Math.random()*W,Math.random()*H,Math.random()*1.5,0,Math.PI*2)
+        ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.25+0.05})`; ctx.fill()
+      }
+      ctx.strokeStyle='rgba(255,107,0,0.06)'; ctx.lineWidth=0.5
+      for(let i=0;i<=6;i++){
+        ctx.beginPath(); ctx.moveTo(0,(H/6)*i); ctx.lineTo(W,(H/6)*i); ctx.stroke()
+        ctx.beginPath(); ctx.moveTo((W/6)*i,0); ctx.lineTo((W/6)*i,H); ctx.stroke()
+      }
+      satellites.forEach(sat=>{
+        const x=sat.lng*W,y=sat.lat*H
+        const isOnline=sat.status==='online'
+        if(isOnline){
+          ctx.beginPath(); ctx.arc(x,y,30,0,Math.PI*2)
+          ctx.strokeStyle='rgba(255,107,0,0.2)'; ctx.lineWidth=1; ctx.stroke()
+          ctx.beginPath(); ctx.arc(x,y,50,0,Math.PI*2)
+          ctx.strokeStyle='rgba(255,184,0,0.08)'; ctx.stroke()
         }
-        document.getElementById('dtcStatus').textContent = data.status || 'Conectado'
-      } catch {
-        document.getElementById('dtcStatus').textContent = 'Falha na conex+˙o'
+        ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2)
+        ctx.fillStyle=isOnline?'#FF6B00':'#FF3131'; ctx.fill()
+        if(isOnline){
+          ctx.shadowColor='#FFB800'; ctx.shadowBlur=16
+          ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2)
+          ctx.fillStyle='#FFFFFF'; ctx.fill(); ctx.shadowBlur=0
+        }
+        ctx.fillStyle=isOnline?'#FF6B00':'#FF3131'
+        ctx.font='11px Segoe UI'; ctx.fillText(sat.id,x+10,y-8)
+        ctx.fillStyle='#666'; ctx.font='10px Segoe UI'; ctx.fillText(sat.region,x+10,y+6)
+      })
+      document.getElementById('satInfo').innerHTML=satellites.map(sat=>`
+        <div class="sat-node ${sat.status==='online'?'active':''}" onclick="selectSat('${sat.id}')">
+          <div class="sat-node-id"><span class="dot ${sat.status==='offline'?'red':''}"></span>${sat.id}</div>
+          <div class="sat-node-status">${sat.region}</div>
+          <div class="sat-node-signal" style="color:${sat.status==='online'?'#FF6B00':'#FF3131'}">${sat.status==='online'?sat.signal+'%':'OFFLINE'}</div>
+        </div>
+      `).join('')
+    }
+
+    function selectSat(id) {
+      const sat=satellites.find(s=>s.id===id)
+      if(sat){
+        document.getElementById('statusValue').textContent=sat.status==='online'?`Connected ‚Äî Orbital node ${sat.id}`:`Offline ‚Äî ${sat.id}`
+        document.getElementById('latencyValue').textContent=sat.status==='online'?Math.floor(Math.random()*30)+20:'--'
+        document.getElementById('signalValue').textContent=sat.signal
+        document.getElementById('signalFill').style.width=`${sat.signal}%`
+        showPage('connectivity',document.querySelector('.nav-tab'))
       }
     }
 
-    function initMap() {
-      const canvas = document.getElementById('mapCanvas')
-      const ctx = canvas.getContext('2d')
-      const rect = canvas.parentElement.getBoundingClientRect()
-      canvas.width = rect.width || 600
-      canvas.height = rect.height || 320
-
-      const nodes = [
-        { x: 0.5, y: 0.1, label: 'SAT-BR-001' }, { x: 0.2, y: 0.25, label: 'SAT-BR-002' },
-        { x: 0.8, y: 0.2, label: 'SAT-BR-003' }, { x: 0.35, y: 0.4, label: 'SAT-BR-004' },
-        { x: 0.65, y: 0.35, label: 'SAT-BR-005' }, { x: 0.5, y: 0.55, label: 'GATEWAY-SP' },
-        { x: 0.2, y: 0.6, label: 'GATEWAY-RJ' }, { x: 0.8, y: 0.5, label: 'GATEWAY-MG' },
-        { x: 0.5, y: 0.75, label: 'EARTH-DF' }
-      ]
-
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.strokeStyle = 'rgba(212,175,55,0.06)'
-        ctx.lineWidth = 1
-        for (let i = 0; i < nodes.length; i++) {
-          for (let j = i + 1; j < nodes.length; j++) {
-            if (Math.random() > 0.6 || (i === 0 && j < 4)) {
-              ctx.beginPath()
-              ctx.moveTo(nodes[i].x * canvas.width, nodes[i].y * canvas.height)
-              ctx.lineTo(nodes[j].x * canvas.width, nodes[j].y * canvas.height)
-              ctx.stroke()
-            }
-          }
-        }
-        nodes.forEach(n => {
-          ctx.beginPath()
-          ctx.arc(n.x * canvas.width, n.y * canvas.height, 4, 0, Math.PI * 2)
-          ctx.fillStyle = '#D4AF37'
-          ctx.shadowColor = 'rgba(212,175,55,0.4)'
-          ctx.shadowBlur = 8
-          ctx.fill()
-          ctx.shadowBlur = 0
-          ctx.fillStyle = '#8B8580'
-          ctx.font = '9px Inter, sans-serif'
-          ctx.textAlign = 'center'
-          ctx.fillText(n.label, n.x * canvas.width, n.y * canvas.height + 16)
-        })
+    function toggleLifi() {
+      lifiActive=!lifiActive
+      const light=document.getElementById('lifiLight')
+      const btn=document.getElementById('lifiBtn')
+      const status=document.getElementById('lifiStatus')
+      const speed=document.getElementById('lifiSpeed')
+      if(lifiActive){
+        light.classList.remove('off'); light.innerHTML='LUZ<br>ON'
+        btn.classList.remove('blocked'); btn.textContent='BLOQUEAR SINAL'
+        status.textContent='Transmitindo dados via luz...'
+        speed.style.background='linear-gradient(135deg,#FF6B00,#FFB800)'
+        speed.style.webkitBackgroundClip='text'; speed.style.webkitTextFillColor='transparent'
+      } else {
+        light.classList.add('off'); light.innerHTML='LUZ<br>OFF'
+        btn.classList.add('blocked'); btn.textContent='LIBERAR SINAL'
+        status.textContent='Sinal bloqueado ‚Äî sensor coberto'
+        speed.style.background='#FF3131'
+        speed.style.webkitBackgroundClip='text'; speed.style.webkitTextFillColor='transparent'
       }
-      draw()
-
-      const satInfo = document.getElementById('satInfo')
-      nodes.forEach(n => {
-        const div = document.createElement('div')
-        div.className = 'sat-node'
-        div.innerHTML = '<div class="sat-node-id">' + n.label + '</div><div class="sat-node-status">Ativo</div><div class="sat-node-signal">' + (70 + Math.floor(Math.random() * 25)) + '%</div>'
-        satInfo.appendChild(div)
-      })
     }
 
     function startLifiSimulator() {
-      const speedEl = document.getElementById('lifiSpeed')
-      const statusEl = document.getElementById('lifiStatus')
-      const lightEl = document.getElementById('lifiLight')
-      const btnEl = document.getElementById('lifiBtn')
-      const canvas = document.getElementById('lifiChart')
-      const ctx = canvas.getContext('2d')
-      const rect = canvas.parentElement.getBoundingClientRect()
-      canvas.width = rect.width || 300
-      canvas.height = rect.height || 80
-
-      let blocked = false
-      let speed = 100
-      const history = new Array(60).fill(50)
-      const chartMinEl = document.getElementById('chartMin')
-      const chartCurrentEl = document.getElementById('chartCurrent')
-      const chartMaxEl = document.getElementById('chartMax')
-
-      function toggleLifi() {
-        blocked = !blocked
-        if (blocked) {
-          lightEl.classList.add('off')
-          lightEl.innerHTML = 'LUZ<br>OFF'
-          btnEl.textContent = 'RESTAURAR SINAL'
-          btnEl.classList.add('blocked')
-          statusEl.textContent = 'Sinal bloqueado!'
-        } else {
-          lightEl.classList.remove('off')
-          lightEl.innerHTML = 'LUZ<br>ON'
-          btnEl.textContent = 'BLOQUEAR SINAL'
-          btnEl.classList.remove('blocked')
-          statusEl.textContent = 'Transmitindo dados via luz...'
-        }
-      }
-      window.toggleLifi = toggleLifi
-
-      function smoothPoints(points) {
-        if (points.length < 2) return points
-        const result = []
-        for (let i = 0; i < points.length; i++) {
-          const prev = points[Math.max(0, i - 1)]
-          const next = points[Math.min(points.length - 1, i + 1)]
-          result.push({
-            x: points[i].x,
-            y: points[i].y,
-            cp1x: (prev.x + points[i].x) / 2,
-            cp1y: (prev.y + points[i].y) / 2 + (points[i].y - prev.y) * 0.15,
-            cp2x: (points[i].x + next.x) / 2,
-            cp2y: (points[i].y + next.y) / 2 + (next.y - points[i].y) * 0.15,
-          })
-        }
-        return result
-      }
-
-      function drawChart() {
-        const w = canvas.width, h = canvas.height, pad = 4
-        ctx.clearRect(0, 0, w, h)
-
-        const grad = ctx.createLinearGradient(0, 0, 0, h)
-        grad.addColorStop(0, 'rgba(212,175,55,0.08)')
-        grad.addColorStop(0.4, 'rgba(212,175,55,0.03)')
-        grad.addColorStop(1, 'rgba(212,175,55,0)')
-
-        for (let i = 1; i <= 3; i++) {
-          const y = (h / 4) * i
-          ctx.beginPath()
-          ctx.strokeStyle = 'rgba(212,175,55,0.04)'
-          ctx.lineWidth = 1
-          ctx.moveTo(pad, y)
-          ctx.lineTo(w - pad, y)
-          ctx.stroke()
-        }
-
-        const step = (w - pad * 2) / (history.length - 1)
-        const points = history.map((v, i) => ({
-          x: pad + i * step,
-          y: h - pad - (Math.max(0, v) / 100) * (h - pad * 2),
-        }))
-
-        const smoothed = smoothPoints(points)
-
-        ctx.shadowColor = 'rgba(212,175,55,0.15)'
-        ctx.shadowBlur = 6
-        ctx.beginPath()
-        ctx.moveTo(points[0].x, points[0].y)
-        for (let i = 0; i < smoothed.length - 1; i++) {
-          const p = smoothed[i], n = points[i + 1]
-          ctx.bezierCurveTo(p.cp2x, p.cp2y, n.x, n.y, n.x, n.y)
-        }
-        ctx.strokeStyle = 'rgba(212,175,55,0.5)'
-        ctx.lineWidth = 1.5
-        ctx.stroke()
-        ctx.shadowBlur = 0
-
-        ctx.beginPath()
-        ctx.moveTo(points[0].x, h - pad)
-        for (let i = 0; i < smoothed.length - 1; i++) {
-          const p = smoothed[i], n = points[i + 1]
-          ctx.bezierCurveTo(p.cp2x, p.cp2y, n.x, n.y, n.x, n.y)
-        }
-        ctx.lineTo(points[points.length - 1].x, h - pad)
-        ctx.closePath()
-        ctx.fillStyle = grad
-        ctx.fill()
-      }
-
-      if (lifiInterval) clearInterval(lifiInterval)
-      lifiInterval = setInterval(() => {
-        if (!blocked) {
-          speed = 80 + Math.random() * 20
-          statusEl.textContent = 'Transmitindo dados via luz...'
-        } else {
-          speed = 0
-        }
-        speedEl.textContent = speed.toFixed(1)
-        history.push(blocked ? 0 : 30 + Math.random() * 70)
-        if (history.length > 60) history.shift()
-        drawChart()
-        const min = Math.round(Math.min(...history))
-        const max = Math.round(Math.max(...history))
-        const cur = Math.round(history[history.length - 1])
-        if (chartMinEl) chartMinEl.textContent = min + ' Gbps'
-        if (chartCurrentEl) chartCurrentEl.textContent = cur + ' Gbps'
-        if (chartMaxEl) chartMaxEl.textContent = max + ' Gbps'
-      }, 1000)
-    }
-
-    function startAutoRefresh() {
-      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
-      document.getElementById('autoRefreshLabel').textContent = 'Atualiza+∫+˙o autom+Ìtica: 10s'
-      autoRefreshCount = 10
-      autoRefreshInterval = setInterval(() => {
-        autoRefreshCount--
-        if (autoRefreshCount <= 0) {
-          autoRefreshCount = 10
-          const active = document.querySelector('.provider-btn.active')
-          if (active) fetchData(currentProvider, active)
-        }
-        document.getElementById('autoRefreshLabel').textContent = 'Atualiza+∫+˙o autom+Ìtica: ' + autoRefreshCount + 's'
-      }, 1000)
-    }
-
-    async function fetchProfile() {
-      const token = localStorage.getItem('token')
-      if (!token) return
-      try {
-        const res = await fetch(API + '/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } })
-        if (!res.ok) throw new Error('Unauthorized')
-        const user = await res.json()
-        document.getElementById('profileName').textContent = user.name || 'Usu+Ìrio'
-        document.getElementById('profileEmail').textContent = user.email || '--'
-        document.getElementById('profileAvatar').textContent = (user.name || 'N')[0].toUpperCase()
-        document.getElementById('profilePlan').textContent = user.plan || 'Nexus Pro'
-        document.getElementById('profileConnections').textContent = (user.totalConnections || 0) + ' conex+¡es'
-        document.getElementById('profileCreated').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-BR') : '--'
-        document.getElementById('profileLastLogin').textContent = user.lastLogin ? new Date(user.lastLogin).toLocaleString('pt-BR') : '--'
-        checkConnectionQuality()
-      } catch {
-        showToast('Erro ao carregar perfil', 'error')
-      }
-    }
-
-    async function fetchHistory() {
-      const token = localStorage.getItem('token')
-      if (!token) return
-      try {
-        const res = await fetch(API + '/auth/history', { headers: { 'Authorization': 'Bearer ' + token } })
-        if (!res.ok) throw new Error('Unauthorized')
-        const data = await res.json()
-        const list = document.getElementById('historyList')
-        if (!data.history || data.history.length === 0) {
-          list.innerHTML = '<div style="color:var(--muted);font-size:13px">Nenhum hist+¶rico encontrado.</div>'
-          return
-        }
-        list.innerHTML = data.history.map(h => {
-          const type = (h.deviceType || 'sat').toLowerCase()
-          const iconMap = { sat: 'SAT', cell: '5G', lifi: 'LF', dtc: 'DTC' }
-          const icon = iconMap[type] || '?'
-          return '<div class="history-item"><div class="history-left"><div class="history-icon ' + type + '">' + icon + '</div><div><div class="history-info">' + (h.deviceLabel || 'Conex+˙o') + '</div><div class="history-time">' + (h.recordedAt ? new Date(h.recordedAt).toLocaleString('pt-BR') : '--') + '</div></div></div><div class="history-right"><div class="history-signal">' + (h.signal || '--') + '%</div><div class="history-latency">' + (h.latency || '--') + 'ms</div></div></div>'
-        }).join('')
-      } catch {
-        showToast('Erro ao carregar hist+¶rico', 'error')
-      }
-    }
-
-    function checkConnectionQuality() {
-      try {
-        fetch(API + '/health', { method: 'GET', cache: 'no-store' }).then(r => {
-          if (r.ok) {
-            const badge = document.querySelector('.connection-badge')
-            if (badge) { badge.className = 'connection-badge excellent'; badge.innerHTML = '<span class="connection-dot excellent"></span>LIVE' }
-          }
+      if(chartInterval) clearInterval(chartInterval)
+      const canvas=document.getElementById('lifiChart')
+      const ctx=canvas.getContext('2d')
+      chartInterval=setInterval(()=>{
+        const speed=document.getElementById('lifiSpeed')
+        let newValue
+        if(lifiActive){newValue=Math.floor(Math.random()*20)+85;speed.textContent=newValue}
+        else{newValue=Math.floor(Math.random()*5);speed.textContent=newValue}
+        chartData.push(newValue); chartData.shift()
+        canvas.width=canvas.offsetWidth; canvas.height=canvas.offsetHeight
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+        const grad=ctx.createLinearGradient(0,0,canvas.width,0)
+        if(lifiActive){grad.addColorStop(0,'#FF6B00');grad.addColorStop(0.5,'#FFB800');grad.addColorStop(1,'#FFFFFF')}
+        else{grad.addColorStop(0,'#FF3131');grad.addColorStop(1,'#FF6B6B')}
+        ctx.beginPath(); ctx.strokeStyle=grad; ctx.lineWidth=2
+        chartData.forEach((val,i)=>{
+          const x=(i/chartData.length)*canvas.width
+          const y=canvas.height-(val/100)*canvas.height
+          if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)
         })
-      } catch {}
+        ctx.stroke()
+        ctx.fillStyle=lifiActive?'rgba(255,107,0,0.08)':'rgba(255,49,49,0.08)'
+        ctx.lineTo(canvas.width,canvas.height); ctx.lineTo(0,canvas.height)
+        ctx.closePath(); ctx.fill()
+      },500)
     }
 
-    function showPage(page, btn) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
-      document.getElementById('page-' + page).classList.add('active')
-      if (btn) {
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
-        btn.classList.add('active')
-      }
-      document.querySelectorAll('.mobile-nav-item').forEach(i => i.classList.remove('active'))
-      const mobileMap = { connectivity: 0, satellite: 1, lifi: 2, oran: 3, profile: 4 }
-      const items = document.querySelectorAll('.mobile-nav-item')
-      if (mobileMap[page] !== undefined) items[mobileMap[page]]?.classList.add('active')
+    function startHeartbeat() {
+      if(heartbeatTimer) clearInterval(heartbeatTimer)
+      heartbeatTimer=setInterval(async()=>{
+        try{await fetch(`${window.location.origin}/api/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}});checkConnectionQuality()}catch(e){}
+      },HEARTBEAT_INTERVAL)
+      sessionTimer=setTimeout(()=>{
+        showToast('Sua sess√£o expirar√° em 1 minuto. Fa√ßa login novamente.','warning')
+      },SESSION_WARNING_TIME)
+    }
 
-      if (page === 'dtc') fetchDTC()
-      if (page === 'history') fetchHistory()
-      if (page === 'profile') fetchProfile()
+    function checkConnectionQuality(){
+      const start=performance.now()
+      try{
+        fetch(`${window.location.origin}/api/health`,{method:'GET',cache:'no-store'}).then(()=>{
+          lastPing=performance.now()-start
+          connectionQuality=lastPing<150?'excellent':lastPing<500?'good':'poor'
+          updateConnectionBadge()
+        }).catch(()=>{connectionQuality='poor';updateConnectionBadge()})
+      }catch{connectionQuality='poor';updateConnectionBadge()}
+    }
+
+    function updateConnectionBadge(){
+      document.querySelectorAll('.connection-badge,.connection-dot').forEach(el=>{
+        if(el.classList.contains('connection-badge')){
+          el.className=`connection-badge ${connectionQuality}`
+          el.innerHTML=`<span class="connection-dot ${connectionQuality}"></span>${connectionQuality==='excellent'?'LIVE':connectionQuality==='good'?'EST√ÅVEL':'INST√ÅVEL'}`
+        }
+      })
+    }
+
+    function startClock(){
+      function tick(){
+        document.querySelectorAll('.header-clock').forEach(el=>{el.textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'})})
+      }
+      tick();setInterval(tick,1000)
+    }
+
+    function showToast(message,type='info'){
+      let container=document.getElementById('toastContainer')
+      if(!container){container=document.createElement('div');container.id='toastContainer';container.className='toast-container';document.body.appendChild(container)}
+      const toast=document.createElement('div');toast.className=`toast ${type}`;toast.textContent=message
+      container.appendChild(toast)
+      setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(40px)';toast.style.transition='all 0.4s ease';setTimeout(()=>toast.remove(),400)},4000)
     }
 
     function handleLogout() {
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      if (lifiInterval) clearInterval(lifiInterval)
-      if (autoRefreshInterval) clearInterval(autoRefreshInterval)
-      document.getElementById('dashboardContainer').style.display = 'none'
-      document.getElementById('authContainer').style.display = 'block'
-      document.getElementById('loginScreen').classList.add('active')
-      document.getElementById('registerScreen').classList.remove('active')
-      showToast('Sess+˙o encerrada.', 'info')
+      clearSession()
+      if(chartInterval) clearInterval(chartInterval)
+      if(autoRefreshInterval) clearInterval(autoRefreshInterval)
+      if(heartbeatTimer) clearInterval(heartbeatTimer)
+      if(sessionTimer) clearTimeout(sessionTimer)
+      document.body.style.alignItems='center'
+      document.body.style.justifyContent='center'
+      document.getElementById('authContainer').style.display='flex'
+      document.getElementById('authContainer').style.flexDirection='column'
+      document.getElementById('dashboardContainer').style.display='none'
+      showLogin()
     }
 
-    const clockEl = document.querySelector('.header-clock')
-    if (clockEl) setInterval(() => { clockEl.textContent = new Date().toLocaleTimeString('pt-BR') }, 1000)
-
-    const token = localStorage.getItem('token')
-    if (token) {
-      try {
-        fetch(API + '/auth/profile', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => {
-          if (r.ok) { r.json().then(u => showDashboard(u)); checkConnectionQuality() }
-        }).catch(() => {})
-      } catch {}
-    }
-
-    document.addEventListener('click', () => {
-      const warning = document.getElementById('sessionWarning')
-      if (warning.style.display !== 'none' && warning.style.display !== '') {
-        warning.style.display = 'none'
+    document.addEventListener('keypress',(e)=>{
+      if(e.key==='Enter'){
+        if(document.getElementById('loginScreen').classList.contains('active')) handleLogin()
+        else handleRegister()
       }
     })
 
-    const MODAL_ICONS = { success: '&#10003;', error: '&#10007;', warning: '&#9888;', info: '&#9670;', confirm: '&#63;' }
-    function showModal({ type = 'info', title, message, confirmText, cancelText, onConfirm, onClose, showClose = true }) {
-      const existing = document.querySelector('.modal-overlay')
-      if (existing) existing.remove()
-      const iconHtml = '<div class="modal-icon ' + type + '">' + (MODAL_ICONS[type] || MODAL_ICONS.info) + '</div>'
-      let actionsHtml = type === 'confirm'
-        ? '<div class="modal-actions"><button class="btn-secondary" id="modalCancelBtn">' + (cancelText || 'Cancelar') + '</button><button class="btn-primary" id="modalConfirmBtn">' + (confirmText || 'Confirmar') + '</button></div>'
-        : '<div class="modal-actions"><button class="btn-primary" id="modalOkBtn">OK</button></div>'
-      const overlay = document.createElement('div')
-      overlay.className = 'modal-overlay'
-      overlay.innerHTML = '<div class="modal-box">' + (showClose ? '<button class="modal-close" id="modalCloseBtn">&times;</button>' : '') + iconHtml + '<div class="modal-body"><div class="modal-title">' + (title || '') + '</div><div class="modal-message">' + (message || '') + '</div>' + actionsHtml + '</div></div>'
-      document.body.appendChild(overlay)
-      function closeModal() {
-        overlay.classList.add('closing')
-        const box = overlay.querySelector('.modal-box')
-        if (box) box.classList.add('closing')
-        setTimeout(function () { overlay.remove(); if (onClose) onClose() }, 350)
-      }
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal() })
-      setTimeout(function () {
-        var cb = document.getElementById('modalCloseBtn'); if (cb) cb.addEventListener('click', closeModal)
-        var ob = document.getElementById('modalOkBtn'); if (ob) ob.addEventListener('click', closeModal)
-        var cfb = document.getElementById('modalConfirmBtn'); if (cfb) cfb.addEventListener('click', function () { if (onConfirm) onConfirm(); closeModal() })
-        var clb = document.getElementById('modalCancelBtn'); if (clb) clb.addEventListener('click', closeModal)
-      }, 0)
-    }
-  </script>
+    window.addEventListener('resize',()=>{if(token) detectDevice()})
 
+
+  </script>
+</body>
 </html>
