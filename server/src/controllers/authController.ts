@@ -146,57 +146,62 @@ function buildResetPasswordLink(token: string) {
 }
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
-  const body = getBody(request)
-  const name = getTrimmedString(body.name)
-  const email = getTrimmedString(body.email).toLowerCase()
-  const password = getTrimmedString(body.password)
+  try {
+    const body = getBody(request)
+    const name = getTrimmedString(body.name)
+    const email = getTrimmedString(body.email).toLowerCase()
+    const password = getTrimmedString(body.password)
 
-  const nameError = validateName(name)
-  if (nameError) return reply.status(400).send({ error: nameError })
+    const nameError = validateName(name)
+    if (nameError) return reply.status(400).send({ error: nameError })
 
-  const emailError = validateEmail(email)
-  if (emailError) return reply.status(400).send({ error: emailError })
+    const emailError = validateEmail(email)
+    if (emailError) return reply.status(400).send({ error: emailError })
 
-  const passwordError = validatePassword(password)
-  if (passwordError) return reply.status(400).send({ error: passwordError })
+    const passwordError = validatePassword(password)
+    if (passwordError) return reply.status(400).send({ error: passwordError })
 
-  const usersRef = db.collection('users')
-  const existing = await usersRef.where('email', '==', email).get()
+    const usersRef = db.collection('users')
+    const existing = await usersRef.where('email', '==', email).get()
 
-  if (!existing.empty) {
-    return reply.status(409).send({ error: 'Email já cadastrado.' })
+    if (!existing.empty) {
+      return reply.status(409).send({ error: 'Email já cadastrado.' })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const newUser = {
+      id: randomUUID(),
+      name,
+      email,
+      password: hashedPassword,
+      createdAt: new Date().toISOString(),
+      plan: 'Nexus Pro',
+      totalConnections: 0,
+    }
+
+    await usersRef.doc(newUser.id).set(newUser)
+
+    const token = await reply.jwtSign(
+      { id: newUser.id, email: newUser.email, name: newUser.name },
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    )
+
+    return reply.status(201).send({
+      message: 'Usuário criado com sucesso.',
+      token,
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        plan: newUser.plan,
+        totalConnections: newUser.totalConnections,
+        createdAt: newUser.createdAt,
+      },
+    })
+  } catch (err) {
+    console.error('[register] Erro:', err instanceof Error ? err.message : err)
+    return reply.status(500).send({ error: 'Erro ao criar conta. Verifique a conexão com o banco de dados.' })
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10)
-  const newUser = {
-    id: randomUUID(),
-    name,
-    email,
-    password: hashedPassword,
-    createdAt: new Date().toISOString(),
-    plan: 'Nexus Pro',
-    totalConnections: 0,
-  }
-
-  await usersRef.doc(newUser.id).set(newUser)
-
-  const token = await reply.jwtSign(
-    { id: newUser.id, email: newUser.email, name: newUser.name },
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-  )
-
-  return reply.status(201).send({
-    message: 'Usuário criado com sucesso.',
-    token,
-    user: {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      plan: newUser.plan,
-      totalConnections: newUser.totalConnections,
-      createdAt: newUser.createdAt,
-    },
-  })
 }
 
 export async function login(request: FastifyRequest, reply: FastifyReply) {
