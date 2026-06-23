@@ -3,6 +3,8 @@ export const colors = {
   primary: '#00F5FF',
   secondary: '#7000FF',
   danger: '#FF3131',
+  success: '#00FF88',
+  warning: '#FFB800',
   white: '#FFFFFF',
   gray: '#8B949E',
   grayDark: '#161B22',

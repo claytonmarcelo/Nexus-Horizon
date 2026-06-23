@@ -4,12 +4,12 @@ import { colors, spacing } from '../theme'
 
 const items = [
   { icon: 'SAT', label: 'Satélite — SAT-BR-001', time: 'Hoje, 20:33', signal: '92%', latency: '28ms', color: colors.primary },
-  { icon: 'LFI', label: 'Li-Fi — LIFI-LAB-001', time: 'Hoje, 19:55', signal: '100%', latency: '1ms', color: 'colors.success' },
+  { icon: 'LFI', label: 'Li-Fi — LIFI-LAB-001', time: 'Hoje, 19:55', signal: '100%', latency: '1ms', color: colors.success },
   { icon: '5G', label: 'Celular — TOWER-SP-042', time: 'Hoje, 19:12', signal: '87%', latency: '8ms', color: colors.secondary },
   { icon: 'DTC', label: 'Direct-to-Cell — DTC-BR-001', time: 'Hoje, 18:47', signal: '82%', latency: '15ms', color: colors.gray },
   { icon: 'SAT', label: 'Satélite — SAT-BR-005', time: 'Hoje, 18:00', signal: '95%', latency: '22ms', color: colors.primary },
   { icon: '5G', label: 'Celular — TOWER-RJ-018', time: 'Ontem, 22:15', signal: '76%', latency: '11ms', color: colors.secondary },
-  { icon: 'LFI', label: 'Li-Fi — LIFI-LAB-001', time: 'Ontem, 20:30', signal: '100%', latency: '1ms', color: 'colors.success' },
+  { icon: 'LFI', label: 'Li-Fi — LIFI-LAB-001', time: 'Ontem, 20:30', signal: '100%', latency: '1ms', color: colors.success },
 ]
 
 export function HistoryScreen() {

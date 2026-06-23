@@ -13,7 +13,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 
 const server = Fastify({ logger: true })
 
-const jwtSecret = process.env.JWT_SECRET
+let jwtSecret = process.env.JWT_SECRET
 if (!jwtSecret) {
   if (isProduction) {
     console.error('FATAL: JWT_SECRET é obrigatório em produção.')
@@ -21,11 +21,7 @@ if (!jwtSecret) {
   }
 
   console.warn('WARN: JWT_SECRET não definido. Usando chave padrão apenas para desenvolvimento.')
-}
-
-if (!jwtSecret) {
-  console.error('FATAL: JWT_SECRET é obrigatório.')
-  process.exit(1)
+  jwtSecret = 'nexus-horizon-dev-secret'
 }
 
 server.register(fastifyJwt, {

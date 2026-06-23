@@ -15,7 +15,7 @@ export function OranScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.summaryRow}>
         <View style={styles.summaryBox}><Text style={styles.summaryLabel}>NÓS ATIVOS</Text><Text style={styles.summaryValue}>5</Text></View>
-        <View style={styles.summaryBox}><Text style={styles.summaryLabel}>UPTIME</Text><Text style={[styles.summaryValue, { color: '#00FF88' }]}>99.8%</Text></View>
+        <View style={styles.summaryBox}><Text style={styles.summaryLabel}>UPTIME</Text><Text style={[styles.summaryValue, { color: colors.success }]}>99.8%</Text></View>
       </View>
       <Text style={styles.title}>NÓS DE RÁDIO ABERTO — OPEN RAN</Text>
       {nodes.map((node) => (
@@ -35,7 +35,7 @@ export function OranScreen() {
             <View style={styles.metric}><Text style={styles.metricLabel}>USUÁRIOS</Text><Text style={styles.metricValue}>{node.users}</Text></View>
             <View style={styles.metric}><Text style={styles.metricLabel}>LATÊNCIA</Text><Text style={styles.metricValue}>{node.latency}</Text></View>
           </View>
-          <View style={styles.bar}><View style={[styles.fill, { width: `${node.cpu}%`, backgroundColor: node.status === 'offline' ? colors.danger : node.status === 'warning' ? '#FFB800' : colors.primary }]} /></View>
+          <View style={styles.bar}><View style={[styles.fill, { width: `${node.cpu}%`, backgroundColor: node.status === 'offline' ? colors.danger : node.status === 'warning' ? colors.warning : colors.primary }]} /></View>
         </View>
       ))}
     </ScrollView>
@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm },
   headerLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   dot: { width: 8, height: 8, borderRadius: 4, marginRight: 8 },
-  dotOn: { backgroundColor: '#00FF88' },
-  dotWarn: { backgroundColor: '#FFB800' },
+  dotOn: { backgroundColor: colors.success },
+  dotWarn: { backgroundColor: colors.warning },
   dotOff: { backgroundColor: colors.danger },
   nodeName: { fontSize: 13, fontWeight: '700', color: colors.white, flex: 1 },
   badge: { fontSize: 10, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10, fontWeight: '700', letterSpacing: 1 },
-  badgeOn: { backgroundColor: 'rgba(0,255,136,0.1)', color: '#00FF88', borderWidth: 1, borderColor: 'rgba(0,255,136,0.3)' },
-  badgeWarn: { backgroundColor: 'rgba(255,184,0,0.1)', color: '#FFB800', borderWidth: 1, borderColor: 'rgba(255,184,0,0.3)' },
+  badgeOn: { backgroundColor: 'rgba(0,255,136,0.1)', color: colors.success, borderWidth: 1, borderColor: 'rgba(0,255,136,0.3)' },
+  badgeWarn: { backgroundColor: 'rgba(255,184,0,0.1)', color: colors.warning, borderWidth: 1, borderColor: 'rgba(255,184,0,0.3)' },
   badgeOff: { backgroundColor: 'rgba(255,49,49,0.1)', color: colors.danger, borderWidth: 1, borderColor: 'rgba(255,49,49,0.3)' },
   metrics: { flexDirection: 'row', gap: 8, marginBottom: 8 },
   metric: { flex: 1, alignItems: 'center' },

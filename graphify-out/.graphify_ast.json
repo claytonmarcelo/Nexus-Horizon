@@ -1,0 +1,806 @@
+{
+  "nodes": [
+    {
+      "id": "app_app",
+      "label": "App",
+      "file_type": "code",
+      "source_file": "App.tsx",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_app_app",
+      "label": "App",
+      "file_type": "code",
+      "source_file": "mobile/App.tsx",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_screens_dtcscreen_tsx_screens_dtcscreen_dtcscreen",
+      "label": "DtcScreen",
+      "file_type": "code",
+      "source_file": "mobile/src/screens/DtcScreen.tsx",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_screens_historyscreen_tsx_screens_historyscreen_historyscreen",
+      "label": "HistoryScreen",
+      "file_type": "code",
+      "source_file": "mobile/src/screens/HistoryScreen.tsx",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_api_ts_services_api_restoreauthsession",
+      "label": "restoreAuthSession",
+      "file_type": "code",
+      "source_file": "mobile/src/services/api.ts",
+      "source_location": "L93",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_devicecontext_ts_services_devicecontext_clientcontext",
+      "label": "ClientContext",
+      "file_type": "code",
+      "source_file": "mobile/src/services/deviceContext.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_devicecontext_ts_services_devicecontext_getclientcontext",
+      "label": "getClientContext",
+      "file_type": "code",
+      "source_file": "mobile/src/services/deviceContext.ts",
+      "source_location": "L95",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_ts_services_securestorage_setitem",
+      "label": "setItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_ts_services_securestorage_getitem",
+      "label": "getItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.ts",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_ts_services_securestorage_deleteitem",
+      "label": "deleteItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.ts",
+      "source_location": "L11",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_web_ts_services_securestorage_web_setitem",
+      "label": "setItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.web.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_web_ts_services_securestorage_web_getitem",
+      "label": "getItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.web.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "mobile_src_services_securestorage_web_ts_services_securestorage_web_deleteitem",
+      "label": "deleteItem",
+      "file_type": "code",
+      "source_file": "mobile/src/services/secureStorage.web.ts",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_register",
+      "label": "register",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L148",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_login",
+      "label": "login",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L202",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_forgotpassword",
+      "label": "forgotPassword",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L266",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_resetpassword",
+      "label": "resetPassword",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L318",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_getprofile",
+      "label": "getProfile",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L354",
+      "_origin": "ast"
+    },
+    {
+      "id": "controllers_authcontroller_deleteaccount",
+      "label": "deleteAccount",
+      "file_type": "code",
+      "source_file": "server/src/controllers/authController.ts",
+      "source_location": "L367",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_connectivityprovider_iconnectivityprovider",
+      "label": "IConnectivityProvider",
+      "file_type": "code",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_connectivityprovider_satelliteprovider",
+      "label": "SatelliteProvider",
+      "file_type": "code",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_connectivityprovider_cellularprovider",
+      "label": "CellularProvider",
+      "file_type": "code",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L28",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_connectivityprovider_lifiprovider",
+      "label": "LiFiProvider",
+      "file_type": "code",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L48",
+      "_origin": "ast"
+    },
+    {
+      "id": "core_connectivityprovider_directtocellprovider",
+      "label": "DirectToCellProvider",
+      "file_type": "code",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L68",
+      "_origin": "ast"
+    },
+    {
+      "id": "middlewares_authmiddleware_authmiddleware",
+      "label": "authMiddleware",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/authMiddleware.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "middlewares_ratelimit_byip",
+      "label": "byIp",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimit.ts",
+      "source_location": "L36",
+      "_origin": "ast"
+    },
+    {
+      "id": "middlewares_ratelimit_byipandemail",
+      "label": "byIpAndEmail",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimit.ts",
+      "source_location": "L40",
+      "_origin": "ast"
+    },
+    {
+      "id": "middlewares_ratelimit_createratelimiter",
+      "label": "createRateLimiter",
+      "file_type": "code",
+      "source_file": "server/src/middlewares/rateLimit.ts",
+      "source_location": "L46",
+      "_origin": "ast"
+    },
+    {
+      "id": "routes_authroutes_authroutes",
+      "label": "authRoutes",
+      "file_type": "code",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L38",
+      "_origin": "ast"
+    },
+    {
+      "id": "routes_connectivityroutes_connectivityroutes",
+      "label": "connectivityRoutes",
+      "file_type": "code",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_screens_dtcscreen_tsx_screens_dtcscreen_dtcscreen",
+      "label": "DtcScreen",
+      "file_type": "code",
+      "source_file": "src/screens/DtcScreen.tsx",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_screens_historyscreen_tsx_screens_historyscreen_historyscreen",
+      "label": "HistoryScreen",
+      "file_type": "code",
+      "source_file": "src/screens/HistoryScreen.tsx",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_api_ts_services_api_restoreauthsession",
+      "label": "restoreAuthSession",
+      "file_type": "code",
+      "source_file": "src/services/api.ts",
+      "source_location": "L93",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_devicecontext_ts_services_devicecontext_clientcontext",
+      "label": "ClientContext",
+      "file_type": "code",
+      "source_file": "src/services/deviceContext.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_devicecontext_ts_services_devicecontext_getclientcontext",
+      "label": "getClientContext",
+      "file_type": "code",
+      "source_file": "src/services/deviceContext.ts",
+      "source_location": "L95",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_ts_services_securestorage_setitem",
+      "label": "setItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_ts_services_securestorage_getitem",
+      "label": "getItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.ts",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_ts_services_securestorage_deleteitem",
+      "label": "deleteItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.ts",
+      "source_location": "L11",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_web_ts_services_securestorage_web_setitem",
+      "label": "setItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.web.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_web_ts_services_securestorage_web_getitem",
+      "label": "getItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.web.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_services_securestorage_web_ts_services_securestorage_web_deleteitem",
+      "label": "deleteItem",
+      "file_type": "code",
+      "source_file": "src/services/secureStorage.web.ts",
+      "source_location": "L9",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "theme_index",
+      "target": "theme_colors",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/theme/index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "theme_index",
+      "target": "theme_colors",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/theme/index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "index",
+      "target": "app_app",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "mobile_index",
+      "target": "mobile_app_app",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "screens_dtcscreen_dtcscreen",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/navigation/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "screens_historyscreen_historyscreen",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/navigation/index.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "services_api_restoreauthsession",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/navigation/index.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_dashboardscreen",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/screens/DashboardScreen.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_dashboardscreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/screens/DashboardScreen.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_loginscreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/screens/LoginScreen.tsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_profilescreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/screens/ProfileScreen.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "services_api",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/services/api.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "services_api",
+      "target": "services_securestorage_getitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/services/api.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_register",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_login",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_forgotpassword",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_resetpassword",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_getprofile",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "controllers_authcontroller_deleteaccount",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "middlewares_authmiddleware_authmiddleware",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "middlewares_ratelimit_byip",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "middlewares_ratelimit_byipandemail",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_authroutes",
+      "target": "middlewares_ratelimit_createratelimiter",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/authRoutes.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_connectivityroutes",
+      "target": "middlewares_authmiddleware_authmiddleware",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_connectivityroutes",
+      "target": "core_connectivityprovider_satelliteprovider",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_connectivityroutes",
+      "target": "core_connectivityprovider_cellularprovider",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_connectivityroutes",
+      "target": "core_connectivityprovider_lifiprovider",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "routes_connectivityroutes",
+      "target": "core_connectivityprovider_directtocellprovider",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/routes/connectivityRoutes.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_server",
+      "target": "routes_connectivityroutes_connectivityroutes",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/server.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_server",
+      "target": "routes_authroutes_authroutes",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/server.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "screens_dtcscreen_dtcscreen",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/navigation/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "screens_historyscreen_historyscreen",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/navigation/index.tsx",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "services_api_restoreauthsession",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/navigation/index.tsx",
+      "source_location": "L21",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/navigation/index.tsx",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_dashboardscreen",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/screens/DashboardScreen.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_dashboardscreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/screens/DashboardScreen.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_loginscreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/screens/LoginScreen.tsx",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_profilescreen",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/screens/ProfileScreen.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_profilescreen",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/screens/ProfileScreen.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "services_api",
+      "target": "services_securestorage_deleteitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/api.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "services_api",
+      "target": "services_securestorage_getitem",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/services/api.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "screens_loginscreen_handlelogin",
+      "target": "services_devicecontext_getclientcontext",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "mobile/src/screens/LoginScreen.tsx",
+      "source_location": "L80",
+      "weight": 1.0
+    },
+    {
+      "source": "navigation_index_drawercontent",
+      "target": "services_securestorage_deleteitem",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/navigation/index.tsx",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "core_connectivityprovider_satelliteprovider",
+      "target": "core_connectivityprovider_iconnectivityprovider",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "core_connectivityprovider_cellularprovider",
+      "target": "core_connectivityprovider_iconnectivityprovider",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "core_connectivityprovider_lifiprovider",
+      "target": "core_connectivityprovider_iconnectivityprovider",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L48",
+      "weight": 1.0
+    },
+    {
+      "source": "core_connectivityprovider_directtocellprovider",
+      "target": "core_connectivityprovider_iconnectivityprovider",
+      "relation": "implements",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "server/src/core/ConnectivityProvider.ts",
+      "source_location": "L68",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

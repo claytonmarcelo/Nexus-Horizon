@@ -1,0 +1,768 @@
+{
+  "communities": {
+    "0": [
+      "config_firebase",
+      "config_firebase_db",
+      "config_firebase_missingvars",
+      "config_firebase_privatekey",
+      "controllers_authcontroller",
+      "controllers_authcontroller_authbody",
+      "controllers_authcontroller_buildresetpasswordlink",
+      "controllers_authcontroller_clientcontext",
+      "controllers_authcontroller_createmailtransporter",
+      "controllers_authcontroller_deleteaccount",
+      "controllers_authcontroller_forgotpassword",
+      "controllers_authcontroller_getbody",
+      "controllers_authcontroller_getclientcontext",
+      "controllers_authcontroller_getprofile",
+      "controllers_authcontroller_getresetpasswordbaseurl",
+      "controllers_authcontroller_gettrimmedstring",
+      "controllers_authcontroller_isplaceholder",
+      "controllers_authcontroller_login",
+      "controllers_authcontroller_register",
+      "controllers_authcontroller_resetpassword",
+      "controllers_authcontroller_sanitizecontextvalue",
+      "controllers_authcontroller_sanitizeuser",
+      "controllers_authcontroller_validateemail",
+      "controllers_authcontroller_validatename",
+      "controllers_authcontroller_validatepassword",
+      "routes_authroutes",
+      "routes_authroutes_authroutes",
+      "routes_authroutes_forgotpasswordlimiter",
+      "routes_authroutes_loginlimiter",
+      "routes_authroutes_registerlimiter",
+      "routes_authroutes_resetpasswordlimiter",
+      "src_server",
+      "src_server_defaultallowedorigins",
+      "src_server_healthpayload",
+      "src_server_server",
+      "src_server_start"
+    ],
+    "1": [
+      "package",
+      "package_dependencies",
+      "package_dependencies_axios",
+      "package_dependencies_expo",
+      "package_dependencies_expo_linear_gradient",
+      "package_dependencies_expo_secure_store",
+      "package_dependencies_expo_status_bar",
+      "package_dependencies_firebase",
+      "package_dependencies_localstorage_polyfill",
+      "package_dependencies_react",
+      "package_dependencies_react_dom",
+      "package_dependencies_react_native",
+      "package_dependencies_react_native_gesture_handler",
+      "package_dependencies_react_native_reanimated",
+      "package_dependencies_react_native_safe_area_context",
+      "package_dependencies_react_native_screens",
+      "package_dependencies_react_native_web",
+      "package_dependencies_react_native_worklets",
+      "package_dependencies_react_navigation_bottom_tabs",
+      "package_dependencies_react_navigation_drawer",
+      "package_dependencies_react_navigation_native",
+      "package_dependencies_react_navigation_native_stack",
+      "package_dependencies_react_navigation_stack",
+      "package_devdependencies",
+      "package_devdependencies_types_react",
+      "package_devdependencies_typescript",
+      "package_main",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_android",
+      "package_scripts_ios",
+      "package_scripts_start",
+      "package_scripts_web",
+      "package_version"
+    ],
+    "2": [
+      "core_connectivityprovider",
+      "core_connectivityprovider_cellularprovider",
+      "core_connectivityprovider_cellularprovider_constructor",
+      "core_connectivityprovider_cellularprovider_getlatency",
+      "core_connectivityprovider_cellularprovider_getsignalstrength",
+      "core_connectivityprovider_cellularprovider_getstatus",
+      "core_connectivityprovider_cellularprovider_gettechnology",
+      "core_connectivityprovider_directtocellprovider",
+      "core_connectivityprovider_directtocellprovider_constructor",
+      "core_connectivityprovider_directtocellprovider_getlatency",
+      "core_connectivityprovider_directtocellprovider_getsignalstrength",
+      "core_connectivityprovider_directtocellprovider_getstatus",
+      "core_connectivityprovider_directtocellprovider_gettechnology",
+      "core_connectivityprovider_iconnectivityprovider",
+      "core_connectivityprovider_lifiprovider",
+      "core_connectivityprovider_lifiprovider_constructor",
+      "core_connectivityprovider_lifiprovider_getlatency",
+      "core_connectivityprovider_lifiprovider_getsignalstrength",
+      "core_connectivityprovider_lifiprovider_getstatus",
+      "core_connectivityprovider_lifiprovider_gettechnology",
+      "core_connectivityprovider_satelliteprovider",
+      "core_connectivityprovider_satelliteprovider_constructor",
+      "core_connectivityprovider_satelliteprovider_getlatency",
+      "core_connectivityprovider_satelliteprovider_getsignalstrength",
+      "core_connectivityprovider_satelliteprovider_getstatus",
+      "core_connectivityprovider_satelliteprovider_gettechnology",
+      "middlewares_authmiddleware",
+      "middlewares_authmiddleware_authmiddleware",
+      "routes_connectivityroutes",
+      "routes_connectivityroutes_connectivityroutes"
+    ],
+    "3": [
+      "mobile_package",
+      "mobile_package_dependencies",
+      "mobile_package_dependencies_axios",
+      "mobile_package_dependencies_expo",
+      "mobile_package_dependencies_expo_linear_gradient",
+      "mobile_package_dependencies_expo_secure_store",
+      "mobile_package_dependencies_react",
+      "mobile_package_dependencies_react_dom",
+      "mobile_package_dependencies_react_native",
+      "mobile_package_dependencies_react_native_gesture_handler",
+      "mobile_package_dependencies_react_native_reanimated",
+      "mobile_package_dependencies_react_native_safe_area_context",
+      "mobile_package_dependencies_react_native_screens",
+      "mobile_package_dependencies_react_native_web",
+      "mobile_package_dependencies_react_native_worklets",
+      "mobile_package_dependencies_react_navigation_drawer",
+      "mobile_package_dependencies_react_navigation_native",
+      "mobile_package_dependencies_react_navigation_native_stack",
+      "mobile_package_devdependencies",
+      "mobile_package_devdependencies_types_react",
+      "mobile_package_devdependencies_typescript",
+      "mobile_package_main",
+      "mobile_package_name",
+      "mobile_package_private",
+      "mobile_package_scripts",
+      "mobile_package_scripts_android",
+      "mobile_package_scripts_ios",
+      "mobile_package_scripts_start",
+      "mobile_package_scripts_web",
+      "mobile_package_version"
+    ],
+    "4": [
+      "app_adaptiveicon_backgroundcolor",
+      "app_adaptiveicon_foregroundimage",
+      "app_android_adaptiveicon",
+      "app_android_edgetoedgeenabled",
+      "app_android_predictivebackgestureenabled",
+      "app_expo",
+      "app_expo_android",
+      "app_expo_icon",
+      "app_expo_ios",
+      "app_expo_name",
+      "app_expo_newarchenabled",
+      "app_expo_orientation",
+      "app_expo_plugins",
+      "app_expo_slug",
+      "app_expo_splash",
+      "app_expo_userinterfacestyle",
+      "app_expo_version",
+      "app_expo_web",
+      "app_ios_supportstablet",
+      "app_json_app",
+      "app_splash_backgroundcolor",
+      "app_splash_image",
+      "app_splash_resizemode",
+      "app_web_favicon"
+    ],
+    "5": [
+      "mobile_app_adaptiveicon_backgroundcolor",
+      "mobile_app_adaptiveicon_foregroundimage",
+      "mobile_app_android_adaptiveicon",
+      "mobile_app_android_edgetoedgeenabled",
+      "mobile_app_android_predictivebackgestureenabled",
+      "mobile_app_expo",
+      "mobile_app_expo_android",
+      "mobile_app_expo_icon",
+      "mobile_app_expo_ios",
+      "mobile_app_expo_name",
+      "mobile_app_expo_newarchenabled",
+      "mobile_app_expo_orientation",
+      "mobile_app_expo_plugins",
+      "mobile_app_expo_slug",
+      "mobile_app_expo_splash",
+      "mobile_app_expo_userinterfacestyle",
+      "mobile_app_expo_version",
+      "mobile_app_expo_web",
+      "mobile_app_ios_supportstablet",
+      "mobile_app_json_mobile_app",
+      "mobile_app_splash_backgroundcolor",
+      "mobile_app_splash_image",
+      "mobile_app_splash_resizemode",
+      "mobile_app_web_favicon"
+    ],
+    "6": [
+      "server_package",
+      "server_package_dependencies",
+      "server_package_dependencies_bcryptjs",
+      "server_package_dependencies_dotenv",
+      "server_package_dependencies_fastify",
+      "server_package_dependencies_fastify_cors",
+      "server_package_dependencies_fastify_jwt",
+      "server_package_dependencies_fastify_static",
+      "server_package_dependencies_firebase_admin",
+      "server_package_dependencies_nodemailer",
+      "server_package_dependencies_typescript",
+      "server_package_description",
+      "server_package_devdependencies",
+      "server_package_devdependencies_ts_node_dev",
+      "server_package_devdependencies_types_bcryptjs",
+      "server_package_devdependencies_types_node",
+      "server_package_devdependencies_types_nodemailer",
+      "server_package_main",
+      "server_package_name",
+      "server_package_scripts",
+      "server_package_scripts_build",
+      "server_package_scripts_dev",
+      "server_package_scripts_start",
+      "server_package_version"
+    ],
+    "7": [
+      "server_tsconfig",
+      "server_tsconfig_compileroptions",
+      "server_tsconfig_compileroptions_esmoduleinterop",
+      "server_tsconfig_compileroptions_forceconsistentcasinginfilenames",
+      "server_tsconfig_compileroptions_lib",
+      "server_tsconfig_compileroptions_module",
+      "server_tsconfig_compileroptions_outdir",
+      "server_tsconfig_compileroptions_resolvejsonmodule",
+      "server_tsconfig_compileroptions_rootdir",
+      "server_tsconfig_compileroptions_skiplibcheck",
+      "server_tsconfig_compileroptions_sourcemap",
+      "server_tsconfig_compileroptions_strict",
+      "server_tsconfig_compileroptions_target",
+      "server_tsconfig_exclude",
+      "server_tsconfig_include"
+    ],
+    "8": [
+      "assets_api",
+      "assets_api_apifetch",
+      "assets_api_checkconnectionquality",
+      "assets_api_gettoken",
+      "assets_api_getuser",
+      "assets_api_goto",
+      "assets_api_requireauth",
+      "assets_api_showtoast",
+      "assets_api_startclock",
+      "assets_api_startheartbeat",
+      "assets_api_stopheartbeat",
+      "assets_api_togglepassword",
+      "assets_api_updateconnectionbadge"
+    ],
+    "9": [
+      "mobile_src_services_api_ts_services_api",
+      "mobile_src_services_api_ts_services_api_api",
+      "mobile_src_services_api_ts_services_api_defaulturl",
+      "mobile_src_services_api_ts_services_api_detectapiurl",
+      "mobile_src_services_api_ts_services_api_envapiurl",
+      "mobile_src_services_api_ts_services_api_getcandidateapiurls",
+      "mobile_src_services_api_ts_services_api_getdefaultapiurl",
+      "mobile_src_services_api_ts_services_api_gethealthurl",
+      "mobile_src_services_api_ts_services_api_removeauthtoken",
+      "mobile_src_services_api_ts_services_api_restoreauthsession",
+      "mobile_src_services_api_ts_services_api_setauthtoken"
+    ],
+    "10": [
+      "src_services_api_ts_services_api",
+      "src_services_api_ts_services_api_api",
+      "src_services_api_ts_services_api_defaulturl",
+      "src_services_api_ts_services_api_detectapiurl",
+      "src_services_api_ts_services_api_envapiurl",
+      "src_services_api_ts_services_api_getcandidateapiurls",
+      "src_services_api_ts_services_api_getdefaultapiurl",
+      "src_services_api_ts_services_api_gethealthurl",
+      "src_services_api_ts_services_api_removeauthtoken",
+      "src_services_api_ts_services_api_restoreauthsession",
+      "src_services_api_ts_services_api_setauthtoken"
+    ],
+    "11": [
+      "middlewares_ratelimit",
+      "middlewares_ratelimit_byip",
+      "middlewares_ratelimit_byipandemail",
+      "middlewares_ratelimit_cleanupexpiredentries",
+      "middlewares_ratelimit_createratelimiter",
+      "middlewares_ratelimit_getrequestbody",
+      "middlewares_ratelimit_normalizevalue",
+      "middlewares_ratelimit_ratelimitentry",
+      "middlewares_ratelimit_ratelimitoptions",
+      "middlewares_ratelimit_ratelimitstore"
+    ],
+    "12": [
+      "bin_expo",
+      "bin_expo_child",
+      "bin_expo_clipath",
+      "bin_expo_existssync",
+      "bin_expo_mobiledir",
+      "bin_expo_projectroot",
+      "bin_expo_resolve",
+      "bin_expo_spawn"
+    ],
+    "13": [
+      "mobile_src_navigation_index_tsx_navigation_index",
+      "mobile_src_navigation_index_tsx_navigation_index_bootstyles",
+      "mobile_src_navigation_index_tsx_navigation_index_drawer",
+      "mobile_src_navigation_index_tsx_navigation_index_drawercontent",
+      "mobile_src_navigation_index_tsx_navigation_index_drawerstyles",
+      "mobile_src_navigation_index_tsx_navigation_index_maindrawer",
+      "mobile_src_navigation_index_tsx_navigation_index_navigation",
+      "mobile_src_navigation_index_tsx_navigation_index_stack"
+    ],
+    "14": [
+      "src_navigation_index_tsx_navigation_index",
+      "src_navigation_index_tsx_navigation_index_bootstyles",
+      "src_navigation_index_tsx_navigation_index_drawer",
+      "src_navigation_index_tsx_navigation_index_drawercontent",
+      "src_navigation_index_tsx_navigation_index_drawerstyles",
+      "src_navigation_index_tsx_navigation_index_maindrawer",
+      "src_navigation_index_tsx_navigation_index_navigation",
+      "src_navigation_index_tsx_navigation_index_stack"
+    ],
+    "15": [
+      "vercel",
+      "vercel_buildcommand",
+      "vercel_headers",
+      "vercel_outputdirectory",
+      "vercel_public",
+      "vercel_rewrites",
+      "vercel_schema"
+    ],
+    "16": [
+      "auditoria_relatorio",
+      "mobile_api_service",
+      "server_auth_controller",
+      "server_dashboard_html",
+      "server_firebase_ts",
+      "server_main"
+    ],
+    "17": [
+      "docs_dashboard_png",
+      "docs_login_png",
+      "docs_map_png",
+      "docs_oran_png",
+      "mobile_readme",
+      "readme"
+    ],
+    "18": [
+      "expo_proxy_package",
+      "expo_proxy_package_bin",
+      "expo_proxy_package_bin_expo",
+      "expo_proxy_package_name",
+      "expo_proxy_package_private",
+      "expo_proxy_package_version"
+    ],
+    "19": [
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen",
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen_satellitenode",
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen_satellites",
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen_satellitescreen",
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen_satellitestatus",
+      "mobile_src_screens_satellitescreen_tsx_screens_satellitescreen_styles"
+    ],
+    "20": [
+      "mobile_src_services_devicecontext_ts_services_devicecontext",
+      "mobile_src_services_devicecontext_ts_services_devicecontext_clientcontext",
+      "mobile_src_services_devicecontext_ts_services_devicecontext_getclientcontext",
+      "mobile_src_services_devicecontext_ts_services_devicecontext_getviewportwidth",
+      "mobile_src_services_devicecontext_ts_services_devicecontext_getwebbrowserinfo",
+      "mobile_src_services_devicecontext_ts_services_devicecontext_getwebsysteminfo"
+    ],
+    "21": [
+      "src_screens_satellitescreen_tsx_screens_satellitescreen",
+      "src_screens_satellitescreen_tsx_screens_satellitescreen_satellitenode",
+      "src_screens_satellitescreen_tsx_screens_satellitescreen_satellites",
+      "src_screens_satellitescreen_tsx_screens_satellitescreen_satellitescreen",
+      "src_screens_satellitescreen_tsx_screens_satellitescreen_satellitestatus",
+      "src_screens_satellitescreen_tsx_screens_satellitescreen_styles"
+    ],
+    "22": [
+      "src_services_devicecontext_ts_services_devicecontext",
+      "src_services_devicecontext_ts_services_devicecontext_clientcontext",
+      "src_services_devicecontext_ts_services_devicecontext_getclientcontext",
+      "src_services_devicecontext_ts_services_devicecontext_getviewportwidth",
+      "src_services_devicecontext_ts_services_devicecontext_getwebbrowserinfo",
+      "src_services_devicecontext_ts_services_devicecontext_getwebsysteminfo"
+    ],
+    "23": [
+      "mobile_src_screens_aboutscreen_tsx_screens_aboutscreen",
+      "mobile_src_screens_aboutscreen_tsx_screens_aboutscreen_aboutscreen",
+      "mobile_src_screens_aboutscreen_tsx_screens_aboutscreen_highlights",
+      "mobile_src_screens_aboutscreen_tsx_screens_aboutscreen_quicksteps",
+      "mobile_src_screens_aboutscreen_tsx_screens_aboutscreen_styles"
+    ],
+    "24": [
+      "mobile_src_screens_profilescreen_tsx_screens_profilescreen",
+      "mobile_src_screens_profilescreen_tsx_screens_profilescreen_field",
+      "mobile_src_screens_profilescreen_tsx_screens_profilescreen_logincontext",
+      "mobile_src_screens_profilescreen_tsx_screens_profilescreen_profilescreen",
+      "mobile_src_screens_profilescreen_tsx_screens_profilescreen_styles"
+    ],
+    "25": [
+      "src_screens_aboutscreen_tsx_screens_aboutscreen",
+      "src_screens_aboutscreen_tsx_screens_aboutscreen_aboutscreen",
+      "src_screens_aboutscreen_tsx_screens_aboutscreen_highlights",
+      "src_screens_aboutscreen_tsx_screens_aboutscreen_quicksteps",
+      "src_screens_aboutscreen_tsx_screens_aboutscreen_styles"
+    ],
+    "26": [
+      "src_screens_profilescreen_tsx_screens_profilescreen",
+      "src_screens_profilescreen_tsx_screens_profilescreen_field",
+      "src_screens_profilescreen_tsx_screens_profilescreen_logincontext",
+      "src_screens_profilescreen_tsx_screens_profilescreen_profilescreen",
+      "src_screens_profilescreen_tsx_screens_profilescreen_styles"
+    ],
+    "27": [
+      "mobile_src_components_wavescrollscreen_tsx_components_wavescrollscreen",
+      "mobile_src_components_wavescrollscreen_tsx_components_wavescrollscreen_styles",
+      "mobile_src_components_wavescrollscreen_tsx_components_wavescrollscreen_wavescrollscreen",
+      "mobile_src_components_wavescrollscreen_tsx_components_wavescrollscreen_wavescrollscreenprops"
+    ],
+    "28": [
+      "mobile_src_screens_dashboardscreen_tsx_screens_dashboardscreen",
+      "mobile_src_screens_dashboardscreen_tsx_screens_dashboardscreen_connectivitydata",
+      "mobile_src_screens_dashboardscreen_tsx_screens_dashboardscreen_dashboardscreen",
+      "mobile_src_screens_dashboardscreen_tsx_screens_dashboardscreen_styles"
+    ],
+    "29": [
+      "mobile_src_screens_historyscreen_tsx_screens_historyscreen",
+      "mobile_src_screens_historyscreen_tsx_screens_historyscreen_historyscreen",
+      "mobile_src_screens_historyscreen_tsx_screens_historyscreen_items",
+      "mobile_src_screens_historyscreen_tsx_screens_historyscreen_styles"
+    ],
+    "30": [
+      "mobile_src_screens_oranscreen_tsx_screens_oranscreen",
+      "mobile_src_screens_oranscreen_tsx_screens_oranscreen_nodes",
+      "mobile_src_screens_oranscreen_tsx_screens_oranscreen_oranscreen",
+      "mobile_src_screens_oranscreen_tsx_screens_oranscreen_styles"
+    ],
+    "31": [
+      "mobile_src_services_securestorage_ts_services_securestorage",
+      "mobile_src_services_securestorage_ts_services_securestorage_deleteitem",
+      "mobile_src_services_securestorage_ts_services_securestorage_getitem",
+      "mobile_src_services_securestorage_ts_services_securestorage_setitem"
+    ],
+    "32": [
+      "mobile_src_services_securestorage_web_ts_services_securestorage_web",
+      "mobile_src_services_securestorage_web_ts_services_securestorage_web_deleteitem",
+      "mobile_src_services_securestorage_web_ts_services_securestorage_web_getitem",
+      "mobile_src_services_securestorage_web_ts_services_securestorage_web_setitem"
+    ],
+    "33": [
+      "mobile_tsconfig",
+      "mobile_tsconfig_compileroptions",
+      "mobile_tsconfig_compileroptions_strict",
+      "mobile_tsconfig_extends"
+    ],
+    "34": [
+      "src_components_wavescrollscreen_tsx_components_wavescrollscreen",
+      "src_components_wavescrollscreen_tsx_components_wavescrollscreen_styles",
+      "src_components_wavescrollscreen_tsx_components_wavescrollscreen_wavescrollscreen",
+      "src_components_wavescrollscreen_tsx_components_wavescrollscreen_wavescrollscreenprops"
+    ],
+    "35": [
+      "src_screens_dashboardscreen_tsx_screens_dashboardscreen",
+      "src_screens_dashboardscreen_tsx_screens_dashboardscreen_connectivitydata",
+      "src_screens_dashboardscreen_tsx_screens_dashboardscreen_dashboardscreen",
+      "src_screens_dashboardscreen_tsx_screens_dashboardscreen_styles"
+    ],
+    "36": [
+      "src_screens_historyscreen_tsx_screens_historyscreen",
+      "src_screens_historyscreen_tsx_screens_historyscreen_historyscreen",
+      "src_screens_historyscreen_tsx_screens_historyscreen_items",
+      "src_screens_historyscreen_tsx_screens_historyscreen_styles"
+    ],
+    "37": [
+      "src_screens_oranscreen_tsx_screens_oranscreen",
+      "src_screens_oranscreen_tsx_screens_oranscreen_nodes",
+      "src_screens_oranscreen_tsx_screens_oranscreen_oranscreen",
+      "src_screens_oranscreen_tsx_screens_oranscreen_styles"
+    ],
+    "38": [
+      "src_services_securestorage_ts_services_securestorage",
+      "src_services_securestorage_ts_services_securestorage_deleteitem",
+      "src_services_securestorage_ts_services_securestorage_getitem",
+      "src_services_securestorage_ts_services_securestorage_setitem"
+    ],
+    "39": [
+      "src_services_securestorage_web_ts_services_securestorage_web",
+      "src_services_securestorage_web_ts_services_securestorage_web_deleteitem",
+      "src_services_securestorage_web_ts_services_securestorage_web_getitem",
+      "src_services_securestorage_web_ts_services_securestorage_web_setitem"
+    ],
+    "40": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_extends"
+    ],
+    "41": [
+      "app_app",
+      "app_tsx_app",
+      "index"
+    ],
+    "42": [
+      "mobile_app_app",
+      "mobile_app_tsx_mobile_app",
+      "mobile_index"
+    ],
+    "43": [
+      "mobile_src_components_wavebackground_tsx_components_wavebackground",
+      "mobile_src_components_wavebackground_tsx_components_wavebackground_styles",
+      "mobile_src_components_wavebackground_tsx_components_wavebackground_wavebackground"
+    ],
+    "44": [
+      "mobile_src_screens_dtcscreen_tsx_screens_dtcscreen",
+      "mobile_src_screens_dtcscreen_tsx_screens_dtcscreen_dtcscreen",
+      "mobile_src_screens_dtcscreen_tsx_screens_dtcscreen_styles"
+    ],
+    "45": [
+      "mobile_src_screens_lifiscreen_tsx_screens_lifiscreen",
+      "mobile_src_screens_lifiscreen_tsx_screens_lifiscreen_lifiscreen",
+      "mobile_src_screens_lifiscreen_tsx_screens_lifiscreen_styles"
+    ],
+    "46": [
+      "mobile_src_screens_loginscreen_tsx_screens_loginscreen",
+      "mobile_src_screens_loginscreen_tsx_screens_loginscreen_loginscreen",
+      "mobile_src_screens_loginscreen_tsx_screens_loginscreen_styles"
+    ],
+    "47": [
+      "mobile_src_screens_registerscreen_tsx_screens_registerscreen",
+      "mobile_src_screens_registerscreen_tsx_screens_registerscreen_registerscreen",
+      "mobile_src_screens_registerscreen_tsx_screens_registerscreen_styles"
+    ],
+    "48": [
+      "mobile_src_theme_index_ts_theme_index",
+      "mobile_src_theme_index_ts_theme_index_spacing",
+      "mobile_src_theme_index_ts_theme_index_typography"
+    ],
+    "49": [
+      "src_components_wavebackground_tsx_components_wavebackground",
+      "src_components_wavebackground_tsx_components_wavebackground_styles",
+      "src_components_wavebackground_tsx_components_wavebackground_wavebackground"
+    ],
+    "50": [
+      "src_screens_dtcscreen_tsx_screens_dtcscreen",
+      "src_screens_dtcscreen_tsx_screens_dtcscreen_dtcscreen",
+      "src_screens_dtcscreen_tsx_screens_dtcscreen_styles"
+    ],
+    "51": [
+      "src_screens_lifiscreen_tsx_screens_lifiscreen",
+      "src_screens_lifiscreen_tsx_screens_lifiscreen_lifiscreen",
+      "src_screens_lifiscreen_tsx_screens_lifiscreen_styles"
+    ],
+    "52": [
+      "src_screens_loginscreen_tsx_screens_loginscreen",
+      "src_screens_loginscreen_tsx_screens_loginscreen_loginscreen",
+      "src_screens_loginscreen_tsx_screens_loginscreen_styles"
+    ],
+    "53": [
+      "src_screens_registerscreen_tsx_screens_registerscreen",
+      "src_screens_registerscreen_tsx_screens_registerscreen_registerscreen",
+      "src_screens_registerscreen_tsx_screens_registerscreen_styles"
+    ],
+    "54": [
+      "src_theme_index_ts_theme_index",
+      "src_theme_index_ts_theme_index_spacing",
+      "src_theme_index_ts_theme_index_typography"
+    ],
+    "55": [
+      "mobile_src_theme_colors_ts_theme_colors",
+      "mobile_src_theme_colors_ts_theme_colors_colors"
+    ],
+    "56": [
+      "src_theme_colors_ts_theme_colors",
+      "src_theme_colors_ts_theme_colors_colors"
+    ],
+    "57": [
+      "babel_config"
+    ],
+    "58": [
+      "docs_index_html"
+    ],
+    "59": [
+      "mobile_babel_config"
+    ],
+    "60": [
+      "mobile_web_index_html"
+    ],
+    "61": [
+      "server_config_web_index_html"
+    ]
+  },
+  "cohesion": {
+    "0": 0.09841269841269841,
+    "1": 0.05714285714285714,
+    "2": 0.08735632183908046,
+    "3": 0.06666666666666667,
+    "4": 0.08333333333333333,
+    "5": 0.08333333333333333,
+    "6": 0.08333333333333333,
+    "7": 0.13333333333333333,
+    "8": 0.2692307692307692,
+    "9": 0.2727272727272727,
+    "10": 0.2727272727272727,
+    "11": 0.3111111111111111,
+    "12": 0.25,
+    "13": 0.25,
+    "14": 0.25,
+    "15": 0.2857142857142857,
+    "16": 0.3333333333333333,
+    "17": 0.5333333333333333,
+    "18": 0.3333333333333333,
+    "19": 0.3333333333333333,
+    "20": 0.6,
+    "21": 0.3333333333333333,
+    "22": 0.6,
+    "23": 0.4,
+    "24": 0.4,
+    "25": 0.4,
+    "26": 0.4,
+    "27": 0.5,
+    "28": 0.5,
+    "29": 0.5,
+    "30": 0.5,
+    "31": 0.5,
+    "32": 0.5,
+    "33": 0.5,
+    "34": 0.5,
+    "35": 0.5,
+    "36": 0.5,
+    "37": 0.5,
+    "38": 0.5,
+    "39": 0.5,
+    "40": 0.5,
+    "41": 0.6666666666666666,
+    "42": 0.6666666666666666,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 0.6666666666666666,
+    "47": 0.6666666666666666,
+    "48": 0.6666666666666666,
+    "49": 0.6666666666666666,
+    "50": 0.6666666666666666,
+    "51": 0.6666666666666666,
+    "52": 0.6666666666666666,
+    "53": 0.6666666666666666,
+    "54": 0.6666666666666666,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_expo",
+      "label": "expo",
+      "degree": 13
+    },
+    {
+      "id": "mobile_app_expo",
+      "label": "expo",
+      "degree": 13
+    },
+    {
+      "id": "server_tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 12
+    },
+    {
+      "id": "core_connectivityprovider_satelliteprovider",
+      "label": "SatelliteProvider",
+      "degree": 8
+    },
+    {
+      "id": "core_connectivityprovider_cellularprovider",
+      "label": "CellularProvider",
+      "degree": 8
+    },
+    {
+      "id": "core_connectivityprovider_lifiprovider",
+      "label": "LiFiProvider",
+      "degree": 8
+    },
+    {
+      "id": "core_connectivityprovider_directtocellprovider",
+      "label": "DirectToCellProvider",
+      "degree": 8
+    },
+    {
+      "id": "controllers_authcontroller_register",
+      "label": "register()",
+      "degree": 7
+    },
+    {
+      "id": "assets_api_requireauth",
+      "label": "requireAuth()",
+      "degree": 6
+    },
+    {
+      "id": "controllers_authcontroller_forgotpassword",
+      "label": "forgotPassword()",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "CRM Dashboard",
+      "target": "Mobile API Service",
+      "source_files": [
+        "server/src/config/web/admin/crm/pages/dashboard.html",
+        "mobile/src/services/api.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "Relat\u00f3rio de Auditoria e Corre\u00e7\u00e3o",
+      "target": "Mobile API Service",
+      "source_files": [
+        "AUDITORIA_RELATORIO.md",
+        "mobile/src/services/api.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "Relat\u00f3rio de Auditoria e Corre\u00e7\u00e3o",
+      "target": "Auth Controller",
+      "source_files": [
+        "AUDITORIA_RELATORIO.md",
+        "server/src/controllers/authController.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "Relat\u00f3rio de Auditoria e Corre\u00e7\u00e3o",
+      "target": "Firebase Config",
+      "source_files": [
+        "AUDITORIA_RELATORIO.md",
+        "server/src/config/firebase.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc \u2194 code); connects across different repos/directories"
+    },
+    {
+      "source": "Relat\u00f3rio de Auditoria e Corre\u00e7\u00e3o",
+      "target": "Server Entry (server.ts)",
+      "source_files": [
+        "AUDITORIA_RELATORIO.md",
+        "server/src/server.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "crosses file types (doc \u2194 code); connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 59097,
+    "output": 1698
+  }
+}

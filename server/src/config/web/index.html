@@ -1065,6 +1065,24 @@
 
   <script>
     const API = window.location.origin + '/api'
+
+    async function apiFetch(url, options = {}, retries = 2) {
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const res = await fetch(url, options)
+          if (!res.ok && res.status === 401) {
+            localStorage.removeItem('token')
+            window.location.href = '/'
+            throw new Error('Sessão expirada')
+          }
+          return res
+        } catch (err) {
+          if (i === retries) throw err
+          await new Promise(r => setTimeout(r, 1000 * (i + 1)))
+        }
+      }
+    }
+
     let token = localStorage.getItem('token')
     let userEmail = localStorage.getItem('userEmail') || ''
     let userName = localStorage.getItem('userName') || ''
@@ -1135,7 +1153,7 @@
       if (!token) return
 
       try {
-        const res = await fetch(`${API}/auth/profile`, { headers: { 'Authorization': `Bearer ${token}` } })
+        const res = await apiFetch(`${API}/auth/profile`, { headers: { 'Authorization': `Bearer ${token}` } })
         if (!res.ok) throw new Error('Sessão inválida')
 
         const profile = await res.json()
@@ -1171,8 +1189,7 @@
 
     async function loadProfile() {
       try {
-        const res=await fetch(`${API}/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}})
-        if(res.status===401){handleLogout();return}
+        const res=await apiFetch(`${API}/auth/profile`,{headers:{'Authorization':`Bearer ${token}`}})
         const data=await res.json()
         const name=data.name||userEmail.split('@')[0]
         document.getElementById('profileAvatar').textContent=name.charAt(0).toUpperCase()
@@ -1224,7 +1241,7 @@
       if(!email || !password){errorEl.textContent='Preencha todos os campos';errorEl.style.display='block';return}
       btn.disabled=true;btn.textContent='ENTRANDO...'
       try {
-        const res=await fetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})})
+        const res=await apiFetch(`${API}/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})})
         const data=await res.json()
         if(!res.ok) throw new Error(data.error||'Falha no login')
         localStorage.setItem('token',data.token); localStorage.setItem('userEmail',email); localStorage.setItem('userName',data.user?.name||'')
@@ -1267,8 +1284,7 @@
       const providers={satellite:'Satélite — SAT-BR-001',cellular:'Celular — TOWER-SP-042',lifi:'Li-Fi — LIFI-LAB-001',directcell:'Direct-to-Cell — DTC-BR-001'}
       document.getElementById('activeProvider').textContent=providers[type]
       try {
-        const res=await fetch(`${API}/connectivity/${type}`,{headers:{'Authorization':`Bearer ${token}`}})
-        if(res.status===401){handleLogout();return}
+        const res=await apiFetch(`${API}/connectivity/${type}`,{headers:{'Authorization':`Bearer ${token}`}})
         const data=await res.json()
         if(!res.ok) throw new Error(data.error||'Falha ao carregar os dados')
         document.getElementById('statusValue').textContent=data.status
@@ -1282,7 +1298,7 @@
 
     async function fetchDTC() {
       try {
-        const res=await fetch(`${API}/connectivity/directcell`,{headers:{'Authorization':`Bearer ${token}`}})
+        const res=await apiFetch(`${API}/connectivity/directcell`,{headers:{'Authorization':`Bearer ${token}`}})
         const data=await res.json()
         document.getElementById('dtcLatency').textContent=data.latency
         document.getElementById('dtcSignal').textContent=data.signal+'%'
@@ -1369,6 +1385,7 @@
     }
 
     function startLifiSimulator() {
+      if(chartInterval) clearInterval(chartInterval)
       const canvas=document.getElementById('lifiChart')
       const ctx=canvas.getContext('2d')
       chartInterval=setInterval(()=>{

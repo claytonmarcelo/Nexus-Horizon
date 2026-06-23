@@ -78,21 +78,41 @@ export function LoginScreen({ navigation, route }: any) {
 
     try {
       const clientContext = getClientContext()
+      console.log('[Login] Tentando login para:', normalizedEmail)
+      
       const response = await api.post('/auth/login', {
         email: normalizedEmail,
         password: normalizedPassword,
         clientContext,
       })
 
+      console.log('[Login] Resposta recebida:', response.status)
       const { token } = response.data
+      
+      if (!token) {
+        throw new Error('Token não recebido do servidor.')
+      }
+
       await storage.setItem('token', token)
       setAuthToken(token)
       setRegisterNotice('')
       setLoginSuccessModalVisible(true)
     } catch (error: any) {
-      const errorMsg =
-        error.response?.data?.error || error.message || 'Falha na conexão com o servidor.'
-      Alert.alert('Erro', errorMsg)
+      console.error('[Login] Erro:', error)
+      
+      let errorMsg = 'Falha na conexão com o servidor.'
+      
+      if (error.response) {
+        console.error('[Login] Status:', error.response.status)
+        console.error('[Login] Data:', error.response.data)
+        errorMsg = error.response?.data?.error || `Erro ${error.response.status}`
+      } else if (error.request) {
+        errorMsg = 'Servidor não respondeu. Verifique sua conexão.'
+      } else {
+        errorMsg = error.message || errorMsg
+      }
+      
+      Alert.alert('Erro no login', errorMsg)
     } finally {
       setLoading(false)
     }
