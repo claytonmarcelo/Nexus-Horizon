@@ -61,16 +61,13 @@ server.register(fastifyStatic, {
 
 server.setErrorHandler((error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
   const statusCode = error.statusCode || 500
-  const message = statusCode === 500 && isProduction
-    ? 'Erro interno do servidor'
-    : error.message
 
   if (statusCode === 500) {
     console.error(error)
   }
 
   reply.status(statusCode).send({
-    error: message,
+    error: error.message || 'Erro interno do servidor',
     statusCode,
   })
 })
